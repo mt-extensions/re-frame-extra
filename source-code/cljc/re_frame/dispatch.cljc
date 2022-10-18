@@ -8,6 +8,7 @@
               [re-frame.event-vector  :as event-vector]
               [re-frame.metamorphic   :as metamorphic]
               [re-frame.registrar     :as registrar]
+              [re-frame.state         :as state]
               [time.api               :as time]))
 
 
