@@ -35,13 +35,13 @@
   ; @param (metamorphic-event) event-handler
   ;
   ; @usage
-  ;  (r/dispatch [:foo])
+  ;  (dispatch [:foo])
   ;
   ; @usage
-  ;  (r/dispatch {:dispatch [:foo]})
+  ;  (dispatch {:dispatch [:foo]})
   ;
   ; @usage
-  ;  (r/dispatch nil)
+  ;  (dispatch nil)
   [event-handler]
 
   ; Szerver-oldalon a Re-Frame nem jelez hibát, nem regisztrált esemény meghívásakor.
@@ -63,7 +63,7 @@
   ; @param (event-vector) event-handler
   ;
   ; @usage
-  ;  (r/dispatch-fx [:my-side-effect-event ...])
+  ;  (dispatch-fx [:my-side-effect-event ...])
   [event-handler]
   (dispatch {:fx event-handler}))
 
@@ -71,7 +71,7 @@
   ; @param (event-vector) event-handler
   ;
   ; @usage
-  ;  (r/dispatch-sync [...])
+  ;  (dispatch-sync [...])
   ;
   ; A dispatch-sync függvény a meghívási sebesség fontossága miatt nem kezeli
   ; a metamorphic-event kezelőket!
@@ -82,9 +82,9 @@
   ; @param (metamorphic-events in vector) event-list
   ;
   ; @usage
-  ;  (r/dispatch-n [[:event-a]
-  ;                 {:dispatch [:event-b]}
-  ;                 (fn [_ _] {:dispatch [:event-c]})])
+  ;  (dispatch-n [[:event-a]
+  ;               {:dispatch [:event-b]}
+  ;               (fn [_ _] {:dispatch [:event-c]})])
   [event-list]
   (doseq [event (remove nil? event-list)]
          (dispatch event)))
@@ -98,7 +98,7 @@
   ; @param (maps in vector) effects-map-list
   ;
   ; @usage
-  ;  (r/dispatch-later [{:ms 500 :dispatch [...]}
+  ;  (dispatch-later [{:ms 500 :dispatch [...]}
   ;                     {:ms 600 :fx [...]
   ;                              :fx-n       [[...] [...]]
   ;                              :dispatch-n [[...] [...]]}])
@@ -119,13 +119,13 @@
   ; @param (metamorphic-event)(opt) else-event-handler
   ;
   ; @usage
-  ;  (r/dispatch-if [true [:my-event] ...])
+  ;  (dispatch-if [true [:my-event] ...])
   ;
   ; @usage
-  ;  (r/dispatch-if [true {:dispatch [:my-event]} ...])
+  ;  (dispatch-if [true {:dispatch [:my-event]} ...])
   ;
   ; @usage
-  ;  (r/dispatch-if [true (fn [_ _] {:dispatch [:my-event]}) ...])
+  ;  (dispatch-if [true (fn [_ _] {:dispatch [:my-event]}) ...])
   [[condition if-event-handler else-event-handler]]
   (if condition (dispatch if-event-handler)
                 (if else-event-handler (dispatch else-event-handler))))
@@ -141,16 +141,16 @@
   ;  ...]
   ;
   ; @usage
-  ;  (r/dispatch-cond [(some? "a") [:my-event]
-  ;                    (nil?  "b") [:my-event]])
+  ;  (dispatch-cond [(some? "a") [:my-event]
+  ;                  (nil?  "b") [:my-event]])
   ;
   ; @usage
-  ;  (r/dispatch-cond [(some? "a") {:dispatch [:my-event]}
-  ;                    (nil?  "b") {:dispatch [:my-event]}])
+  ;  (dispatch-cond [(some? "a") {:dispatch [:my-event]}
+  ;                  (nil?  "b") {:dispatch [:my-event]}])
   ;
   ; @usage
-  ;  (r/dispatch-cond [(some? "a") (fn [_ _] {:dispatch [:my-event]})
-  ;                    (nil?  "b") (fn [_ _] {:dispatch [:my-event]})])
+  ;  (dispatch-cond [(some? "a") (fn [_ _] {:dispatch [:my-event]})
+  ;                  (nil?  "b") (fn [_ _] {:dispatch [:my-event]})])
   [conditional-events]
   (letfn [(dispatch-cond-f [_ dex x]
                            (if (and (even? dex) x)
@@ -174,8 +174,6 @@
 ; formátumok nem rendelkeznek kizárólagos azonosítási lehetősséggel.
 
 (defn- reg-event-lock
-  ; WARNING! NON-PUBLIC! DO NOT USE!
-  ;
   ; @param (integer) timeout
   ; @param (keyword) event-id
   ;
@@ -186,8 +184,6 @@
        (swap! state/EVENT-LOCKS assoc event-id unlock-time)))
 
 (defn- event-unlocked?
-  ; WARNING! NON-PUBLIC! DO NOT USE!
-  ;
   ; @param (keyword) event-id
   ;
   ; @return (boolean)
@@ -197,8 +193,6 @@
        (> elapsed-time unlock-time)))
 
 (defn- dispatch-unlocked?!
-  ; WARNING! NON-PUBLIC! DO NOT USE!
-  ;
   ; Dispatch event if it is NOT locked
   ;
   ; @param (event-vector) event-vector
@@ -210,8 +204,6 @@
            (core/dispatch   event-vector))))
 
 (defn- delayed-try
-  ; WARNING! NON-PUBLIC! DO NOT USE!
-  ;
   ; @param (integer) timeout
   ; @param (event-vector) event-vector
   ;

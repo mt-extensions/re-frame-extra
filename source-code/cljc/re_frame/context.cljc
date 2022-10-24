@@ -16,7 +16,7 @@
   ;   {:event (vector)}}
   ;
   ; @example
-  ;  (r/context->event-vector {:coeffects {:event [:my-event ...]}})
+  ;  (context->event-vector {:coeffects {:event [:my-event ...]}})
   ;  =>
   ;  [:my-event ...]
   ;
@@ -30,7 +30,7 @@
   ;   {:event (vector)}}
   ;
   ; @example
-  ;  (r/context->event-vector {:coeffects {:event [:my-event ...]}})
+  ;  (context->event-vector {:coeffects {:event [:my-event ...]}})
   ;  =>
   ;  :my-event
   ;
@@ -44,7 +44,7 @@
   ;   {:db (map)}}
   ;
   ; @example
-  ;  (r/context->db-before-effect {:coeffects {:db {...}}})
+  ;  (context->db-before-effect {:coeffects {:db {...}}})
   ;  =>
   ;  {...}
   ;
@@ -58,7 +58,7 @@
   ;   {:db (map)}}
   ;
   ; @example
-  ;  (r/context->db-before-effect {:effects {:db {...}}})
+  ;  (context->db-before-effect {:effects {:db {...}}})
   ;  =>
   ;  {...}
   ;

@@ -22,7 +22,7 @@
   ; @param (subscription-vector) subscriber
   ;
   ; @usage
-  ;  (r/subscribed [:my-subscription])
+  ;  (subscribed [:my-subscription])
   ;
   ; @return (*)
   [subscriber]

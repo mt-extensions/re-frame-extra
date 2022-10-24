@@ -14,7 +14,7 @@
   ; @param (*) n
   ;
   ; @example
-  ;  (r/event-vector? [:my-event ...])
+  ;  (event-vector? [:my-event ...])
   ;  =>
   ;  true
   ;
@@ -27,17 +27,17 @@
   ; @param (*) n
   ;
   ; @example
-  ;  (r/subscription-vector? [:my-namespace/get-something ...])
+  ;  (subscription-vector? [:my-namespace/get-something ...])
   ;  =>
   ;  true
   ;
   ; @example
-  ;  (r/subscription-vector? [:my-namespace/something-happened? ...])
+  ;  (subscription-vector? [:my-namespace/something-happened? ...])
   ;  =>
   ;  true
   ;
   ; @example
-  ;  (r/subscription-vector? [:div ...])
+  ;  (subscription-vector? [:div ...])
   ;  =>
   ;  false
   ;

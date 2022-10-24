@@ -14,10 +14,10 @@
   ; @param (keyword)(opt) event-kind
   ;
   ; @usage
-  ;  (r/get-event-handlers)
+  ;  (get-event-handlers)
   ;
   ; @usage
-  ;  (r/get-event-handlers :sub)
+  ;  (get-event-handlers :sub)
   ;
   ; @return (map)
   ;  {:cofx (map)
@@ -33,7 +33,7 @@
   ; @param (keyword) event-id
   ;
   ; @usage
-  ;  (r/get-event-handler :sub :my-subscription)
+  ;  (get-event-handler :sub :my-subscription)
   ;
   ; @return (maps in list)
   [event-kind event-id]
@@ -46,7 +46,7 @@
   ; @param (keyword) event-id
   ;
   ; @usage
-  ;  (r/event-handler-registrated? :sub :my-subscription)
+  ;  (event-handler-registrated? :sub :my-subscription)
   ;
   ; @return (function)
   [event-kind event-id]

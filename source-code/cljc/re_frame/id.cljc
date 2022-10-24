@@ -16,7 +16,7 @@
   ; @param (map) context
   ;
   ; @usage
-  ;  (r/event-vector<-id-f {...})
+  ;  (event-vector<-id-f {...})
   ;
   ; @return (map)
   [context]

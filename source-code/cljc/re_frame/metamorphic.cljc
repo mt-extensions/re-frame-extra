@@ -19,17 +19,17 @@
   ; @param (metamorphic-event) n
   ;
   ; @example
-  ;  (r/metamorphic-handler->handler-f [...])
+  ;  (metamorphic-handler->handler-f [...])
   ;  =>
   ;  (fn [_ _] {:dispatch [...]})
   ;
   ; @example
-  ;  (r/metamorphic-handler->handler-f {:dispatch [...]})
+  ;  (metamorphic-handler->handler-f {:dispatch [...]})
   ;  =>
   ;  (fn [_ _] {:dispatch [...]})
   ;
   ; @example
-  ;  (r/metamorphic-handler->handler-f (fn [_ _] ...))
+  ;  (metamorphic-handler->handler-f (fn [_ _] ...))
   ;  =>
   ;  (fn [_ _] ...})
   ;
@@ -43,12 +43,12 @@
   ; @param (metamorphic-effects) n
   ;
   ; @example
-  ;  (r/metamorphic-event->effects-map [:my-event])
+  ;  (metamorphic-event->effects-map [:my-event])
   ;  =>
   ;  {:dispatch [:my-event]}
   ;
   ; @example
-  ;  (r/metamorphic-event->effects-map {:dispatch [:my-event])
+  ;  (metamorphic-event->effects-map {:dispatch [:my-event])
   ;  =>
   ;  {:dispatch [:my-event]}
   ;
@@ -62,12 +62,12 @@
   ; @param (list of *) params
   ;
   ; @example
-  ;  (r/metamorphic-event<-params [:my-event] "My param" "Your param")
+  ;  (metamorphic-event<-params [:my-event] "My param" "Your param")
   ;  =>
   ;  [:my-event "My param" "Your param"]
   ;
   ; @example
-  ;  (r/metamorphic-event<-params {:dispatch [:my-event]} "My param" "Your param")
+  ;  (metamorphic-event<-params {:dispatch [:my-event]} "My param" "Your param")
   ;  =>
   ;  {:dispatch [:my-event "My param" "Your param"]}
   ;
