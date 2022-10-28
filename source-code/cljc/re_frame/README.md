@@ -1,9 +1,22 @@
 
 # metamorphic-event
-  A metamorphic-event olyan formula amely lehetővé teszi, hogy egy eseményt vagy
-  esemény-csoportot event-vector vagy effects-map formában is meghatározhass.
-  `(dispatch [...])`
-  `(dispatch {:dispatch [...]})`
+  A metamorphic-event olyan formula amely lehetővé teszi, hogy egy eseményt
+  vagy esemény-csoportot event-vector vagy effects-map formában is meghatározhass.
+
+  A metamorphic-event típust fogadó függvényeknek (pl. dispatch) átadhatsz ...
+  ... event-vector típust (pl. [:my-event]).
+  ... effects-map típust (pl. {:fx [:my-side-effect]}),
+  ... olyan függvényt, aminek a visszatérési értéke az előző két típus valamelyike
+      (pl. (fn [] {:dispatch [:my-event]}))
+  `(dispatch                   [...])`
+  `(dispatch        {:dispatch [...]})`
+  `(dispatch (fn [] {:dispatch [...]}))`
+
+  + A metamorphic-event típust függvényként meghatározva belecsempészhetsz egyéb
+    mellékhatásokat is, azzal a feltétellel, hogy a függvényed visszatérési értéke
+    is metamorphic-event típus vagy nil!
+    `(dispatch (fn [] (println "Hello World!")
+                      {:dispatch [...]}))`
 
 
 

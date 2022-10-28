@@ -49,7 +49,7 @@
   ; interceptor-ban vizsgálni az események regisztráltságát.
   #?(:clj (let [event-id      (event-vector/event-vector->event-id      event-handler)
                 event-exists? (event-handler/event-handler-registrated? :event event-id)]
-               (if-not event-exists? (println (str "re-frame: no :event handler registrated for: " event-id)))))
+               (if-not event-exists? (println "re-frame: no :event handler registrated for:" event-id))))
 
   (if (vector? event-handler) (core/dispatch event-handler)
                               (core/dispatch [:dispatch-metamorphic-event event-handler])))
@@ -99,9 +99,9 @@
   ;
   ; @usage
   ;  (dispatch-later [{:ms 500 :dispatch [...]}
-  ;                     {:ms 600 :fx [...]
-  ;                              :fx-n       [[...] [...]]
-  ;                              :dispatch-n [[...] [...]]}])
+  ;                   {:ms 600 :fx [...]
+  ;                            :fx-n       [[...] [...]]
+  ;                            :dispatch-n [[...] [...]]}])
   [effects-map-list]
   ; Az eredeti dispatch-later függvény clojure környezetben nem időzíti a dispatch-later eseményeket!
   (doseq [{:keys [ms] :as effects-map} (remove nil? effects-map-list)]
@@ -223,7 +223,7 @@
   ; @param (event-vector) event-vector
   ;
   ; @usage
-  ;  (e-frame/dispatch-last 500 [:foo-bar-baz])
+  ;  (dispatch-last 500 [:foo-bar-baz])
   ;
   ; @return (?)
   [timeout event-vector]
@@ -240,7 +240,7 @@
   ; @param (event-vector) event-vector
   ;
   ; @usage
-  ;  (re-frame/dispatch-once 500 [:foo-bar-baz])
+  ;  (dispatch-once 500 [:foo-bar-baz])
   ;
   ; @return (?)
   [interval event-vector]

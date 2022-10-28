@@ -16,5 +16,5 @@
 (def LOG-EVENT! (interceptors/->interceptor :id :re-frame/log-event!
                                             :before #(let [event-vector (context/context->event-vector %1)]
                                                          ; Szükséges korlátozni a fájl maximális méretét!
-                                                         ;(write events to log file ...)
+                                                         ; (write events to log file ...)
                                                           (return %1))))

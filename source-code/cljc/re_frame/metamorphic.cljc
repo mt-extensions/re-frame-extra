@@ -40,7 +40,7 @@
         :return  n))
 
 (defn metamorphic-event->effects-map
-  ; @param (metamorphic-effects) n
+  ; @param (metamorphic-event) n
   ;
   ; @example
   ;  (metamorphic-event->effects-map [:my-event])
@@ -52,10 +52,16 @@
   ;  =>
   ;  {:dispatch [:my-event]}
   ;
+  ; @example
+  ;  (metamorphic-event->effects-map (fn [] {:dispatch [:my-event]))
+  ;  =>
+  ;  {:dispatch [:my-event]}
+  ;
   ; @return (map)
   [n]
   (cond (vector? n) (event-vector/event-vector->effects-map n)
-        (map?    n) (return                                 n)))
+        (map?    n) (return                                 n)
+        (fn?     n) (metamorphic-event->effects-map        (n))))
 
 (defn metamorphic-event<-params
   ; @param (metamorphic-event) n
