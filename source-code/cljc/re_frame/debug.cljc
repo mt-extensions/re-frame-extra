@@ -3,11 +3,11 @@
 ;; ----------------------------------------------------------------------------
 
 (ns re-frame.debug
-    (:require [mid-fruits.candy  :refer [return]]
-              [mid-fruits.format :as format]
-              [re-frame.context  :as context]
-              [re-frame.core     :as core]
-              [time.api          :as time]))
+    (:require [mid-fruits.candy :refer [return]]
+              [format.api       :as format]
+              [re-frame.context :as context]
+              [re-frame.core    :as core]
+              [time.api         :as time]))
 
 
 
