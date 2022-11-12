@@ -1,6 +1,6 @@
 
 (ns re-frame.event-vector
-    (:require [mid-fruits.candy  :refer [return]]
+    (:require [candy.api         :refer [return]]
               [mid-fruits.vector :as vector]))
 
 ;; ----------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 
 (ns re-frame.id
-    (:require [mid-fruits.candy  :refer [return]]
+    (:require [candy.api         :refer [return]]
               [mid-fruits.random :as random]
               [re-frame.core     :as core]))
 

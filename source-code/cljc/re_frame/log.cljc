@@ -1,6 +1,6 @@
 
 (ns re-frame.log
-    (:require [mid-fruits.candy      :refer [return]]
+    (:require [candy.api             :refer [return]]
               [re-frame.context      :as context]
               [re-frame.interceptors :as interceptors]))
 

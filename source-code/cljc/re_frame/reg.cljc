@@ -1,6 +1,6 @@
 
 (ns re-frame.reg
-    (:require [mid-fruits.candy     :refer [return]]
+    (:require [candy.api            :refer [return]]
               [mid-fruits.vector    :as vector]
               [re-frame.core        :as core]
               [re-frame.log         :as log]

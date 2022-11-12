@@ -1,6 +1,6 @@
 
 (ns re-frame.debug
-    (:require [mid-fruits.candy :refer [return]]
+    (:require [candy.api        :refer [return]]
               [format.api       :as format]
               [re-frame.context :as context]
               [re-frame.core    :as core]
