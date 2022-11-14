@@ -14,6 +14,7 @@
               [re-frame.metamorphic   :as metamorphic]
               [re-frame.reg           :as reg]
               [re-frame.side-effects  :as side-effects]
+              [re-frame.state         :as state]
               [re-frame.sub           :as sub]
               [re-frame.tick          :as tick]
               [re-frame.types         :as types]))
@@ -36,9 +37,10 @@
 (def app-db db/app-db)
 
 ; re-frame.debug
-(def debug!           debug/debug!)
-(def set-debug-mode!  debug/set-debug-mode!)
-(def quit-debug-mode! debug/quit-debug-mode!)
+(def debug!             debug/debug!)
+(def set-debug-mode!    debug/set-debug-mode!)
+(def quit-debug-mode!   debug/quit-debug-mode!)
+(def toggle-debug-mode! debug/toggle-debug-mode!)
 
 ; re-frame.dispatch
 (def dispatch       dispatch/dispatch)
@@ -90,6 +92,9 @@
 ; re-frame.side-effects
 (def fx   side-effects/fx)
 (def fx-n side-effects/fx-n)
+
+; re-frame.state
+(def DEBUG-MODE? state/DEBUG-MODE?)
 
 ; re-frame.sub
 (def subscribe  sub/subscribe)

@@ -38,3 +38,9 @@
   ;  (quit-debug-mode!)
   []
   (reset! state/DEBUG-MODE? false))
+  
+(defn toggle-debug-mode!
+  ; @usage
+  ;  (toggle-debug-mode!)
+  []
+  (swap! state/DEBUG-MODE? not))
