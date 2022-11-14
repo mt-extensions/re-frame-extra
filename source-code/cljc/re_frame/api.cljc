@@ -2,6 +2,7 @@
 (ns re-frame.api
     (:require [re-frame.coeffects     :as coeffects]
               [re-frame.context       :as context]
+              [re-frame.db            :as db]
               [re-frame.trans         :as trans]
               [re-frame.debug         :as debug]
               [re-frame.dispatch      :as dispatch]
@@ -30,6 +31,9 @@
 (def context->event-id         context/context->event-id)
 (def context->db-before-effect context/context->db-before-effect)
 (def context->db-after-effect  context/context->db-after-effect)
+
+; re-frame.db
+(def app-db db/app-db)
 
 ; re-frame.debug
 (def debug! debug/debug!)
