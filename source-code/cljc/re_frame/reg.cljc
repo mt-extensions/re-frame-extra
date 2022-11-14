@@ -1,7 +1,6 @@
 
 (ns re-frame.reg
-    (:require [candy.api            :refer [return]]
-              [mid-fruits.vector    :as vector]
+    (:require [mid-fruits.vector    :as vector]
               [re-frame.core        :as core]
               [re-frame.log         :as log]
               [re-frame.metamorphic :as metamorphic]))
@@ -21,8 +20,7 @@
   ;
   ; @return (vector)
   [interceptors]
-  #?(:clj  (vector/conj-item interceptors log/LOG-EVENT!)
-     :cljs (return           interceptors)))
+  (vector/conj-item interceptors log/LOG-EVENT!))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

@@ -36,7 +36,9 @@
 (def app-db db/app-db)
 
 ; re-frame.debug
-(def debug! debug/debug!)
+(def debug!           debug/debug!)
+(def set-debug-mode!  debug/set-debug-mode!)
+(def quit-debug-mode! debug/quit-debug-mode!)
 
 ; re-frame.dispatch
 (def dispatch       dispatch/dispatch)

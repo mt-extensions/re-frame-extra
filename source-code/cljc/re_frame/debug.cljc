@@ -4,6 +4,7 @@
               [format.api       :as format]
               [re-frame.context :as context]
               [re-frame.core    :as core]
+              [re-frame.state   :as state]
               [time.api         :as time]))
 
 ;; ----------------------------------------------------------------------------
@@ -22,3 +23,18 @@
 ; @constant (?)
 (def debug! (core/->interceptor :id :re-frame/debug!
                                 :after debug-f))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
+(defn set-debug-mode!
+  ; @usage
+  ;  (set-debug-mode!)
+  []
+  (reset! state/DEBUG-MODE? true))
+
+(defn quit-debug-mode!
+  ; @usage
+  ;  (quit-debug-mode!)
+  []
+  (reset! state/DEBUG-MODE? false))
