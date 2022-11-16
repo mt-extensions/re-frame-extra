@@ -11,9 +11,9 @@
   ; @param (vector) event-vector
   ;
   ; @example
-  ;  (effects-map<-event {:dispatch [:foo]} [:bar])
-  ;  =>
-  ;  {:dispatch [:foo] :dispatch-n [[:bar]]}
+  ; (effects-map<-event {:dispatch [:foo]} [:bar])
+  ; =>
+  ; {:dispatch [:foo] :dispatch-n [[:bar]]}
   ;
   ; @return (map)
   [effects-map event-vector]
@@ -24,12 +24,12 @@
   ; @param (map) b
   ;
   ; @example
-  ;  (merge-effects-maps {:dispatch [:a1]
-  ;                       :dispatch-n [[:a2] [:a3]}]}
-  ;                      {:dispatch [:b1]
-  ;                       :dispatch-n [[:b2]]})
-  ;  =>
-  ;  {:dispatch [:a1] :dispatch-n [[:a2] [:a3] [:b1] [:b2]]}
+  ; (merge-effects-maps {:dispatch [:a1]
+  ;                      :dispatch-n [[:a2] [:a3]}]}
+  ;                     {:dispatch [:b1]
+  ;                      :dispatch-n [[:b2]]})
+  ; =>
+  ; {:dispatch [:a1] :dispatch-n [[:a2] [:a3] [:b1] [:b2]]}
   ;
   ; @return (map)
   [a b]
@@ -41,9 +41,9 @@
   ; @param (map) effects-map
   ;
   ; @example
-  ;  (effects-map->handler-f {:dispatch [...]})
-  ;  =>
-  ;  (fn [_ _] {:dispatch [...]})
+  ; (effects-map->handler-f {:dispatch [...]})
+  ; =>
+  ; (fn [_ _] {:dispatch [...]})
   ;
   ; @return (function)
   [effects-map]

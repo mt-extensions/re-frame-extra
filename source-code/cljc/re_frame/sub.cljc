@@ -15,7 +15,7 @@
   ; @param (subscription-vector) subscriber
   ;
   ; @usage
-  ;  (subscribed [:my-subscription])
+  ; (subscribed [:my-subscription])
   ;
   ; @return (*)
   [subscriber]

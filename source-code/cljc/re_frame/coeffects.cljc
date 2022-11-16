@@ -13,12 +13,12 @@
 
 (defn cofx->event-vector
   ; @param (map) cofx
-  ;  {:event (vector)}
+  ; {:event (vector)}
   ;
   ; @example
-  ;  (cofx->event-vector {:event [...]})
-  ;  =>
-  ;  [...]
+  ; (cofx->event-vector {:event [...]})
+  ; =>
+  ; [...]
   ;
   ; @return (vector)
   [cofx]
@@ -26,13 +26,13 @@
 
 (defn cofx->event-id
   ; @param (map) cofx
-  ;  {:event (vector)
-  ;    [(keyword) event-id]}
+  ; {:event (vector)
+  ;   [(keyword) event-id]}
   ;
   ; @example
-  ;  (cofx->event-vector {:event [:my-event ...]})
-  ;  =>
-  ;  :my-event
+  ; (cofx->event-vector {:event [:my-event ...]})
+  ; =>
+  ; :my-event
   ;
   ; @return (keyword)
   [cofx]

@@ -21,9 +21,9 @@
   ; @param (*) params
   ;
   ; @example
-  ;  (r db/remove-item! db [:my-item])
-  ;  =>
-  ;  (db/remove-item! db [nil [:my-item]])
+  ; (r db/remove-item! db [:my-item])
+  ; =>
+  ; (db/remove-item! db [nil [:my-item]])
   ;
   ; @return (*)
   [f & params]

@@ -9,9 +9,9 @@
   ; @param (*) n
   ;
   ; @example
-  ;  (event-vector? [:my-event ...])
-  ;  =>
-  ;  true
+  ; (event-vector? [:my-event ...])
+  ; =>
+  ; true
   ;
   ; @return (boolean)
   [n]
@@ -22,19 +22,19 @@
   ; @param (*) n
   ;
   ; @example
-  ;  (subscription-vector? [:my-namespace/get-something ...])
-  ;  =>
-  ;  true
+  ; (subscription-vector? [:my-namespace/get-something ...])
+  ; =>
+  ; true
   ;
   ; @example
-  ;  (subscription-vector? [:my-namespace/something-happened? ...])
-  ;  =>
-  ;  true
+  ; (subscription-vector? [:my-namespace/something-happened? ...])
+  ; =>
+  ; true
   ;
   ; @example
-  ;  (subscription-vector? [:div ...])
-  ;  =>
-  ;  false
+  ; (subscription-vector? [:div ...])
+  ; =>
+  ; false
   ;
   ; @return (boolean)
   [n]

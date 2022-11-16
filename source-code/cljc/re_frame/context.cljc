@@ -7,13 +7,13 @@
 
 (defn context->event-vector
   ; @param (map) context
-  ;  {:coeffects (map)
-  ;   {:event (vector)}}
+  ; {:coeffects (map)
+  ;  {:event (vector)}}
   ;
   ; @example
-  ;  (context->event-vector {:coeffects {:event [:my-event ...]}})
-  ;  =>
-  ;  [:my-event ...]
+  ; (context->event-vector {:coeffects {:event [:my-event ...]}})
+  ; =>
+  ; [:my-event ...]
   ;
   ; @return (vector)
   [context]
@@ -21,13 +21,13 @@
 
 (defn context->event-id
   ; @param (map) context
-  ;  {:coeffects (map)
-  ;   {:event (vector)}}
+  ; {:coeffects (map)
+  ;  {:event (vector)}}
   ;
   ; @example
-  ;  (context->event-vector {:coeffects {:event [:my-event ...]}})
-  ;  =>
-  ;  :my-event
+  ; (context->event-vector {:coeffects {:event [:my-event ...]}})
+  ; =>
+  ; :my-event
   ;
   ; @return (keyword)
   [context]
@@ -35,13 +35,13 @@
 
 (defn context->db-before-effect
   ; @param (map) context
-  ;  {:coeffects (map)
-  ;   {:db (map)}}
+  ; {:coeffects (map)
+  ;  {:db (map)}}
   ;
   ; @example
-  ;  (context->db-before-effect {:coeffects {:db {...}}})
-  ;  =>
-  ;  {...}
+  ; (context->db-before-effect {:coeffects {:db {...}}})
+  ; =>
+  ; {...}
   ;
   ; @return (map)
   [context]
@@ -49,13 +49,13 @@
 
 (defn context->db-after-effect
   ; @param (map) context
-  ;  {:effects (map)
-  ;   {:db (map)}}
+  ; {:effects (map)
+  ;  {:db (map)}}
   ;
   ; @example
-  ;  (context->db-before-effect {:effects {:db {...}}})
-  ;  =>
-  ;  {...}
+  ; (context->db-before-effect {:effects {:db {...}}})
+  ; =>
+  ; {...}
   ;
   ; @return (map)
   [context]

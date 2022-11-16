@@ -20,12 +20,12 @@
 
 (defn dispatch-tick
   ; @param (maps in vector) effects-maps-vector
-  ;  [{ ... }
-  ;   {:tick 10
-  ;    :dispatch       [:my-event]
-  ;    :dispatch-n     [[:my-event]]
-  ;    :dispatch-later [ ... ]}
-  ;   { ... }]
+  ; [{ ... }
+  ;  {:tick 10
+  ;   :dispatch       [:my-event]
+  ;   :dispatch-n     [[:my-event]]
+  ;   :dispatch-later [ ... ]}
+  ;  { ... }]
   [effects-maps-vector]
   (core/dispatch [:dispatch-tick effects-maps-vector]))
 
@@ -38,13 +38,13 @@
 
 (core/reg-event-fx :dispatch-tick
   ; @param (maps in vector) effects-maps-vector
-  ;  [{ ... }
-  ;   {:tick 10
-  ;    :dispatch       [:my-event]
-  ;    :dispatch-n     [[:my-event]]
-  ;    :dispatch-later [ ... ]}
+  ; [{ ... }
+  ;  {:tick 10
+  ;   :dispatch       [:my-event]
+  ;   :dispatch-n     [[:my-event]]
+  ;   :dispatch-later [ ... ]}
   ;
-  ;   { ... }]
+  ;  { ... }]
   (fn [_ [_ effects-maps-vector]]
       (letfn [(f [merged-effects-map effects-map]
                  (if ; Tick now?

@@ -14,19 +14,19 @@
   ; @param (metamorphic-event) n
   ;
   ; @example
-  ;  (metamorphic-handler->handler-f [...])
-  ;  =>
-  ;  (fn [_ _] {:dispatch [...]})
+  ; (metamorphic-handler->handler-f [...])
+  ; =>
+  ; (fn [_ _] {:dispatch [...]})
   ;
   ; @example
-  ;  (metamorphic-handler->handler-f {:dispatch [...]})
-  ;  =>
-  ;  (fn [_ _] {:dispatch [...]})
+  ; (metamorphic-handler->handler-f {:dispatch [...]})
+  ; =>
+  ; (fn [_ _] {:dispatch [...]})
   ;
   ; @example
-  ;  (metamorphic-handler->handler-f (fn [_ _] ...))
-  ;  =>
-  ;  (fn [_ _] ...})
+  ; (metamorphic-handler->handler-f (fn [_ _] ...))
+  ; =>
+  ; (fn [_ _] ...})
   ;
   ; @return (function)
   [n]
@@ -38,19 +38,19 @@
   ; @param (metamorphic-event) n
   ;
   ; @example
-  ;  (metamorphic-event->effects-map [:my-event])
-  ;  =>
-  ;  {:dispatch [:my-event]}
+  ; (metamorphic-event->effects-map [:my-event])
+  ; =>
+  ; {:dispatch [:my-event]}
   ;
   ; @example
-  ;  (metamorphic-event->effects-map {:dispatch [:my-event])
-  ;  =>
-  ;  {:dispatch [:my-event]}
+  ; (metamorphic-event->effects-map {:dispatch [:my-event])
+  ; =>
+  ; {:dispatch [:my-event]}
   ;
   ; @example
-  ;  (metamorphic-event->effects-map (fn [] {:dispatch [:my-event]))
-  ;  =>
-  ;  {:dispatch [:my-event]}
+  ; (metamorphic-event->effects-map (fn [] {:dispatch [:my-event]))
+  ; =>
+  ; {:dispatch [:my-event]}
   ;
   ; @return (map)
   [n]
@@ -63,14 +63,14 @@
   ; @param (list of *) params
   ;
   ; @example
-  ;  (metamorphic-event<-params [:my-event] "My param" "Your param")
-  ;  =>
-  ;  [:my-event "My param" "Your param"]
+  ; (metamorphic-event<-params [:my-event] "My param" "Your param")
+  ; =>
+  ; [:my-event "My param" "Your param"]
   ;
   ; @example
-  ;  (metamorphic-event<-params {:dispatch [:my-event]} "My param" "Your param")
-  ;  =>
-  ;  {:dispatch [:my-event "My param" "Your param"]}
+  ; (metamorphic-event<-params {:dispatch [:my-event]} "My param" "Your param")
+  ; =>
+  ; {:dispatch [:my-event "My param" "Your param"]}
   ;
   ; @return (metamorphic-event)
   [n & params]

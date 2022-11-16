@@ -31,12 +31,12 @@
   ; @param (metamorphic-event) event-handler
   ;
   ; @usage
-  ;  (defn my-handler-f [db _])
-  ;  (reg-event-db :my-event my-handler-f)
+  ; (defn my-handler-f [db _])
+  ; (reg-event-db :my-event my-handler-f)
   ;
   ; @usage
-  ;  (defn my-handler-f [db _])
-  ;  (reg-event-db :my-event [...] my-handler-f)
+  ; (defn my-handler-f [db _])
+  ; (reg-event-db :my-event [...] my-handler-f)
   ([event-id event-handler]
    (reg-event-db event-id nil event-handler))
 
@@ -52,16 +52,16 @@
   ; @param (metamorphic-event) event-handler
   ;
   ; @usage
-  ;  (reg-event-fx :my-event [:your-event])
+  ; (reg-event-fx :my-event [:your-event])
   ;
   ; @usage
-  ;  (reg-event-fx :my-event {:dispatch [:your-event]})
+  ; (reg-event-fx :my-event {:dispatch [:your-event]})
   ;
   ; @usage
-  ;  (reg-event-fx :my-event (fn [cofx event-vector] [:your-event]})
+  ; (reg-event-fx :my-event (fn [cofx event-vector] [:your-event]})
   ;
   ; @usage
-  ;  (reg-event-fx :my-event (fn [cofx event-vector] {:dispatch [:your-event]})
+  ; (reg-event-fx :my-event (fn [cofx event-vector] {:dispatch [:your-event]})
   ([event-id event-handler]
    (reg-event-fx event-id nil event-handler))
 
@@ -75,13 +75,13 @@
   ; @param (* or vector) params
   ;
   ; @usage
-  ;  (apply-fx-params (fn [a] ...) "a")
+  ; (apply-fx-params (fn [a] ...) "a")
   ;
   ; @usage
-  ;  (apply-fx-params (fn [a] ...) ["a"])
+  ; (apply-fx-params (fn [a] ...) ["a"])
   ;
   ; @usage
-  ;  (apply-fx-params (fn [a b] ...) ["a" "b"])
+  ; (apply-fx-params (fn [a b] ...) ["a" "b"])
   ;
   ; @return (*)
   [handler-f params]
@@ -94,13 +94,13 @@
   ; @param (function) handler-f
   ;
   ; @usage
-  ;  (defn my-side-effect-f [a])
-  ;  (reg-fx       :my-side-effect my-side-effect-f)
-  ;  (reg-event-fx :my-effect {:my-my-side-effect-f "A"})
+  ; (defn my-side-effect-f [a])
+  ; (reg-fx       :my-side-effect my-side-effect-f)
+  ; (reg-event-fx :my-effect {:my-my-side-effect-f "A"})
   ;
   ; @usage
-  ;  (defn your-side-effect-f [a b])
-  ;  (reg-fx       :your-side-effect your-side-effect-f)
-  ;  (reg-event-fx :your-effect {:your-my-side-effect-f ["a" "b"]})
+  ; (defn your-side-effect-f [a b])
+  ; (reg-fx       :your-side-effect your-side-effect-f)
+  ; (reg-event-fx :your-effect {:your-my-side-effect-f ["a" "b"]})
   [event-id handler-f]
   (core/reg-fx event-id #(apply-fx-params handler-f %)))

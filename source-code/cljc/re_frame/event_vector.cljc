@@ -10,9 +10,9 @@
   ; @param (vector) event-vector
   ;
   ; @example
-  ;  (event-vector->event-id [:my-event ...])
-  ;  =>
-  ;  :my-event
+  ; (event-vector->event-id [:my-event ...])
+  ; =>
+  ; :my-event
   ;
   ; @return (vector)
   [event-vector]
@@ -22,9 +22,9 @@
   ; @param (vector) event-vector
   ;
   ; @example
-  ;  (event-vector->effects-map [...])
-  ;  =>
-  ;  {:dispatch [...]}
+  ; (event-vector->effects-map [...])
+  ; =>
+  ; {:dispatch [...]}
   ;
   ; @return (map)
   [event-vector]
@@ -34,9 +34,9 @@
   ; @param (vector) event-vector
   ;
   ; @example
-  ;  (event-vector->handler-f [...])
-  ;  =>
-  ;  (fn [_ _] {:dispatch [...]})
+  ; (event-vector->handler-f [...])
+  ; =>
+  ; (fn [_ _] {:dispatch [...]})
   ;
   ; @return (function)
   [event-vector]
@@ -50,9 +50,9 @@
   ; @param (list of *) params
   ;
   ; @example
-  ;  (event-vector<-params [:my-event] "My param" "Your param")
-  ;  =>
-  ;  [:my-event "My param" "Your param"]
+  ; (event-vector<-params [:my-event] "My param" "Your param")
+  ; =>
+  ; [:my-event "My param" "Your param"]
   ;
   ; @return (event-vector)
   [n & params]

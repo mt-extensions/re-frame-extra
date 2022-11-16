@@ -15,10 +15,10 @@
   ; @param (metamorphic-event) n
   ;
   ; @usage
-  ;  [:dispatch-metamorphic-event [...]]
+  ; [:dispatch-metamorphic-event [...]]
   ;
   ; @usage
-  ;  [:dispatch-metamorphic-event {:dispatch [...]}]
+  ; [:dispatch-metamorphic-event {:dispatch [...]}]
   (fn [_ [_ n]] (metamorphic/metamorphic-event->effects-map n)))
 
 ;; ----------------------------------------------------------------------------
@@ -28,13 +28,13 @@
   ; @param (metamorphic-event) event-handler
   ;
   ; @usage
-  ;  (dispatch [:foo])
+  ; (dispatch [:foo])
   ;
   ; @usage
-  ;  (dispatch {:dispatch [:foo]})
+  ; (dispatch {:dispatch [:foo]})
   ;
   ; @usage
-  ;  (dispatch nil)
+  ; (dispatch nil)
   [event-handler]
 
   ; Szerver-oldalon a Re-Frame nem jelez hibát, nem regisztrált esemény meghívásakor.
@@ -56,7 +56,7 @@
   ; @param (event-vector) event-handler
   ;
   ; @usage
-  ;  (dispatch-fx [:my-side-effect-event ...])
+  ; (dispatch-fx [:my-side-effect-event ...])
   [event-handler]
   (dispatch {:fx event-handler}))
 
@@ -64,7 +64,7 @@
   ; @param (event-vector) event-handler
   ;
   ; @usage
-  ;  (dispatch-sync [...])
+  ; (dispatch-sync [...])
   ;
   ; A dispatch-sync függvény a meghívási sebesség fontossága miatt nem kezeli
   ; a metamorphic-event kezelőket!
@@ -75,9 +75,9 @@
   ; @param (metamorphic-events in vector) event-list
   ;
   ; @usage
-  ;  (dispatch-n [[:event-a]
-  ;               {:dispatch [:event-b]}
-  ;               (fn [_ _] {:dispatch [:event-c]})])
+  ; (dispatch-n [[:event-a]
+  ;              {:dispatch [:event-b]}
+  ;              (fn [_ _] {:dispatch [:event-c]})])
   [event-list]
   (doseq [event (remove nil? event-list)]
          (dispatch event)))
@@ -91,10 +91,10 @@
   ; @param (maps in vector) effects-map-list
   ;
   ; @usage
-  ;  (dispatch-later [{:ms 500 :dispatch [...]}
-  ;                   {:ms 600 :fx [...]
-  ;                            :fx-n       [[...] [...]]
-  ;                            :dispatch-n [[...] [...]]}])
+  ; (dispatch-later [{:ms 500 :dispatch [...]}
+  ;                  {:ms 600 :fx [...]
+  ;                           :fx-n       [[...] [...]]
+  ;                           :dispatch-n [[...] [...]]}])
   [effects-map-list]
   ; Az eredeti dispatch-later függvény clojure környezetben nem időzíti a dispatch-later eseményeket!
   (doseq [{:keys [ms] :as effects-map} (remove nil? effects-map-list)]
@@ -112,13 +112,13 @@
   ; @param (metamorphic-event)(opt) else-event-handler
   ;
   ; @usage
-  ;  (dispatch-if [true [:my-event] ...])
+  ; (dispatch-if [true [:my-event] ...])
   ;
   ; @usage
-  ;  (dispatch-if [true {:dispatch [:my-event]} ...])
+  ; (dispatch-if [true {:dispatch [:my-event]} ...])
   ;
   ; @usage
-  ;  (dispatch-if [true (fn [_ _] {:dispatch [:my-event]}) ...])
+  ; (dispatch-if [true (fn [_ _] {:dispatch [:my-event]}) ...])
   [[condition if-event-handler else-event-handler]]
   (if condition (dispatch if-event-handler)
                 (if else-event-handler (dispatch else-event-handler))))
@@ -130,20 +130,20 @@
 (defn dispatch-cond
   ; @param (vector) conditional-events
   ; [(*) condition
-  ;  (metamorphic-event) if-event-handler
-  ;  ...]
+  ; (metamorphic-event) if-event-handler
+  ; ...]
   ;
   ; @usage
-  ;  (dispatch-cond [(some? "a") [:my-event]
-  ;                  (nil?  "b") [:my-event]])
+  ; (dispatch-cond [(some? "a") [:my-event]
+  ;                 (nil?  "b") [:my-event]])
   ;
   ; @usage
-  ;  (dispatch-cond [(some? "a") {:dispatch [:my-event]}
-  ;                  (nil?  "b") {:dispatch [:my-event]}])
+  ; (dispatch-cond [(some? "a") {:dispatch [:my-event]}
+  ;                 (nil?  "b") {:dispatch [:my-event]}])
   ;
   ; @usage
-  ;  (dispatch-cond [(some? "a") (fn [_ _] {:dispatch [:my-event]})
-  ;                  (nil?  "b") (fn [_ _] {:dispatch [:my-event]})])
+  ; (dispatch-cond [(some? "a") (fn [_ _] {:dispatch [:my-event]})
+  ;                 (nil?  "b") (fn [_ _] {:dispatch [:my-event]})])
   [conditional-events]
   (letfn [(dispatch-cond-f [_ dex x]
                            (if (and (even? dex) x)
@@ -214,7 +214,7 @@
   ; @param (event-vector) event-vector
   ;
   ; @usage
-  ;  (dispatch-last 500 [:foo-bar-baz])
+  ; (dispatch-last 500 [:foo-bar-baz])
   ;
   ; @return (?)
   [timeout event-vector]
@@ -231,7 +231,7 @@
   ; @param (event-vector) event-vector
   ;
   ; @usage
-  ;  (dispatch-once 500 [:foo-bar-baz])
+  ; (dispatch-once 500 [:foo-bar-baz])
   ;
   ; @return (?)
   [interval event-vector]

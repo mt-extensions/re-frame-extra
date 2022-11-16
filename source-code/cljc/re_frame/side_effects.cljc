@@ -11,8 +11,8 @@
   ; @param (vector) effect-vector
   ;
   ; @usage
-  ;  (reg-fx :my-side-effect (fn [a b c]))
-  ;  (fx [:my-side-effect "a" "b" "c"])
+  ; (reg-fx :my-side-effect (fn [a b c]))
+  ; (fx [:my-side-effect "a" "b" "c"])
   [[effect-id & params :as effect-vector]]
   (when (= :db effect-id)
         (console :warn "re-frame: \":fx\" effect should not contain a :db effect"))
@@ -29,9 +29,9 @@
   ; @param (vectors in vector) effect-vector-list
   ;
   ; @usage
-  ;  (reg-fx :my-side-effect (fn [a b c]))
-  ;  (fx-n [[:my-side-effect "a" "b" "c"]
-  ;         [...]])
+  ; (reg-fx :my-side-effect (fn [a b c]))
+  ; (fx-n [[:my-side-effect "a" "b" "c"]
+  ;        [...]])
   [effect-vector-list]
   (if-not (sequential? effect-vector-list)
           (console :warn "re-frame: \":fx\" effect expects a seq, but was given " (type effect-vector-list))

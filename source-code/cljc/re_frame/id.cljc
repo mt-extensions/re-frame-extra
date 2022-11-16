@@ -11,21 +11,21 @@
   ; @param (map) context
   ;
   ; @usage
-  ;  (event-vector<-id-f {...})
+  ; (event-vector<-id-f {...})
   ;
   ; @return (map)
   [context]
   (letfn [(f ; @param (vector) event-vector
              ;
              ; @example
-             ;  (f [:my-event :my-id {...}])
-             ;  =>
-             ;  [:my-event :my-id {...}]
+             ; (f [:my-event :my-id {...}])
+             ; =>
+             ; [:my-event :my-id {...}]
              ;
              ; @example
-             ;  (f [:my-event {...}])
-             ;  =>
-             ;  [:my-event :0ce14671-e916-43ab-b057-0939329d4c1b {...}]
+             ; (f [:my-event {...}])
+             ; =>
+             ; [:my-event :0ce14671-e916-43ab-b057-0939329d4c1b {...}]
              ;
              ; @return (vector)
              [event-vector]

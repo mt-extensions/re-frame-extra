@@ -9,26 +9,26 @@
   ; @param (keyword)(opt) event-kind
   ;
   ; @usage
-  ;  (get-event-handlers)
+  ; (get-event-handlers)
   ;
   ; @usage
-  ;  (get-event-handlers :sub)
+  ; (get-event-handlers :sub)
   ;
   ; @return (map)
-  ;  {:cofx (map)
-  ;   :event (map)
-  ;   :fx (map)
-  ;   :sub (map)}
+  ; {:cofx (map)
+  ;  :event (map)
+  ;  :fx (map)
+  ;  :sub (map)}
   ([]                       (deref registrar/kind->id->handler))
   ([event-kind] (event-kind (deref registrar/kind->id->handler))))
 
 (defn get-event-handler
   ; @param (keyword) event-kind
-  ;  :cofx, :event, :fx, :sub
+  ; :cofx, :event, :fx, :sub
   ; @param (keyword) event-id
   ;
   ; @usage
-  ;  (get-event-handler :sub :my-subscription)
+  ; (get-event-handler :sub :my-subscription)
   ;
   ; @return (maps in list)
   [event-kind event-id]
@@ -37,11 +37,11 @@
 
 (defn event-handler-registrated?
   ; @param (keyword) event-kind
-  ;  :cofx, :event, :fx, :sub
+  ; :cofx, :event, :fx, :sub
   ; @param (keyword) event-id
   ;
   ; @usage
-  ;  (event-handler-registrated? :sub :my-subscription)
+  ; (event-handler-registrated? :sub :my-subscription)
   ;
   ; @return (function)
   [event-kind event-id]
