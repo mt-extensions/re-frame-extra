@@ -1913,8 +1913,8 @@ true
 
 ```
 @usage
-(defn my-db-f [db _])
-(reg-sub :my-subscription my-db-f)
+(defn my-handler-f [db _])
+(reg-sub :my-subscription my-handler-f)
 ```
 
 ```
