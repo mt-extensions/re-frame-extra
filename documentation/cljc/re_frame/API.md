@@ -905,11 +905,28 @@
 
 ### event-handler-registrated?
 
+```
+@param (keyword) event-kind
+@param (keyword) event-id
+```
+
+```
+@usage
+(event-handler-registrated? :sub :my-subscription)
+```
+
+```
+@return (function)
+```
+
 <details>
 <summary>Source code</summary>
 
 ```
-
+(defn event-handler-registrated?
+  [event-kind event-id]
+  (-> (get-event-handler event-kind event-id)
+      (some?)))
 ```
 
 </details>
@@ -920,8 +937,8 @@
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [event-handler-registrated?]]))
 
-(re-frame/event-handler-registrated?)
-(event-handler-registrated?)
+(re-frame/event-handler-registrated? ...)
+(event-handler-registrated?          ...)
 ```
 
 </details>
@@ -1168,11 +1185,29 @@
 
 ### event-vector?
 
+```
+@param (*) n
+```
+
+```
+@example
+(event-vector? [:my-event ...])
+=>
+true
+```
+
+```
+@return (boolean)
+```
+
 <details>
 <summary>Source code</summary>
 
 ```
-
+(defn event-vector?
+  [n]
+  (and (-> n vector?)
+       (-> n first keyword?)))
 ```
 
 </details>
@@ -1183,8 +1218,8 @@
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [event-vector?]]))
 
-(re-frame/event-vector?)
-(event-vector?)
+(re-frame/event-vector? ...)
+(event-vector?          ...)
 ```
 
 </details>
@@ -1980,11 +2015,45 @@
 
 ### subscription-vector?
 
+```
+@param (*) n
+```
+
+```
+@example
+(subscription-vector? [:my-namespace/get-something ...])
+=>
+true
+```
+
+```
+@example
+(subscription-vector? [:my-namespace/something-happened? ...])
+=>
+true
+```
+
+```
+@example
+(subscription-vector? [:div ...])
+=>
+false
+```
+
+```
+@return (boolean)
+```
+
 <details>
 <summary>Source code</summary>
 
 ```
-
+(defn subscription-vector?
+  [n]
+  (and (-> n vector?)
+       (and (-> n first keyword?)
+            (or (-> n first name (string/starts-with? "get-"))
+                (-> n first name (string/ends-with?   "?"))))))
 ```
 
 </details>
@@ -1995,8 +2064,8 @@
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [subscription-vector?]]))
 
-(re-frame/subscription-vector?)
-(subscription-vector?)
+(re-frame/subscription-vector? ...)
+(subscription-vector?          ...)
 ```
 
 </details>
