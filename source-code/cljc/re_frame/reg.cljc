@@ -8,9 +8,24 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-; re-frame.core
-(def reg-cofx core/reg-cofx)
-(def reg-sub  core/reg-sub)
+(defn apply-fx-params
+  ; @param (function) handler-f
+  ; @param (* or vector) params
+  ;
+  ; @usage
+  ; (apply-fx-params (fn [a] ...) "a")
+  ;
+  ; @usage
+  ; (apply-fx-params (fn [a] ...) ["a"])
+  ;
+  ; @usage
+  ; (apply-fx-params (fn [a b] ...) ["a" "b"])
+  ;
+  ; @return (*)
+  [handler-f params]
+  (if (sequential?     params)
+      (apply handler-f params)
+      (handler-f       params)))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -24,6 +39,32 @@
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
+
+(defn reg-cofx
+  ; @param (keyword) event-id
+  ; @param (metamorphic-event) event-handler
+  ;
+  ; @usage
+  ; (defn my-handler-f [cofx _])
+  ; (reg-cofx :my-event my-handler-f)
+  [event-id event-handler]
+  (core/reg-cofx event-id event-handler))
+
+(defn reg-sub
+  ; @param (keyword) query-id
+  ; @param (list of functions) fs
+  ;
+  ; @usage
+  ; (defn my-db-f [db _])
+  ; (reg-sub :my-subscription my-db-f)
+  ;
+  ; @usage
+  ; (defn my-signal-f      [db _])
+  ; (defn your-signal-f    [db _])
+  ; (defn my-computation-f [[my-signal your-signal] _])
+  ; (reg-sub :my-subscription my-signal-f your-signal-f my-computation-f)
+  [query-id & fs]
+  (apply core/reg-sub query-id fs))
 
 (defn reg-event-db
   ; @param (keyword) event-id
@@ -69,25 +110,6 @@
    (let [handler-f    (metamorphic/metamorphic-handler->handler-f event-handler)
          interceptors (interceptors<-system-interceptors          interceptors)]
         (core/reg-event-fx event-id interceptors #(metamorphic/metamorphic-event->effects-map (handler-f %1 %2))))))
-
-(defn apply-fx-params
-  ; @param (function) handler-f
-  ; @param (* or vector) params
-  ;
-  ; @usage
-  ; (apply-fx-params (fn [a] ...) "a")
-  ;
-  ; @usage
-  ; (apply-fx-params (fn [a] ...) ["a"])
-  ;
-  ; @usage
-  ; (apply-fx-params (fn [a b] ...) ["a" "b"])
-  ;
-  ; @return (*)
-  [handler-f params]
-  (if (sequential?     params)
-      (apply handler-f params)
-      (handler-f       params)))
 
 (defn reg-fx
   ; @param (keyword) event-id

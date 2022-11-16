@@ -1715,11 +1715,24 @@ true
 
 ### reg-cofx
 
+```
+@param (keyword) event-id
+@param (metamorphic-event) event-handler
+```
+
+```
+@usage
+(defn my-handler-f [cofx _])
+(reg-cofx :my-event my-handler-f)
+```
+
 <details>
 <summary>Source code</summary>
 
 ```
-
+(defn reg-cofx
+  [event-id event-handler]
+  (core/reg-cofx event-id event-handler))
 ```
 
 </details>
@@ -1730,8 +1743,8 @@ true
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [reg-cofx]]))
 
-(re-frame/reg-cofx)
-(reg-cofx)
+(re-frame/reg-cofx ...)
+(reg-cofx          ...)
 ```
 
 </details>
@@ -1893,11 +1906,32 @@ true
 
 ### reg-sub
 
+```
+@param (keyword) query-id
+@param (list of functions) fs
+```
+
+```
+@usage
+(defn my-db-f [db _])
+(reg-sub :my-subscription my-db-f)
+```
+
+```
+@usage
+(defn my-signal-f      [db _])
+(defn your-signal-f    [db _])
+(defn my-computation-f [[my-signal your-signal] _])
+(reg-sub :my-subscription my-signal-f your-signal-f my-computation-f)
+```
+
 <details>
 <summary>Source code</summary>
 
 ```
-
+(defn reg-sub
+  [query-id & fs]
+  (apply core/reg-sub query-id fs))
 ```
 
 </details>
@@ -1908,8 +1942,8 @@ true
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [reg-sub]]))
 
-(re-frame/reg-sub)
-(reg-sub)
+(re-frame/reg-sub ...)
+(reg-sub          ...)
 ```
 
 </details>
