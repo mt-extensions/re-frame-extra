@@ -26,6 +26,9 @@
   ;   :dispatch-n     [[:my-event]]
   ;   :dispatch-later [ ... ]}
   ;  { ... }]
+  ;
+  ; @usage
+  ; (dispatch-tick [{:tick 42 :dispatch [:my-event]}])
   [effects-maps-vector]
   (core/dispatch [:dispatch-tick effects-maps-vector]))
 

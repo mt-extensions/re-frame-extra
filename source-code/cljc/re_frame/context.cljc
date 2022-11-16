@@ -25,7 +25,7 @@
   ;  {:event (vector)}}
   ;
   ; @example
-  ; (context->event-vector {:coeffects {:event [:my-event ...]}})
+  ; (context->event-id {:coeffects {:event [:my-event ...]}})
   ; =>
   ; :my-event
   ;
@@ -53,7 +53,7 @@
   ;  {:db (map)}}
   ;
   ; @example
-  ; (context->db-before-effect {:effects {:db {...}}})
+  ; (context->db-after-effect {:effects {:db {...}}})
   ; =>
   ; {...}
   ;

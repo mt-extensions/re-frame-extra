@@ -36,7 +36,6 @@
   ; @usage
   ; (dispatch nil)
   [event-handler]
-
   ; Szerver-oldalon a Re-Frame nem jelez hibát, nem regisztrált esemény meghívásakor.
   ; A szerver-oldalon nem történnek meg a nem regisztrált Re-Frame események, ezért nem lehetséges
   ; interceptor-ban vizsgálni az események regisztráltságát.
@@ -66,9 +65,9 @@
   ; @usage
   ; (dispatch-sync [...])
   ;
+  [event-handler]
   ; A dispatch-sync függvény a meghívási sebesség fontossága miatt nem kezeli
   ; a metamorphic-event kezelőket!
-  [event-handler]
   (core/dispatch-sync event-handler))
 
 (defn dispatch-n

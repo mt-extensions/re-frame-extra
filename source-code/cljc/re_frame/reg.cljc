@@ -58,10 +58,10 @@
   ; (reg-event-fx :my-event {:dispatch [:your-event]})
   ;
   ; @usage
-  ; (reg-event-fx :my-event (fn [cofx event-vector] [:your-event]})
+  ; (reg-event-fx :my-event (fn [cofx event-vector] [:your-event]))
   ;
   ; @usage
-  ; (reg-event-fx :my-event (fn [cofx event-vector] {:dispatch [:your-event]})
+  ; (reg-event-fx :my-event (fn [cofx event-vector] {:dispatch [:your-event]}))
   ([event-id event-handler]
    (reg-event-fx event-id nil event-handler))
 

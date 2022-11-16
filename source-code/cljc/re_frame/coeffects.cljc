@@ -30,7 +30,7 @@
   ;   [(keyword) event-id]}
   ;
   ; @example
-  ; (cofx->event-vector {:event [:my-event ...]})
+  ; (cofx->event-id {:event [:my-event ...]})
   ; =>
   ; :my-event
   ;

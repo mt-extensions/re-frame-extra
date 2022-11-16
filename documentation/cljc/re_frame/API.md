@@ -117,7 +117,7 @@
 
 ```
 @example
-(cofx->event-vector {:event [:my-event ...]})
+(cofx->event-id {:event [:my-event ...]})
 =>
 :my-event
 ```
@@ -201,7 +201,7 @@
 
 ```
 @example
-(context->db-before-effect {:effects {:db {...}}})
+(context->db-after-effect {:effects {:db {...}}})
 =>
 {...}
 ```
@@ -285,7 +285,7 @@
 
 ```
 @example
-(context->event-vector {:coeffects {:event [:my-event ...]}})
+(context->event-id {:coeffects {:event [:my-event ...]}})
 =>
 :my-event
 ```
@@ -413,7 +413,6 @@
 ```
 (defn dispatch
   [event-handler]
-
   #?(:clj (let [event-id      (event-vector/event-vector->event-id      event-handler)
                 event-exists? (event-handler/event-handler-registrated? :event event-id)]
                (if-not event-exists? (println "re-frame: no :event handler registrated for:" event-id))))
@@ -755,8 +754,7 @@
 ```
 @usage
 (dispatch-sync [...])
-A dispatch-sync függvény a meghívási sebesség fontossága miatt nem kezeli
-a metamorphic-event kezelőket!
+  ;
 ```
 
 <details>
@@ -788,6 +786,11 @@ a metamorphic-event kezelőket!
 
 ```
 @param (maps in vector) effects-maps-vector
+```
+
+```
+@usage
+(dispatch-tick [{:tick 42 :dispatch [:my-event]}])
 ```
 
 <details>
@@ -902,28 +905,11 @@ a metamorphic-event kezelőket!
 
 ### event-handler-registrated?
 
-```
-@param (keyword) event-kind
-@param (keyword) event-id
-```
-
-```
-@usage
-(event-handler-registrated? :sub :my-subscription)
-```
-
-```
-@return (function)
-```
-
 <details>
 <summary>Source code</summary>
 
 ```
-(defn event-handler-registrated?
-  [event-kind event-id]
-  (-> (get-event-handler event-kind event-id)
-      (some?)))
+
 ```
 
 </details>
@@ -934,8 +920,8 @@ a metamorphic-event kezelőket!
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [event-handler-registrated?]]))
 
-(re-frame/event-handler-registrated? ...)
-(event-handler-registrated?          ...)
+(re-frame/event-handler-registrated?)
+(event-handler-registrated?)
 ```
 
 </details>
@@ -1070,30 +1056,11 @@ a metamorphic-event kezelőket!
 
 ### event-vector<-id
 
-```
-@param (map) context
-```
-
-```
-@usage
-(event-vector<-id-f {...})
-```
-
-```
-@return (map)
-```
-
 <details>
 <summary>Source code</summary>
 
 ```
-(defn event-vector<-id-f
-  [context]
-  (letfn [(f             [event-vector]
-             (if (->     event-vector second keyword?)
-                 (return event-vector)
-                 (vec (concat [(first event-vector) (random/generate-keyword)] (rest event-vector)))))]
-         (update-in context [:coeffects :event] f)))
+
 ```
 
 </details>
@@ -1104,8 +1071,8 @@ a metamorphic-event kezelőket!
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [event-vector<-id]]))
 
-(re-frame/event-vector<-id ...)
-(event-vector<-id          ...)
+(re-frame/event-vector<-id)
+(event-vector<-id)
 ```
 
 </details>
@@ -1201,29 +1168,11 @@ a metamorphic-event kezelőket!
 
 ### event-vector?
 
-```
-@param (*) n
-```
-
-```
-@example
-(event-vector? [:my-event ...])
-=>
-true
-```
-
-```
-@return (boolean)
-```
-
 <details>
 <summary>Source code</summary>
 
 ```
-(defn event-vector?
-  [n]
-  (and (-> n vector?)
-       (-> n first keyword?)))
+
 ```
 
 </details>
@@ -1234,8 +1183,8 @@ true
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [event-vector?]]))
 
-(re-frame/event-vector? ...)
-(event-vector?          ...)
+(re-frame/event-vector?)
+(event-vector?)
 ```
 
 </details>
@@ -1327,30 +1276,27 @@ true
 ### get-event-handler
 
 ```
-@param (keyword)(opt) event-kind
+@param (keyword) event-kind
+@param (keyword) event-id
 ```
 
 ```
 @usage
-(get-event-handlers)
+(get-event-handler :sub :my-subscription)
 ```
 
 ```
-@usage
-(get-event-handlers :sub)
-```
-
-```
-@return (map)
+@return (maps in list)
 ```
 
 <details>
 <summary>Source code</summary>
 
 ```
-(defn get-event-handlers
-  ([]                       (deref registrar/kind->id->handler))
-  ([event-kind] (event-kind (deref registrar/kind->id->handler))))
+(defn get-event-handler
+  [event-kind event-id]
+  (-> (get-event-handlers)
+      (get-in [event-kind event-id])))
 ```
 
 </details>
@@ -1808,11 +1754,44 @@ true
 
 ### reg-event-fx
 
+```
+@param (keyword) event-id
+@param (vector)(opt) interceptors
+@param (metamorphic-event) event-handler
+```
+
+```
+@usage
+(reg-event-fx :my-event [:your-event])
+```
+
+```
+@usage
+(reg-event-fx :my-event {:dispatch [:your-event]})
+```
+
+```
+@usage
+(reg-event-fx :my-event (fn [cofx event-vector] [:your-event]))
+```
+
+```
+@usage
+(reg-event-fx :my-event (fn [cofx event-vector] {:dispatch [:your-event]}))
+```
+
 <details>
 <summary>Source code</summary>
 
 ```
+(defn reg-event-fx
+  ([event-id event-handler]
+   (reg-event-fx event-id nil event-handler))
 
+  ([event-id interceptors event-handler]
+   (let [handler-f    (metamorphic/metamorphic-handler->handler-f event-handler)
+         interceptors (interceptors<-system-interceptors          interceptors)]
+        (core/reg-event-fx event-id interceptors #(metamorphic/metamorphic-event->effects-map (handler-f %1 %2))))))
 ```
 
 </details>
@@ -1823,8 +1802,8 @@ true
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [reg-event-fx]]))
 
-(re-frame/reg-event-fx)
-(reg-event-fx)
+(re-frame/reg-event-fx ...)
+(reg-event-fx          ...)
 ```
 
 </details>
@@ -1936,26 +1915,11 @@ true
 
 ### subscribe
 
-```
-@param (subscription-vector) subscriber
-```
-
-```
-@usage
-(subscribed [:my-subscription])
-```
-
-```
-@return (*)
-```
-
 <details>
 <summary>Source code</summary>
 
 ```
-(defn subscribed
-  [subscriber]
-  (-> subscriber subscribe deref))
+
 ```
 
 </details>
@@ -1966,8 +1930,8 @@ true
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [subscribe]]))
 
-(re-frame/subscribe ...)
-(subscribe          ...)
+(re-frame/subscribe)
+(subscribe)
 ```
 
 </details>
@@ -2016,45 +1980,11 @@ true
 
 ### subscription-vector?
 
-```
-@param (*) n
-```
-
-```
-@example
-(subscription-vector? [:my-namespace/get-something ...])
-=>
-true
-```
-
-```
-@example
-(subscription-vector? [:my-namespace/something-happened? ...])
-=>
-true
-```
-
-```
-@example
-(subscription-vector? [:div ...])
-=>
-false
-```
-
-```
-@return (boolean)
-```
-
 <details>
 <summary>Source code</summary>
 
 ```
-(defn subscription-vector?
-  [n]
-  (and (-> n vector?)
-       (and (-> n first keyword?)
-            (or (-> n first name (string/starts-with? "get-"))
-                (-> n first name (string/ends-with?   "?"))))))
+
 ```
 
 </details>
@@ -2065,8 +1995,8 @@ false
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [subscription-vector?]]))
 
-(re-frame/subscription-vector? ...)
-(subscription-vector?          ...)
+(re-frame/subscription-vector?)
+(subscription-vector?)
 ```
 
 </details>
