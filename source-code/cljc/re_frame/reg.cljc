@@ -1,9 +1,9 @@
 
 (ns re-frame.reg
-    (:require [mid-fruits.vector    :as vector]
-              [re-frame.core        :as core]
+    (:require [re-frame.core        :as core]
               [re-frame.log         :as log]
-              [re-frame.metamorphic :as metamorphic]))
+              [re-frame.metamorphic :as metamorphic]
+              [vector.api           :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

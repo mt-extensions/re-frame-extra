@@ -1,11 +1,11 @@
 
 (ns re-frame.metamorphic
     (:require [candy.api             :refer [return]]
-              [mid-fruits.map        :as map]
-              [mid-fruits.vector     :as vector]
+              [map.api               :as map]
               [re-frame.effects-map  :as effects-map]
               [re-frame.event-vector :as event-vector]
-              [re-frame.types        :as types]))
+              [re-frame.types        :as types]
+              [vector.api            :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

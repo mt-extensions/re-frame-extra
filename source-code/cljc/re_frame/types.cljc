@@ -1,6 +1,6 @@
 
 (ns re-frame.types
-    (:require [mid-fruits.string :as string]))
+    (:require [string.api :as string]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -18,21 +18,21 @@
   (and (-> n vector?)
        (-> n first keyword?)))
 
-(defn subscription-vector?
+(defn query-vector?
   ; @param (*) n
   ;
   ; @example
-  ; (subscription-vector? [:my-namespace/get-something ...])
+  ; (query-vector? [:my-namespace/get-something ...])
   ; =>
   ; true
   ;
   ; @example
-  ; (subscription-vector? [:my-namespace/something-happened? ...])
+  ; (query-vector? [:my-namespace/something-happened? ...])
   ; =>
   ; true
   ;
   ; @example
-  ; (subscription-vector? [:div ...])
+  ; (query-vector? [:div ...])
   ; =>
   ; false
   ;

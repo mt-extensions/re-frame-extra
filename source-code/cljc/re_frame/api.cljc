@@ -107,5 +107,5 @@
 (def r trans/r)
 
 ; re-frame.types
-(def event-vector?        types/event-vector?)
-(def subscription-vector? types/subscription-vector?)
+(def event-vector? types/event-vector?)
+(def query-vector? types/query-vector?)

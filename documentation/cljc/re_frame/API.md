@@ -6,56 +6,6 @@
 
 
 
-### ->interceptor
-
-<details>
-<summary>Source code</summary>
-
-```
-
-```
-
-</details>
-
-<details>
-<summary>Require</summary>
-
-```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [->interceptor]]))
-
-(re-frame/->interceptor)
-(->interceptor)
-```
-
-</details>
-
----
-
-### DEBUG-MODE?
-
-<details>
-<summary>Source code</summary>
-
-```
-
-```
-
-</details>
-
-<details>
-<summary>Require</summary>
-
-```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [DEBUG-MODE?]]))
-
-(re-frame/DEBUG-MODE?)
-(DEBUG-MODE?)
-```
-
-</details>
-
----
-
 ### apply-fx-params
 
 ```
@@ -355,31 +305,6 @@
 
 (re-frame/context->event-vector ...)
 (context->event-vector          ...)
-```
-
-</details>
-
----
-
-### debug!
-
-<details>
-<summary>Source code</summary>
-
-```
-
-```
-
-</details>
-
-<details>
-<summary>Require</summary>
-
-```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [debug!]]))
-
-(re-frame/debug!)
-(debug!)
 ```
 
 </details>
@@ -1071,31 +996,6 @@
 
 ---
 
-### event-vector<-id
-
-<details>
-<summary>Source code</summary>
-
-```
-
-```
-
-</details>
-
-<details>
-<summary>Require</summary>
-
-```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [event-vector<-id]]))
-
-(re-frame/event-vector<-id)
-(event-vector<-id)
-```
-
-</details>
-
----
-
 ### event-vector<-id-f
 
 ```
@@ -1397,11 +1297,31 @@ true
 
 ### inject-cofx
 
+```
+@param (keyword) handler-id
+@param (*) param
+```
+
+```
+@usage
+(inject-cofx :my-handler)
+```
+
+```
+@usage
+(inject-cofx :my-handler "My param")
+```
+
 <details>
 <summary>Source code</summary>
 
 ```
+(defn inject-cofx
+  ([handler-id]
+   (core/inject-cofx handler-id))
 
+  ([handler-id param]
+   (core/inject-cofx handler-id param)))
 ```
 
 </details>
@@ -1412,8 +1332,8 @@ true
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [inject-cofx]]))
 
-(re-frame/inject-cofx)
-(inject-cofx)
+(re-frame/inject-cofx ...)
+(inject-cofx          ...)
 ```
 
 </details>
@@ -1630,6 +1550,65 @@ true
 
 (re-frame/metamorphic-handler->handler-f ...)
 (metamorphic-handler->handler-f          ...)
+```
+
+</details>
+
+---
+
+### query-vector?
+
+```
+@param (*) n
+```
+
+```
+@example
+(query-vector? [:my-namespace/get-something ...])
+=>
+true
+```
+
+```
+@example
+(query-vector? [:my-namespace/something-happened? ...])
+=>
+true
+```
+
+```
+@example
+(query-vector? [:div ...])
+=>
+false
+```
+
+```
+@return (boolean)
+```
+
+<details>
+<summary>Source code</summary>
+
+```
+(defn query-vector?
+  [n]
+  (and (-> n vector?)
+       (and (-> n first keyword?)
+            (or (-> n first name (string/starts-with? "get-"))
+                (-> n first name (string/ends-with?   "?"))))))
+```
+
+</details>
+
+<details>
+<summary>Require</summary>
+
+```
+(ns my-namespace (:require [re-frame.api :as re-frame :refer [query-vector?]]))
+
+(re-frame/query-vector? ...)
+(query-vector?          ...)
 ```
 
 </details>
@@ -1984,11 +1963,26 @@ true
 
 ### subscribe
 
+```
+@param (vector) query-vector
+```
+
+```
+@usage
+(subscribe [:my-subscription])
+```
+
+```
+@return (atom)
+```
+
 <details>
 <summary>Source code</summary>
 
 ```
-
+(defn subscribe
+  [query-vector]
+  (core/subscribe query-vector))
 ```
 
 </details>
@@ -1999,8 +1993,8 @@ true
 ```
 (ns my-namespace (:require [re-frame.api :as re-frame :refer [subscribe]]))
 
-(re-frame/subscribe)
-(subscribe)
+(re-frame/subscribe ...)
+(subscribe          ...)
 ```
 
 </details>
@@ -2010,7 +2004,7 @@ true
 ### subscribed
 
 ```
-@param (subscription-vector) subscriber
+@param (vector) query-vector
 ```
 
 ```
@@ -2027,8 +2021,8 @@ true
 
 ```
 (defn subscribed
-  [subscriber]
-  (-> subscriber subscribe deref))
+  [query-vector]
+  (-> query-vector subscribe deref))
 ```
 
 </details>
@@ -2041,65 +2035,6 @@ true
 
 (re-frame/subscribed ...)
 (subscribed          ...)
-```
-
-</details>
-
----
-
-### subscription-vector?
-
-```
-@param (*) n
-```
-
-```
-@example
-(subscription-vector? [:my-namespace/get-something ...])
-=>
-true
-```
-
-```
-@example
-(subscription-vector? [:my-namespace/something-happened? ...])
-=>
-true
-```
-
-```
-@example
-(subscription-vector? [:div ...])
-=>
-false
-```
-
-```
-@return (boolean)
-```
-
-<details>
-<summary>Source code</summary>
-
-```
-(defn subscription-vector?
-  [n]
-  (and (-> n vector?)
-       (and (-> n first keyword?)
-            (or (-> n first name (string/starts-with? "get-"))
-                (-> n first name (string/ends-with?   "?"))))))
-```
-
-</details>
-
-<details>
-<summary>Require</summary>
-
-```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [subscription-vector?]]))
-
-(re-frame/subscription-vector? ...)
-(subscription-vector?          ...)
 ```
 
 </details>

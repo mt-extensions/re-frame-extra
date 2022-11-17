@@ -5,18 +5,25 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-; re-frame.core
-(def subscribe core/subscribe)
+(defn subscribe
+  ; @param (vector) query-vector
+  ;
+  ; @usage
+  ; (subscribe [:my-subscription])
+  ;
+  ; @return (atom)
+  [query-vector]
+  (core/subscribe query-vector))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
 (defn subscribed
-  ; @param (subscription-vector) subscriber
+  ; @param (vector) query-vector
   ;
   ; @usage
   ; (subscribed [:my-subscription])
   ;
   ; @return (*)
-  [subscriber]
-  (-> subscriber subscribe deref))
+  [query-vector]
+  (-> query-vector subscribe deref))

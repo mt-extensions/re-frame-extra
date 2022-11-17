@@ -5,8 +5,20 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-; re-frame.core
-(def inject-cofx core/inject-cofx)
+(defn inject-cofx
+  ; @param (keyword) handler-id
+  ; @param (*)(opt) param
+  ;
+  ; @usage
+  ; (inject-cofx :my-handler)
+  ;
+  ; @usage
+  ; (inject-cofx :my-handler "My param")
+  ([handler-id]
+   (core/inject-cofx handler-id))
+
+  ([handler-id param]
+   (core/inject-cofx handler-id param)))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

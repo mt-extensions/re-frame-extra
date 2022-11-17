@@ -1,8 +1,8 @@
 
-(ns re-frame.tick
-    (:require [mid-fruits.vector    :as vector]
-              [re-frame.core        :as core]
-              [re-frame.effects-map :as effects-map]))
+(ns re-frame.tick 
+    (:require [re-frame.core        :as core]
+              [re-frame.effects-map :as effects-map]
+              [vector.api           :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

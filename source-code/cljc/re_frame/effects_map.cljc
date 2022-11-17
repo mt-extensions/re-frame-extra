@@ -1,7 +1,7 @@
 
 (ns re-frame.effects-map
-    (:require [mid-fruits.map    :refer [update-some]]
-              [mid-fruits.vector :as vector]))
+    (:require [map.api    :refer [update-some]]
+              [vector.api :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
