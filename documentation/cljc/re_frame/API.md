@@ -63,6 +63,8 @@
 
 ```
 @param (map) cofx
+{:event (vector)
+  [(keyword) event-id]}
 ```
 
 ```
@@ -105,6 +107,7 @@
 
 ```
 @param (map) cofx
+{:event (vector)}
 ```
 
 ```
@@ -147,6 +150,8 @@
 
 ```
 @param (map) context
+{:effects (map)
+ {:db (map)}}
 ```
 
 ```
@@ -189,6 +194,8 @@
 
 ```
 @param (map) context
+{:coeffects (map)
+ {:db (map)}}
 ```
 
 ```
@@ -231,6 +238,8 @@
 
 ```
 @param (map) context
+{:coeffects (map)
+ {:event (vector)}}
 ```
 
 ```
@@ -273,6 +282,8 @@
 
 ```
 @param (map) context
+{:coeffects (map)
+ {:event (vector)}}
 ```
 
 ```
@@ -366,6 +377,9 @@
 
 ```
 @param (vector) conditional-events
+[(*) condition
+(metamorphic-event) if-event-handler
+...]
 ```
 
 ```
@@ -711,6 +725,12 @@
 
 ```
 @param (maps in vector) effects-maps-vector
+[{ ... }
+ {:tick 10
+  :dispatch       [:my-event]
+  :dispatch-n     [[:my-event]]
+  :dispatch-later [ ... ]}
+ { ... }]
 ```
 
 ```
@@ -832,6 +852,7 @@
 
 ```
 @param (keyword) event-kind
+:cofx, :event, :fx, :sub
 @param (keyword) event-id
 ```
 
@@ -1212,6 +1233,7 @@ true
 
 ```
 @param (keyword) event-kind
+:cofx, :event, :fx, :sub
 @param (keyword) event-id
 ```
 
@@ -1268,6 +1290,10 @@ true
 
 ```
 @return (map)
+{:cofx (map)
+ :event (map)
+ :fx (map)
+ :sub (map)}
 ```
 
 <details>
