@@ -33,7 +33,9 @@
   ;
   ; @return (map)
   [a b]
-  (-> a (update-some :dispatch-n     vector/conj-item    (:dispatch       b))
+  (-> a (update-some :fx-n           vector/conj-item    (:fx             b))
+        (update-some :fx-n           vector/concat-items (:fx-n           b))
+        (update-some :dispatch-n     vector/conj-item    (:dispatch       b))
         (update-some :dispatch-n     vector/concat-items (:dispatch-n     b))
         (update-some :dispatch-later vector/concat-items (:dispatch-later b))))
 
