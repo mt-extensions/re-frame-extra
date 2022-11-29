@@ -4,17 +4,4 @@
          bithandshake/cljc-fruits {:git/url "https://github.com/bithandshake/cljc-fruits"
                                    :sha     "81654bafcdf7c11790e52eb93889c05ff5157177"}
          bithandshake/time-api    {:git/url "https://github.com/bithandshake/time-api"
-                                   :sha     "2de7e6867f7103b1d5a92395e4228ece667cc093"}
-
-
-
-
-
-
-         bithandshake/dom-api     {:git/url "https://github.com/bithandshake/dom-api"
-                                   :sha     "a401165d155cb1d408c1f279beb9a938ab53c942"}
-
-
-
-         bithandshake/io-api   {:git/url "https://github.com/bithandshake/io-api"
-                                :sha     "7b471dfd36cc54b2dc7cc2a73bd4b74e6b824cd4"}}}
+                                   :sha     "2de7e6867f7103b1d5a92395e4228ece667cc093"}}}
