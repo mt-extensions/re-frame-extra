@@ -56,11 +56,26 @@ metamorphic-event ooor a function which returns a function which returns
 an event-vector (for example).
 
 ```
-(dispatch                   [:my-event])
-(dispatch        {:dispatch [:my-event]})
+(dispatch [:my-event])
+```
+
+```
+(dispatch {:dispatch [:my-event]})
+```
+
+```
 (dispatch (fn [] {:dispatch [:my-event]}))
-(dispatch (fn []            [:my-event]))
-(dispatch (fn [] (fn []     [:my-event])))
+```
+
+```
+(dispatch (fn [] [:my-event]))
+```
+
+```
+(dispatch (fn [] (fn [] [:my-event])))
+```
+
+```
 (dispatch (fn [] (println "You can put some side-effects here!")
                  {:dispatch [:my-event]}))
 
@@ -80,9 +95,18 @@ You can pass not just a handler-function but an event-vector or an effect-map to
 `reg-event-fx` function.
 
 ```
-(reg-event-fx :my-effects                      [:my-event])
-(reg-event-fx :my-effects           {:dispatch [:my-event]})
-(reg-event-fx :my-effects (fn [_ _]            [:my-event]))
+(reg-event-fx :my-effects [:my-event])
+```
+
+```
+(reg-event-fx :my-effects {:dispatch [:my-event]})
+```
+
+```
+(reg-event-fx :my-effects (fn [_ _] [:my-event]))
+```
+
+```
 (reg-event-fx :my-effects (fn [_ _] {:dispatch [:my-event]}))
 ```
 
@@ -129,7 +153,7 @@ at least for the given timeout.
 ### dispatch-later
 
 I put some extra magic to the dispatch-later handler too. So you can use not just
-the `:dispatch` handler delayed but all of the Re-Frame handlers or any of
+the `:dispatch` handler delayed but all of the Re-Frame handlers and any of
 your own handlers.
 
 ```
@@ -180,7 +204,7 @@ need to add a slippage. So let's try again with the `:dispatch-tick` handler!
 ```
 
 Now the `[:import-data!]` event happens before the rendering started and the
-queue is ordered in the way we want:
+queue is ordered in the way we wanted:
 
 `[:boot-app!]`
 `[:init-app!]`
@@ -213,55 +237,66 @@ The `r` function helps you not to care about the event-id when you stacking hand
 Case 1. When you disregard the event-id parameter:
 
 ```
-(defn store-data! [db [_ data]]
-                  (assoc db :my-data data))
+(defn store-data!
+  [db [_ data]]
+  (assoc db :my-data data))
 
-(defn import-data! [db _]
-                   (store-data! db [nil 420]))
+(defn import-data!
+  [db _]
+  (store-data! db [nil 420]))
 ```
 
 Case 2. When you pass the event-id parameter:
 
 ```
-(defn store-data! [db [_ data]]
-                  (assoc db :my-data data))
+(defn store-data!
+  [db [_ data]]
+  (assoc db :my-data data))
 
-(defn import-data! [db [event-id]]
-                   (store-data! db [event-id 420]))
+(defn import-data!
+  [db [event-id]]
+  (store-data! db [event-id 420]))
 ```
 
 Case 3. When you use the `r` function:
 
 ```
-(defn store-data! [db [_ data]]
-                  (assoc db :my-data data))
+(defn store-data!
+  [db [_ data]]
+  (assoc db :my-data data))
 
-(defn import-data! [db _]
-                   (r store-data! db 420))
+(defn import-data!
+  [db _]
+  (r store-data! db 420))
 ```
 
-You can apply functions one after another if you use the as-> function:
+You can apply functions with `r` one after another if you use the as-> function:
 
 ```
-(defn store-data! [db [_ data]]
-                  (assoc db :my-data data))
+(defn store-data!
+  [db [_ data]]
+  (assoc db :my-data data))
 
-(defn update-data! [db _]
-                   (update db :my-data inc))
+(defn update-data!
+  [db _]
+ (update db :my-data inc))
 
-(defn import-data! [db _]
-                   (as-> db % (r store-data!  % 420)
-                              (r update-data! %)))
+(defn import-data!
+  [db _]
+  (as-> db % (r store-data!  % 420)
+             (r update-data! %)))
 ```
 
 And you can pass more than one parameter by using the `r`:
 
 ```
-(defn add-user! [db [_ name age]]
-                    (assoc db :my-user {:name name :age age}))
+(defn add-user!
+  [db [_ name age]]
+  (assoc db :my-user {:name name :age age}))
 
-(defn init-app! [db _]
-                (r add-user! db "John" 42))
+(defn init-app!
+  [db _]
+  (r add-user! db "John" 42))
 ```
 
 ### Stacking handler-functions
@@ -272,11 +307,18 @@ In the following sample, when you dispatch the `[:handle-data!]` event it follow
 by two db writes.
 
 ```
-(reg-event-db :store-data!  (fn [db [_ data]] (assoc  db :my-data data)))
-(reg-event-db :update-data! (fn [db _]        (update db :my-data inc)))
+(reg-event-db
+  :store-data!  
+  (fn [db [_ data]] (assoc db :my-data data)))
 
-(reg-event-fx :handle-data! (fn [_ _] {:dispatch-n [[:store-data! 420]
-                                                    [:update-data!]]}))
+(reg-event-db
+  :update-data!
+  (fn [db _] (update db :my-data inc)))
+
+(reg-event-fx
+  :handle-data!
+  (fn [_ _] {:dispatch-n [[:store-data! 420]
+                          [:update-data!]]}))
 ```
 
 If you want to do the same thing in only one db write you have several choices:
@@ -284,28 +326,44 @@ If you want to do the same thing in only one db write you have several choices:
 Case 1:
 
 ```
-(defn store-data!  [db [_ data]] (assoc  db :my-data data))
-(defn update-data! [db _]        (update db :my-data inc))
+(defn store-data!
+  [db [_ data]]
+  (assoc  db :my-data data))
 
-(reg-event-db  :store-data!  store-data!) <- In case if you need your handlers to be registrated.
-(reg-event-db :update-data! update-data!) <- -""-
+(defn update-data!
+  [db _]
+  (update db :my-data inc))
 
-(reg-event-fx :handle-data! (fn [_ _] {:db (as-> db % (r store-data!  % 420)
-                                                      (r update-data! %))}))
+(reg-event-fx
+  :handle-data!
+  (fn [_ _] {:db (as-> db % (r store-data!  % 420)
+                            (r update-data! %))}))
+
+; In case if you need your handlers to be registrated:
+; (reg-event-db :store-data! store-data!)  
+; (reg-event-db :update-data! update-data!)
 ```
 
 Case 2:
 
 ```
-(defn store-data!  [db [_ data]] (assoc  db :my-data data))
-(defn update-data! [db _]        (update db :my-data inc))
-(defn handle-data! [db _]
-                   (as-> db % (r store-data!  % 420)
-                              (r update-data! %)))
+(defn store-data!
+  [db [_ data]]
+  (assoc  db :my-data data))
 
-(reg-event-db  :store-data!  store-data!)
-(reg-event-db :update-data! update-data!)
-(reg-event-db :handle-data! handle-data!)
+(defn update-data!
+  [db _]
+  (update db :my-data inc))
+
+(defn handle-data!
+  [db _]
+  (as-> db % (r store-data!  % 420)
+             (r update-data! %)))
+
+; In case if you need your handlers to be registrated:
+; (reg-event-db  :store-data!  store-data!)
+; (reg-event-db :update-data! update-data!)
+; (reg-event-db :handle-data! handle-data!)
 ```
 
 ### Subscribing in an effect event or in a db event, how?
@@ -314,21 +372,27 @@ If you are registrating named functions as subscription handlers, you can easily
 apply them in effect events and db events.
 
 ```
-(defn get-data [db _]
-               (get db :my-data))
+(defn get-data
+  [db _]
+  (get db :my-data))
 
-(reg-sub :get-data get-data) <- In case if you need your handler to be registrated.
+(defn check-data!
+  [db _]
+  (let [my-data (r get-data db)]))
+       (assoc db :my-data-valid? (number? my-data))
 
-(defn check-data! [db _]
-                  (let [my-data (r get-data db)]))
-                       (assoc db :my-data-valid? (number? my-data))
+; In case if you need your handler to be registrated:
+; (reg-sub :get-data get-data)
 ```
 
 ```
-(defn get-data [db _]
-               (get db :my-data))
+(defn get-data
+  [db _]
+  (get db :my-data))
 
-(reg-event-fx :check-data! (fn [_ _]
-                               (let [my-data (r get-data db)])
-                                    (println my-data))
+(reg-event-fx 
+  :check-data!
+  (fn [_ _]
+      (let [my-data (r get-data db)])
+           (println my-data))
 ```
