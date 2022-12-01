@@ -91,7 +91,7 @@ And of course you can do this if you want:
 
 The 'metamorphic-handler' is very similar to the previous formula.
 But it allows you to registrate Re-Frame effect-handlers really flexible.
-You can pass not just a handler-function but an event-vector or an effect-map to the
+You can pass not just a handler-function but an event-vector or an effects-map to the
 `reg-event-fx` function.
 
 ```
@@ -390,7 +390,7 @@ apply them in effect events and db events.
   [db _]
   (get db :my-data))
 
-(reg-event-fx 
+(reg-event-fx
   :check-data!
   (fn [_ _]
       (let [my-data (r get-data db)])
