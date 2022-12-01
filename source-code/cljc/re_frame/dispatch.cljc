@@ -45,7 +45,7 @@
   (letfn [(check! [] (let [event-id      (event-vector/event-vector->event-id      event-handler)
                            event-exists? (event-handler/event-handler-registrated? :event event-id)]
                           (when-not event-exists? (println "re-frame: no :event handler registrated for:" event-id))))]
-         (if (vector? event-handler) #?(:clj (check!)))
+         (if (vector? event-handler) #?(:clj (check!) :cljs nil))
          (if (vector? event-handler)         (core/dispatch event-handler)
                                              (core/dispatch [:dispatch-metamorphic-event event-handler]))))
 
