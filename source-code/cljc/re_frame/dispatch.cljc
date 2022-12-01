@@ -28,10 +28,13 @@
   ; @param (metamorphic-event) event-handler
   ;
   ; @usage
-  ; (dispatch [:foo])
+  ; (dispatch [:my-event])
   ;
   ; @usage
-  ; (dispatch {:dispatch [:foo]})
+  ; (dispatch {:dispatch [:my-event]})
+  ;
+  ; @usage
+  ; (dispatch (fn [] {:dispatch [:my-event]}))
   ;
   ; @usage
   ; (dispatch nil)
@@ -39,12 +42,12 @@
   ; Szerver-oldalon a Re-Frame nem jelez hibát, nem regisztrált esemény meghívásakor.
   ; A szerver-oldalon nem történnek meg a nem regisztrált Re-Frame események, ezért nem lehetséges
   ; interceptor-ban vizsgálni az események regisztráltságát.
-  #?(:clj (let [event-id      (event-vector/event-vector->event-id      event-handler)
-                event-exists? (event-handler/event-handler-registrated? :event event-id)]
-               (if-not event-exists? (println "re-frame: no :event handler registrated for:" event-id))))
-
-  (if (vector? event-handler) (core/dispatch event-handler)
-                              (core/dispatch [:dispatch-metamorphic-event event-handler])))
+  (letfn [(check! [] (let [event-id      (event-vector/event-vector->event-id      event-handler)
+                           event-exists? (event-handler/event-handler-registrated? :event event-id)]
+                          (when-not event-exists? (println "re-frame: no :event handler registrated for:" event-id))))]
+         (if (vector? event-handler) #?(:clj (check!)))
+         (if (vector? event-handler)         (core/dispatch event-handler)
+                                             (core/dispatch [:dispatch-metamorphic-event event-handler]))))
 
 ; @usage
 ;  {:dispatch ...}
@@ -213,7 +216,7 @@
   ; @param (event-vector) event-vector
   ;
   ; @usage
-  ; (dispatch-last 500 [:foo-bar-baz])
+  ; (dispatch-last 500 [:my-event])
   ;
   ; @return (?)
   [timeout event-vector]
@@ -230,7 +233,7 @@
   ; @param (event-vector) event-vector
   ;
   ; @usage
-  ; (dispatch-once 500 [:foo-bar-baz])
+  ; (dispatch-once 500 [:my-event])
   ;
   ; @return (?)
   [interval event-vector]

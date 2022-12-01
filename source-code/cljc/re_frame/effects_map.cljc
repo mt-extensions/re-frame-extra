@@ -11,9 +11,9 @@
   ; @param (vector) event-vector
   ;
   ; @example
-  ; (effects-map<-event {:dispatch [:foo]} [:bar])
+  ; (effects-map<-event {:dispatch [:my-event]} [:your-event])
   ; =>
-  ; {:dispatch [:foo] :dispatch-n [[:bar]]}
+  ; {:dispatch [:my-event] :dispatch-n [[:your-event]]}
   ;
   ; @return (map)
   [effects-map event-vector]
