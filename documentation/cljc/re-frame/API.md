@@ -1,10 +1,7 @@
 
 # <strong>re-frame.api</strong> namespace
-<p>Documentation of the <strong>re_frame/api.cljc</strong> file</p>
 
-<strong>[README](../../../README.md) > [DOCUMENTATION](../../COVER.md) > re-frame.api</strong>
-
-
+<strong>[README](../../../README.md) > [DOCUMENTATION](../../COVER.md) > </strong>source-code/cljc/re_frame/api.cljc
 
 ### apply-fx-params
 
@@ -49,10 +46,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [apply-fx-params]]))
+(ns my-namespace (:require [re-frame.api :refer [apply-fx-params]]))
 
-(re-frame/apply-fx-params ...)
-(apply-fx-params          ...)
+(re-frame.api/apply-fx-params ...)
+(apply-fx-params              ...)
 ```
 
 </details>
@@ -93,10 +90,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [cofx->event-id]]))
+(ns my-namespace (:require [re-frame.api :refer [cofx->event-id]]))
 
-(re-frame/cofx->event-id ...)
-(cofx->event-id          ...)
+(re-frame.api/cofx->event-id ...)
+(cofx->event-id              ...)
 ```
 
 </details>
@@ -136,10 +133,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [cofx->event-vector]]))
+(ns my-namespace (:require [re-frame.api :refer [cofx->event-vector]]))
 
-(re-frame/cofx->event-vector ...)
-(cofx->event-vector          ...)
+(re-frame.api/cofx->event-vector ...)
+(cofx->event-vector              ...)
 ```
 
 </details>
@@ -180,10 +177,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [context->db-after-effect]]))
+(ns my-namespace (:require [re-frame.api :refer [context->db-after-effect]]))
 
-(re-frame/context->db-after-effect ...)
-(context->db-after-effect          ...)
+(re-frame.api/context->db-after-effect ...)
+(context->db-after-effect              ...)
 ```
 
 </details>
@@ -224,10 +221,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [context->db-before-effect]]))
+(ns my-namespace (:require [re-frame.api :refer [context->db-before-effect]]))
 
-(re-frame/context->db-before-effect ...)
-(context->db-before-effect          ...)
+(re-frame.api/context->db-before-effect ...)
+(context->db-before-effect              ...)
 ```
 
 </details>
@@ -268,10 +265,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [context->event-id]]))
+(ns my-namespace (:require [re-frame.api :refer [context->event-id]]))
 
-(re-frame/context->event-id ...)
-(context->event-id          ...)
+(re-frame.api/context->event-id ...)
+(context->event-id              ...)
 ```
 
 </details>
@@ -312,10 +309,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [context->event-vector]]))
+(ns my-namespace (:require [re-frame.api :refer [context->event-vector]]))
 
-(re-frame/context->event-vector ...)
-(context->event-vector          ...)
+(re-frame.api/context->event-vector ...)
+(context->event-vector              ...)
 ```
 
 </details>
@@ -330,12 +327,17 @@
 
 ```
 @usage
-(dispatch [:foo])
+(dispatch [:my-event])
 ```
 
 ```
 @usage
-(dispatch {:dispatch [:foo]})
+(dispatch {:dispatch [:my-event]})
+```
+
+```
+@usage
+(dispatch (fn [] {:dispatch [:my-event]}))
 ```
 
 ```
@@ -349,12 +351,12 @@
 ```
 (defn dispatch
   [event-handler]
-  #?(:clj (let [event-id      (event-vector/event-vector->event-id      event-handler)
-                event-exists? (event-handler/event-handler-registrated? :event event-id)]
-               (if-not event-exists? (println "re-frame: no :event handler registrated for:" event-id))))
-
-  (if (vector? event-handler) (core/dispatch event-handler)
-                              (core/dispatch [:dispatch-metamorphic-event event-handler])))
+  (letfn [(check! [] (let [event-id      (event-vector/event-vector->event-id      event-handler)
+                           event-exists? (event-handler/event-handler-registrated? :event event-id)]
+                          (when-not event-exists? (println "re-frame: no :event handler registrated for:" event-id))))]
+         (if (vector? event-handler) #?(:clj (check!) :cljs nil))
+         (if (vector? event-handler)         (core/dispatch event-handler)
+                                             (core/dispatch [:dispatch-metamorphic-event event-handler]))))
 ```
 
 </details>
@@ -363,10 +365,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [dispatch]]))
+(ns my-namespace (:require [re-frame.api :refer [dispatch]]))
 
-(re-frame/dispatch ...)
-(dispatch          ...)
+(re-frame.api/dispatch ...)
+(dispatch              ...)
 ```
 
 </details>
@@ -419,10 +421,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [dispatch-cond]]))
+(ns my-namespace (:require [re-frame.api :refer [dispatch-cond]]))
 
-(re-frame/dispatch-cond ...)
-(dispatch-cond          ...)
+(re-frame.api/dispatch-cond ...)
+(dispatch-cond              ...)
 ```
 
 </details>
@@ -455,10 +457,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [dispatch-fx]]))
+(ns my-namespace (:require [re-frame.api :refer [dispatch-fx]]))
 
-(re-frame/dispatch-fx ...)
-(dispatch-fx          ...)
+(re-frame.api/dispatch-fx ...)
+(dispatch-fx              ...)
 ```
 
 </details>
@@ -504,10 +506,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [dispatch-if]]))
+(ns my-namespace (:require [re-frame.api :refer [dispatch-if]]))
 
-(re-frame/dispatch-if ...)
-(dispatch-if          ...)
+(re-frame.api/dispatch-if ...)
+(dispatch-if              ...)
 ```
 
 </details>
@@ -523,7 +525,7 @@
 
 ```
 @usage
-(dispatch-last 500 [:foo-bar-baz])
+(dispatch-last 500 [:my-event])
 ```
 
 ```
@@ -548,10 +550,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [dispatch-last]]))
+(ns my-namespace (:require [re-frame.api :refer [dispatch-last]]))
 
-(re-frame/dispatch-last ...)
-(dispatch-last          ...)
+(re-frame.api/dispatch-last ...)
+(dispatch-last              ...)
 ```
 
 </details>
@@ -589,10 +591,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [dispatch-later]]))
+(ns my-namespace (:require [re-frame.api :refer [dispatch-later]]))
 
-(re-frame/dispatch-later ...)
-(dispatch-later          ...)
+(re-frame.api/dispatch-later ...)
+(dispatch-later              ...)
 ```
 
 </details>
@@ -628,10 +630,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [dispatch-n]]))
+(ns my-namespace (:require [re-frame.api :refer [dispatch-n]]))
 
-(re-frame/dispatch-n ...)
-(dispatch-n          ...)
+(re-frame.api/dispatch-n ...)
+(dispatch-n              ...)
 ```
 
 </details>
@@ -647,7 +649,7 @@
 
 ```
 @usage
-(dispatch-once 500 [:foo-bar-baz])
+(dispatch-once 500 [:my-event])
 ```
 
 ```
@@ -674,10 +676,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [dispatch-once]]))
+(ns my-namespace (:require [re-frame.api :refer [dispatch-once]]))
 
-(re-frame/dispatch-once ...)
-(dispatch-once          ...)
+(re-frame.api/dispatch-once ...)
+(dispatch-once              ...)
 ```
 
 </details>
@@ -711,10 +713,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [dispatch-sync]]))
+(ns my-namespace (:require [re-frame.api :refer [dispatch-sync]]))
 
-(re-frame/dispatch-sync ...)
-(dispatch-sync          ...)
+(re-frame.api/dispatch-sync ...)
+(dispatch-sync              ...)
 ```
 
 </details>
@@ -753,10 +755,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [dispatch-tick]]))
+(ns my-namespace (:require [re-frame.api :refer [dispatch-tick]]))
 
-(re-frame/dispatch-tick ...)
-(dispatch-tick          ...)
+(re-frame.api/dispatch-tick ...)
+(dispatch-tick              ...)
 ```
 
 </details>
@@ -795,10 +797,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [effects-map->handler-f]]))
+(ns my-namespace (:require [re-frame.api :refer [effects-map->handler-f]]))
 
-(re-frame/effects-map->handler-f ...)
-(effects-map->handler-f          ...)
+(re-frame.api/effects-map->handler-f ...)
+(effects-map->handler-f              ...)
 ```
 
 </details>
@@ -814,9 +816,9 @@
 
 ```
 @example
-(effects-map<-event {:dispatch [:foo]} [:bar])
+(effects-map<-event {:dispatch [:my-event]} [:your-event])
 =>
-{:dispatch [:foo] :dispatch-n [[:bar]]}
+{:dispatch [:my-event] :dispatch-n [[:your-event]]}
 ```
 
 ```
@@ -838,10 +840,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [effects-map<-event]]))
+(ns my-namespace (:require [re-frame.api :refer [effects-map<-event]]))
 
-(re-frame/effects-map<-event ...)
-(effects-map<-event          ...)
+(re-frame.api/effects-map<-event ...)
+(effects-map<-event              ...)
 ```
 
 </details>
@@ -881,10 +883,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [event-handler-registrated?]]))
+(ns my-namespace (:require [re-frame.api :refer [event-handler-registrated?]]))
 
-(re-frame/event-handler-registrated? ...)
-(event-handler-registrated?          ...)
+(re-frame.api/event-handler-registrated? ...)
+(event-handler-registrated?              ...)
 ```
 
 </details>
@@ -923,10 +925,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [event-vector->effects-map]]))
+(ns my-namespace (:require [re-frame.api :refer [event-vector->effects-map]]))
 
-(re-frame/event-vector->effects-map ...)
-(event-vector->effects-map          ...)
+(re-frame.api/event-vector->effects-map ...)
+(event-vector->effects-map              ...)
 ```
 
 </details>
@@ -965,10 +967,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [event-vector->event-id]]))
+(ns my-namespace (:require [re-frame.api :refer [event-vector->event-id]]))
 
-(re-frame/event-vector->event-id ...)
-(event-vector->event-id          ...)
+(re-frame.api/event-vector->event-id ...)
+(event-vector->event-id              ...)
 ```
 
 </details>
@@ -1007,10 +1009,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [event-vector->handler-f]]))
+(ns my-namespace (:require [re-frame.api :refer [event-vector->handler-f]]))
 
-(re-frame/event-vector->handler-f ...)
-(event-vector->handler-f          ...)
+(re-frame.api/event-vector->handler-f ...)
+(event-vector->handler-f              ...)
 ```
 
 </details>
@@ -1051,10 +1053,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [event-vector<-id-f]]))
+(ns my-namespace (:require [re-frame.api :refer [event-vector<-id-f]]))
 
-(re-frame/event-vector<-id-f ...)
-(event-vector<-id-f          ...)
+(re-frame.api/event-vector<-id-f ...)
+(event-vector<-id-f              ...)
 ```
 
 </details>
@@ -1094,10 +1096,10 @@
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [event-vector<-params]]))
+(ns my-namespace (:require [re-frame.api :refer [event-vector<-params]]))
 
-(re-frame/event-vector<-params ...)
-(event-vector<-params          ...)
+(re-frame.api/event-vector<-params ...)
+(event-vector<-params              ...)
 ```
 
 </details>
@@ -1137,10 +1139,10 @@ true
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [event-vector?]]))
+(ns my-namespace (:require [re-frame.api :refer [event-vector?]]))
 
-(re-frame/event-vector? ...)
-(event-vector?          ...)
+(re-frame.api/event-vector? ...)
+(event-vector?              ...)
 ```
 
 </details>
@@ -1178,10 +1180,10 @@ true
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [fx]]))
+(ns my-namespace (:require [re-frame.api :refer [fx]]))
 
-(re-frame/fx ...)
-(fx          ...)
+(re-frame.api/fx ...)
+(fx              ...)
 ```
 
 </details>
@@ -1219,10 +1221,10 @@ true
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [fx-n]]))
+(ns my-namespace (:require [re-frame.api :refer [fx-n]]))
 
-(re-frame/fx-n ...)
-(fx-n          ...)
+(re-frame.api/fx-n ...)
+(fx-n              ...)
 ```
 
 </details>
@@ -1262,10 +1264,10 @@ true
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [get-event-handler]]))
+(ns my-namespace (:require [re-frame.api :refer [get-event-handler]]))
 
-(re-frame/get-event-handler ...)
-(get-event-handler          ...)
+(re-frame.api/get-event-handler ...)
+(get-event-handler              ...)
 ```
 
 </details>
@@ -1311,10 +1313,10 @@ true
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [get-event-handlers]]))
+(ns my-namespace (:require [re-frame.api :refer [get-event-handlers]]))
 
-(re-frame/get-event-handlers ...)
-(get-event-handlers          ...)
+(re-frame.api/get-event-handlers ...)
+(get-event-handlers              ...)
 ```
 
 </details>
@@ -1356,10 +1358,10 @@ true
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [inject-cofx]]))
+(ns my-namespace (:require [re-frame.api :refer [inject-cofx]]))
 
-(re-frame/inject-cofx ...)
-(inject-cofx          ...)
+(re-frame.api/inject-cofx ...)
+(inject-cofx              ...)
 ```
 
 </details>
@@ -1406,10 +1408,10 @@ true
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [merge-effects-maps]]))
+(ns my-namespace (:require [re-frame.api :refer [merge-effects-maps]]))
 
-(re-frame/merge-effects-maps ...)
-(merge-effects-maps          ...)
+(re-frame.api/merge-effects-maps ...)
+(merge-effects-maps              ...)
 ```
 
 </details>
@@ -1464,10 +1466,10 @@ true
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [metamorphic-event->effects-map]]))
+(ns my-namespace (:require [re-frame.api :refer [metamorphic-event->effects-map]]))
 
-(re-frame/metamorphic-event->effects-map ...)
-(metamorphic-event->effects-map          ...)
+(re-frame.api/metamorphic-event->effects-map ...)
+(metamorphic-event->effects-map              ...)
 ```
 
 </details>
@@ -1516,10 +1518,10 @@ true
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [metamorphic-event<-params]]))
+(ns my-namespace (:require [re-frame.api :refer [metamorphic-event<-params]]))
 
-(re-frame/metamorphic-event<-params ...)
-(metamorphic-event<-params          ...)
+(re-frame.api/metamorphic-event<-params ...)
+(metamorphic-event<-params              ...)
 ```
 
 </details>
@@ -1574,10 +1576,10 @@ true
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [metamorphic-handler->handler-f]]))
+(ns my-namespace (:require [re-frame.api :refer [metamorphic-handler->handler-f]]))
 
-(re-frame/metamorphic-handler->handler-f ...)
-(metamorphic-handler->handler-f          ...)
+(re-frame.api/metamorphic-handler->handler-f ...)
+(metamorphic-handler->handler-f              ...)
 ```
 
 </details>
@@ -1633,10 +1635,10 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [query-vector?]]))
+(ns my-namespace (:require [re-frame.api :refer [query-vector?]]))
 
-(re-frame/query-vector? ...)
-(query-vector?          ...)
+(re-frame.api/query-vector? ...)
+(query-vector?              ...)
 ```
 
 </details>
@@ -1665,9 +1667,9 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [quit-debug-mode!]]))
+(ns my-namespace (:require [re-frame.api :refer [quit-debug-mode!]]))
 
-(re-frame/quit-debug-mode!)
+(re-frame.api/quit-debug-mode!)
 (quit-debug-mode!)
 ```
 
@@ -1710,10 +1712,10 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [r]]))
+(ns my-namespace (:require [re-frame.api :refer [r]]))
 
-(re-frame/r ...)
-(r          ...)
+(re-frame.api/r ...)
+(r              ...)
 ```
 
 </details>
@@ -1748,10 +1750,10 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [reg-cofx]]))
+(ns my-namespace (:require [re-frame.api :refer [reg-cofx]]))
 
-(re-frame/reg-cofx ...)
-(reg-cofx          ...)
+(re-frame.api/reg-cofx ...)
+(reg-cofx              ...)
 ```
 
 </details>
@@ -1797,10 +1799,10 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [reg-event-db]]))
+(ns my-namespace (:require [re-frame.api :refer [reg-event-db]]))
 
-(re-frame/reg-event-db ...)
-(reg-event-db          ...)
+(re-frame.api/reg-event-db ...)
+(reg-event-db              ...)
 ```
 
 </details>
@@ -1855,10 +1857,10 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [reg-event-fx]]))
+(ns my-namespace (:require [re-frame.api :refer [reg-event-fx]]))
 
-(re-frame/reg-event-fx ...)
-(reg-event-fx          ...)
+(re-frame.api/reg-event-fx ...)
+(reg-event-fx              ...)
 ```
 
 </details>
@@ -1901,10 +1903,10 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [reg-fx]]))
+(ns my-namespace (:require [re-frame.api :refer [reg-fx]]))
 
-(re-frame/reg-fx ...)
-(reg-fx          ...)
+(re-frame.api/reg-fx ...)
+(reg-fx              ...)
 ```
 
 </details>
@@ -1947,10 +1949,10 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [reg-sub]]))
+(ns my-namespace (:require [re-frame.api :refer [reg-sub]]))
 
-(re-frame/reg-sub ...)
-(reg-sub          ...)
+(re-frame.api/reg-sub ...)
+(reg-sub              ...)
 ```
 
 </details>
@@ -1979,9 +1981,9 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [set-debug-mode!]]))
+(ns my-namespace (:require [re-frame.api :refer [set-debug-mode!]]))
 
-(re-frame/set-debug-mode!)
+(re-frame.api/set-debug-mode!)
 (set-debug-mode!)
 ```
 
@@ -2019,10 +2021,10 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [subscribe]]))
+(ns my-namespace (:require [re-frame.api :refer [subscribe]]))
 
-(re-frame/subscribe ...)
-(subscribe          ...)
+(re-frame.api/subscribe ...)
+(subscribe              ...)
 ```
 
 </details>
@@ -2059,10 +2061,10 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [subscribed]]))
+(ns my-namespace (:require [re-frame.api :refer [subscribed]]))
 
-(re-frame/subscribed ...)
-(subscribed          ...)
+(re-frame.api/subscribed ...)
+(subscribed              ...)
 ```
 
 </details>
@@ -2091,9 +2093,9 @@ false
 <summary>Require</summary>
 
 ```
-(ns my-namespace (:require [re-frame.api :as re-frame :refer [toggle-debug-mode!]]))
+(ns my-namespace (:require [re-frame.api :refer [toggle-debug-mode!]]))
 
-(re-frame/toggle-debug-mode!)
+(re-frame.api/toggle-debug-mode!)
 (toggle-debug-mode!)
 ```
 

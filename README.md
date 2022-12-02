@@ -1,11 +1,15 @@
 
 # re-frame-api
 
-> "A person had to work hard for it, but a minute of perfection was worth the effort. A moment was the most you could ever expect from perfection." – Tyler Durden
+> "A person had to work hard for it, but a minute of perfection was worth the effort.
+   A moment was the most you could ever expect from perfection." – Tyler Durden
 
 ### Overview
 
-...
+The <strong>re-frame-api</strong> library contains the whole functionality
+of the great and majestic Re-Frame Clojure/ClojureScript framework with some
+extra features like the metamorphic-events (which allows you to registrate
+and dispatch your events in a very-very freestyle way).
 
 ### deps.edn
 

@@ -1,11 +1,13 @@
 
 # <strong>re-frame-api</strong>
+
 <p>Documentation of the <strong>re-frame-api</strong> Clojure / ClojureScript library</p>
 
 <strong>[README](../README.md) > DOCUMENTATION</strong>
 
 ### Public namespaces
-* [re-frame.api](cljc/re_frame/API.md) [cljc]
+
+* [re-frame.api](cljc/re-frame/API.md) [cljc]
 
 ---
 
