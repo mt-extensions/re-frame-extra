@@ -59,9 +59,9 @@
 (def effects-map->handler-f effects-map/effects-map->handler-f)
 
 ; re-frame.event-handler
-(def get-event-handlers         event-handler/get-event-handlers)
-(def get-event-handler          event-handler/get-event-handler)
-(def event-handler-registrated? event-handler/event-handler-registrated?)
+(def get-event-handlers        event-handler/get-event-handlers)
+(def get-event-handler         event-handler/get-event-handler)
+(def event-handler-registered? event-handler/event-handler-registered?)
 
 ; re-frame.event-vector
 (def event-vector->event-id    event-vector/event-vector->event-id)

@@ -5,9 +5,15 @@
 
 <strong>[README](../README.md) > DOCUMENTATION</strong>
 
-### Public namespaces
+### Clojure namespaces
+
+
+### Isomorphic namespaces
 
 * [re-frame.api](cljc/re-frame/API.md) [cljc]
+
+### ClojureScript namespaces
+
 
 ---
 

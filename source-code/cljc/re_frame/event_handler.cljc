@@ -35,13 +35,13 @@
   (-> (get-event-handlers)
       (get-in [event-kind event-id])))
 
-(defn event-handler-registrated?
+(defn event-handler-registered?
   ; @param (keyword) event-kind
   ; :cofx, :event, :fx, :sub
   ; @param (keyword) event-id
   ;
   ; @usage
-  ; (event-handler-registrated? :sub :my-subscription)
+  ; (event-handler-registered? :sub :my-subscription)
   ;
   ; @return (function)
   [event-kind event-id]

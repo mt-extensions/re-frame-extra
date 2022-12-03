@@ -86,7 +86,7 @@
         (core/reg-event-db event-id interceptors event-handler))))
 
 (defn reg-event-fx
-  ; You can registrate metamorphic-events, not only handler-functions
+  ; You can register metamorphic-events, not only handler-functions!
   ;
   ; @param (keyword) event-id
   ; @param (vector)(opt) interceptors

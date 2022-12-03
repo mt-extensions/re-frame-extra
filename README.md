@@ -8,8 +8,8 @@
 
 The <strong>re-frame-api</strong> library contains the whole functionality
 of the great and majestic Re-Frame Clojure/ClojureScript framework with some
-extra features like the metamorphic-events (which allows you to registrate
-and dispatch your events in a very-very freestyle way).
+extra features like the metamorphic-events (which allows you to register
+and dispatch your events in a very freestyle way).
 
 ### deps.edn
 
@@ -24,7 +24,7 @@ Check out the latest commit on the [release branch](https://github.com/bithandsh
 
 ### Documentation
 
-The <strong>re-frame-api</strong> documentation is [available here](documentation/COVER.md).
+The <strong>re-frame-api</strong> functional documentation is [available here](documentation/COVER.md).
 
 ### Changelog
 
@@ -94,7 +94,7 @@ And of course you can do this if you want:
 ### metamorphic-handler
 
 The 'metamorphic-handler' is very similar to the previous formula.
-But it allows you to registrate Re-Frame effect-handlers really flexible.
+But it allows you to register Re-Frame effect-handlers really flexible.
 You can pass not just a handler-function but an event-vector or an effects-map to the
 `reg-event-fx` function.
 
@@ -343,7 +343,7 @@ Case 1:
   (fn [_ _] {:db (as-> db % (r store-data!  % 420)
                             (r update-data! %))}))
 
-; In case if you need your handlers to be registrated:
+; In case if you need your handlers to be registered:
 ; (reg-event-db :store-data! store-data!)  
 ; (reg-event-db :update-data! update-data!)
 ```
@@ -364,7 +364,7 @@ Case 2:
   (as-> db % (r store-data!  % 420)
              (r update-data! %)))
 
-; In case if you need your handlers to be registrated:
+; In case if you need your handlers to be registered:
 ; (reg-event-db  :store-data!  store-data!)
 ; (reg-event-db :update-data! update-data!)
 ; (reg-event-db :handle-data! handle-data!)
@@ -385,7 +385,7 @@ apply them in effect events and db events.
   (let [my-data (r get-data db)]))
        (assoc db :my-data-valid? (number? my-data))
 
-; In case if you need your handler to be registrated:
+; In case if you need your handler to be registered:
 ; (reg-sub :get-data get-data)
 ```
 
