@@ -400,3 +400,20 @@ apply them in effect events and db events.
       (let [my-data (r get-data db)])
            (println my-data))
 ```
+
+### How to use the debug mode?
+
+You can control the debug mode by the following functions:
+
+```
+(ns my-namespace
+    (:require [re-frame.api]))
+
+(re-frame.api/set-debug-mode!)
+(re-frame.api/quit-debug-mode!)
+(re-frame.api/toggle-debug-mode!)
+```
+
+In debug mode, the event handler prints all the dispatched events and
+their parameters to the console or the terminal, and you can track what happens 
+under the hood.
