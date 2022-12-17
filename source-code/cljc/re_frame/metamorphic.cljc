@@ -74,9 +74,11 @@
   ;
   ; @return (metamorphic-event)
   [n & params]
-  ; Szükséges megkülönböztetni az esemény vektort a dispatch-later és dispatch-tick esemény csoport vektortól!
-  ; [:my-event ...]
-  ; [{:ms 500 :dispatch [:my-event ...]}]
+  ; A metamorphic event could be a vector ...
+  ; ... as an event-vector:         [:my-event ...]
+  ; ... as a dispatch-later vector: [{:ms   500 :dispatch [:my-event ...]}]
+  ; ... as a dispatch-tick vector:  [{:tick 500 :dispatch [:my-event ...]}]
   (cond (types/event-vector? n) (vector/concat-items n params)
+        (vector?             n) (vector/->items      n #(apply metamorphic-event<-params % params))
         (map?                n) (map/->values        n #(apply metamorphic-event<-params % params))
         :return              n))

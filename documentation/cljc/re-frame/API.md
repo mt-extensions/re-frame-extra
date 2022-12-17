@@ -1604,6 +1604,7 @@ true
 (defn metamorphic-event<-params
   [n & params]
   (cond (types/event-vector? n) (vector/concat-items n params)
+        (vector?             n) (vector/->items      n #(apply metamorphic-event<-params % params))
         (map?                n) (map/->values        n #(apply metamorphic-event<-params % params))
         :return              n))
 ```
