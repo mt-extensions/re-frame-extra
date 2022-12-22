@@ -8,8 +8,8 @@
 
 The <strong>re-frame-api</strong> library contains the whole functionality
 of the great and majestic Re-Frame Clojure/ClojureScript framework with some
-extra features like the metamorphic-events (which allows you to register
-and dispatch your events in a very freestyle way).
+extra features such as metamorphic-events (which allows you to register
+and dispatch your events in a freestyle way), etc.
 
 ### deps.edn
 
@@ -415,5 +415,5 @@ You can control the debug mode by the following functions:
 ```
 
 In debug mode, the event handler prints all the dispatched events and
-their parameters to the console or the terminal, and you can track what happens 
+their parameters to the console or the terminal, and you can track what happens
 under the hood.
