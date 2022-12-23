@@ -163,12 +163,13 @@ your own handlers.
 ```
 {:dispatch-later [{:ms 100 :dispatch [:my-event]}
                   {:ms 200 :dispatch-n [[:my-event] [:your-event]]}
-                  {:ms 300 :my-fx nil}]}
+                  {:ms 300 :my-fx nil}
+                  {:ms 400 :dispatch-n [[:my-event] {:dispatch-later [{:fx [:my-side-effect] :ms 500}]}]}]}
 ```
 
 ### dispatch-tick
 
-And what about the event-delaying based not on the time? What if you want to add
+And what about the event-delaying based on not the time? What if you want to add
 just a little slip into the event queue? When you composing your effect-events,
 sometimes you face with the fact that the Re-Frame uses a very logical but strict
 event queue.
@@ -193,7 +194,7 @@ When you dispatch the `[:boot-app!]` event the queue will looks like this:
 `[:import-data!]`
 `[:render-surface!]`
 
-If you want the `[:import-data!]` to happen before the rendering started, you
+If you want the `[:import-data!]` to happens before the rendering started, you
 need to add a slippage. So let's try again with the `:dispatch-tick` handler!
 
 ```
@@ -238,7 +239,7 @@ And one more ...
 
 The `r` function helps you not to care about the event-id when you stacking handler-functions.
 
-Case 1. When you disregard the event-id parameter:
+Case 1: When you disregard the event-id parameter:
 
 ```
 (defn store-data!
@@ -250,7 +251,7 @@ Case 1. When you disregard the event-id parameter:
   (store-data! db [nil 420]))
 ```
 
-Case 2. When you pass the event-id parameter:
+Case 2: When you pass the event-id parameter:
 
 ```
 (defn store-data!
@@ -262,7 +263,7 @@ Case 2. When you pass the event-id parameter:
   (store-data! db [event-id 420]))
 ```
 
-Case 3. When you use the `r` function:
+Case 3: When you use the `r` function:
 
 ```
 (defn store-data!
@@ -308,7 +309,7 @@ And you can pass more than one parameter by using the `r`:
 Stacking handler-functions helps you to decrease the Re-Frame database writes.
 
 In the following sample, when you dispatch the `[:handle-data!]` event it followed
-by two db writes.
+by two db writes by the `[:store-data!]` and `[:update-data!]` events.
 
 ```
 (reg-event-db
@@ -327,72 +328,93 @@ by two db writes.
 
 If you want to do the same thing in only one db write you have several choices:
 
-Case 1:
+Case 1: Keep the `[:handle-data!]` event as an effect event and use the `:db`
+handler to stack the `store-data!` and `update-data!` functions which were anonymous
+functions in the previous example and now they are named functions.
 
 ```
+; Define the 'store-data!' event handler as a named function:
 (defn store-data!
   [db [_ data]]
   (assoc  db :my-data data))
 
+(reg-event-db :store-data! store-data!)  
+
+
+; Define the 'update-data!' event handler as a named function:
 (defn update-data!
   [db _]
   (update db :my-data inc))
+
+(reg-event-db :update-data! update-data!)
+
 
 (reg-event-fx
   :handle-data!
   (fn [_ _] {:db (as-> db % (r store-data!  % 420)
                             (r update-data! %))}))
-
-; In case if you need your handlers to be registered:
-; (reg-event-db :store-data! store-data!)  
-; (reg-event-db :update-data! update-data!)
 ```
 
-Case 2:
+Case 2: The key is the same as in the previous example the only difference is
+that the `handle-data!` function is not an effect event anymore.
 
 ```
+; Define the 'store-data!' event handler as a named function:
 (defn store-data!
   [db [_ data]]
   (assoc  db :my-data data))
 
+(reg-event-db :store-data! store-data!)
+
+
+; Define the 'update-data!' event handler as a named function:
 (defn update-data!
   [db _]
   (update db :my-data inc))
 
+(reg-event-db :update-data! update-data!)
+
+
+; Define the 'handle-data!' event handler as a named function:
 (defn handle-data!
   [db _]
   (as-> db % (r store-data!  % 420)
              (r update-data! %)))
 
-; In case if you need your handlers to be registered:
-; (reg-event-db  :store-data!  store-data!)
-; (reg-event-db :update-data! update-data!)
-; (reg-event-db :handle-data! handle-data!)
+(reg-event-db :handle-data! handle-data!)
 ```
 
 ### Subscribing in an effect event or in a db event, how?
 
-If you are registrating named functions as subscription handlers, you can easily
+If you are register named functions as subscription handlers, you can easily
 apply them in effect events and db events.
 
 ```
+; Define the 'get-data' subscription handler as a named function:
 (defn get-data
   [db _]
   (get db :my-data))
 
+(reg-sub :get-data get-data)
+
+
+; Define the 'check-data!' event handler as a named function:
 (defn check-data!
   [db _]
   (let [my-data (r get-data db)]))
        (assoc db :my-data-valid? (number? my-data))
 
-; In case if you need your handler to be registered:
-; (reg-sub :get-data get-data)
+(reg-event-db :check-data! check-data!)
 ```
 
 ```
+; Define the 'get-data' subscription handler as a named function:
 (defn get-data
   [db _]
   (get db :my-data))
+
+(reg-sub :get-data get-data)
+
 
 (reg-event-fx
   :check-data!
@@ -415,5 +437,5 @@ You can control the debug mode by the following functions:
 ```
 
 In debug mode, the event handler prints all the dispatched events and
-their parameters to the console or the terminal, and you can track what happens
+their parameters to the console, and you can track what happens
 under the hood.
