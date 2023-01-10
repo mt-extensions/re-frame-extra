@@ -21,11 +21,7 @@
 
 - [dispatch](#dispatch)
 
-- [dispatch-cond](#dispatch-cond)
-
 - [dispatch-fx](#dispatch-fx)
-
-- [dispatch-if](#dispatch-if)
 
 - [dispatch-last](#dispatch-last)
 
@@ -471,62 +467,6 @@
 
 ---
 
-### dispatch-cond
-
-```
-@param (vector) conditional-events
-[(*) condition
-(metamorphic-event) if-event-handler
-...]
-```
-
-```
-@usage
-(dispatch-cond [(some? "a") [:my-event]
-                (nil?  "b") [:my-event]])
-```
-
-```
-@usage
-(dispatch-cond [(some? "a") {:dispatch [:my-event]}
-                (nil?  "b") {:dispatch [:my-event]}])
-```
-
-```
-@usage
-(dispatch-cond [(some? "a") (fn [_ _] {:dispatch [:my-event]})
-                (nil?  "b") (fn [_ _] {:dispatch [:my-event]})])
-```
-
-<details>
-<summary>Source code</summary>
-
-```
-(defn dispatch-cond
-  [conditional-events]
-  (letfn [(dispatch-cond-f [_ dex x]
-                           (if (and (even? dex) x)
-                               (let [event (nth conditional-events (inc dex))]
-                                    (dispatch event))))]
-         (reduce-kv dispatch-cond-f nil conditional-events)))
-```
-
-</details>
-
-<details>
-<summary>Require</summary>
-
-```
-(ns my-namespace (:require [re-frame.api :refer [dispatch-cond]]))
-
-(re-frame.api/dispatch-cond ...)
-(dispatch-cond              ...)
-```
-
-</details>
-
----
-
 ### dispatch-fx
 
 ```
@@ -563,56 +503,14 @@
 
 ---
 
-### dispatch-if
-
-```
-@param (*) condition
-@param (metamorphic-event) if-event-handler
-@param (metamorphic-event)(opt) else-event-handler
-```
-
-```
-@usage
-(dispatch-if [true [:my-event] ...])
-```
-
-```
-@usage
-(dispatch-if [true {:dispatch [:my-event]} ...])
-```
-
-```
-@usage
-(dispatch-if [true (fn [_ _] {:dispatch [:my-event]}) ...])
-```
-
-<details>
-<summary>Source code</summary>
-
-```
-(defn dispatch-if
-  [[condition if-event-handler else-event-handler]]
-  (if condition (dispatch if-event-handler)
-                (if else-event-handler (dispatch else-event-handler))))
-```
-
-</details>
-
-<details>
-<summary>Require</summary>
-
-```
-(ns my-namespace (:require [re-frame.api :refer [dispatch-if]]))
-
-(re-frame.api/dispatch-if ...)
-(dispatch-if              ...)
-```
-
-</details>
-
----
-
 ### dispatch-last
+
+```
+@description
+The 'dispatch-last' function only fires an event if you stop calling it
+at least for the given timeout.
+It ignores dispatching the event until the timout elapsed since the last calling.
+```
 
 ```
 @param (integer) timeout
@@ -737,6 +635,12 @@
 ---
 
 ### dispatch-once
+
+```
+@description
+The 'dispatch-once' function only fires an event once in the given interval.
+It ignores dispatching the event except one time per interval.
+```
 
 ```
 @param (integer) interval

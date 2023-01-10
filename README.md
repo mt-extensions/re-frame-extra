@@ -144,14 +144,14 @@ callings except two times per second (500 ms interval).
 ### dispatch-last
 
 It is quite similar to the previous function but the `dispatch-last` only fires
-an event if you stop to calling it at least for the given timeout.
+an event if you stop calling it at least for the given timeout.
 
 ```
 (dispatch-last 500 [:my-event])
 ```
 
 If you call this the same way as in the previous sample the function will ignore
-all of your callings and only fires the event (once) when you stop to calling it
+all of your callings and only fires the event (once) when you stop calling it
 at least for the given timeout.
 
 ### dispatch-later
@@ -186,7 +186,8 @@ So you can delay your events in the queue easily with the `:dispatch-tick` handl
                                        [:render-app!]]})
 ```
 
-When you dispatch the `[:boot-app!]` event the queue will looks like this:
+When you dispatch the `[:boot-app!]` event in the example above the queue will
+look like this:
 
 `[:boot-app!]`
 `[:init-app!]`
@@ -217,29 +218,11 @@ queue is ordered in the way we wanted:
 `[:render-app!]`
 `[:render-surface!]`
 
-### dispatch-if
-
-Just another way to dispatch an event conditional.
-
-```
-{:dispatch-if [(= x 42)            [:my-event]]}
-{:dispatch-if [(= x 42) {:dispatch [:my-event]}]}
-```
-
-### dispatch-cond
-
-And one more ...
-
-```
-{:dispatch-cond [(keyword? x) [:my-event   x]
-                 (string?  x) [:your-event x]]}
-```
-
 ### r
 
 The `r` function helps you not to care about the event-id when you stacking handler-functions.
 
-Case 1: When you disregard the event-id parameter:
+Case 1: If you disregard the event-id parameter:
 
 ```
 (defn store-data!
@@ -251,7 +234,7 @@ Case 1: When you disregard the event-id parameter:
   (store-data! db [nil 420]))
 ```
 
-Case 2: When you pass the event-id parameter:
+Case 2: If you pass the event-id parameter:
 
 ```
 (defn store-data!
@@ -263,7 +246,7 @@ Case 2: When you pass the event-id parameter:
   (store-data! db [event-id 420]))
 ```
 
-Case 3: When you use the `r` function:
+Case 3: If you use the `r` function:
 
 ```
 (defn store-data!
@@ -308,7 +291,7 @@ And you can pass more than one parameter by using the `r`:
 
 Stacking handler-functions helps you to decrease the Re-Frame database writes.
 
-In the following sample, when you dispatch the `[:handle-data!]` event it followed
+In the following example, when you dispatch the `[:handle-data!]` event it followed
 by two db writes by the `[:store-data!]` and `[:update-data!]` events.
 
 ```
@@ -326,14 +309,14 @@ by two db writes by the `[:store-data!]` and `[:update-data!]` events.
                           [:update-data!]]}))
 ```
 
-If you want to do the same thing in only one db write you have several choices:
+If you want to do the same thing with only one db write you have several choices:
 
 Case 1: Keep the `[:handle-data!]` event as an effect event and use the `:db`
 handler to stack the `store-data!` and `update-data!` functions which were anonymous
 functions in the previous example and now they are named functions.
 
 ```
-; Define the 'store-data!' event handler as a named function:
+; Defining the 'store-data!' handler as a named function:
 (defn store-data!
   [db [_ data]]
   (assoc  db :my-data data))
@@ -341,7 +324,7 @@ functions in the previous example and now they are named functions.
 (reg-event-db :store-data! store-data!)  
 
 
-; Define the 'update-data!' event handler as a named function:
+; Defining the 'update-data!' handler as a named function:
 (defn update-data!
   [db _]
   (update db :my-data inc))
@@ -359,7 +342,7 @@ Case 2: The key is the same as in the previous example the only difference is
 that the `handle-data!` function is not an effect event anymore.
 
 ```
-; Define the 'store-data!' event handler as a named function:
+; Defining the 'store-data!' handler as a named function:
 (defn store-data!
   [db [_ data]]
   (assoc  db :my-data data))
@@ -367,7 +350,7 @@ that the `handle-data!` function is not an effect event anymore.
 (reg-event-db :store-data! store-data!)
 
 
-; Define the 'update-data!' event handler as a named function:
+; Defining the 'update-data!' handler as a named function:
 (defn update-data!
   [db _]
   (update db :my-data inc))
@@ -375,7 +358,7 @@ that the `handle-data!` function is not an effect event anymore.
 (reg-event-db :update-data! update-data!)
 
 
-; Define the 'handle-data!' event handler as a named function:
+; Defining the 'handle-data!' handler as a named function:
 (defn handle-data!
   [db _]
   (as-> db % (r store-data!  % 420)
@@ -390,7 +373,7 @@ If you are register named functions as subscription handlers, you can easily
 apply them in effect events and db events.
 
 ```
-; Define the 'get-data' subscription handler as a named function:
+; Defining the 'get-data' handler as a named function:
 (defn get-data
   [db _]
   (get db :my-data))
@@ -398,7 +381,7 @@ apply them in effect events and db events.
 (reg-sub :get-data get-data)
 
 
-; Define the 'check-data!' event handler as a named function:
+; Defining the 'check-data!' handler as a named function:
 (defn check-data!
   [db _]
   (let [my-data (r get-data db)]))
@@ -408,7 +391,7 @@ apply them in effect events and db events.
 ```
 
 ```
-; Define the 'get-data' subscription handler as a named function:
+; Defining the 'get-data' handler as a named function:
 (defn get-data
   [db _]
   (get db :my-data))

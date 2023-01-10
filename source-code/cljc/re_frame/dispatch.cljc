@@ -108,63 +108,8 @@
 (registrar/clear-handlers :fx            :dispatch-later)
 (core/reg-fx              :dispatch-later dispatch-later)
 
-(defn dispatch-if
-  ; @param (*) condition
-  ; @param (metamorphic-event) if-event-handler
-  ; @param (metamorphic-event)(opt) else-event-handler
-  ;
-  ; @usage
-  ; (dispatch-if [true [:my-event] ...])
-  ;
-  ; @usage
-  ; (dispatch-if [true {:dispatch [:my-event]} ...])
-  ;
-  ; @usage
-  ; (dispatch-if [true (fn [_ _] {:dispatch [:my-event]}) ...])
-  [[condition if-event-handler else-event-handler]]
-  (if condition (dispatch if-event-handler)
-                (if else-event-handler (dispatch else-event-handler))))
-
-; @usage
-;  {:dispatch-if [...]}
-(core/reg-fx :dispatch-if dispatch-if)
-
-(defn dispatch-cond
-  ; @param (vector) conditional-events
-  ; [(*) condition
-  ; (metamorphic-event) if-event-handler
-  ; ...]
-  ;
-  ; @usage
-  ; (dispatch-cond [(some? "a") [:my-event]
-  ;                 (nil?  "b") [:my-event]])
-  ;
-  ; @usage
-  ; (dispatch-cond [(some? "a") {:dispatch [:my-event]}
-  ;                 (nil?  "b") {:dispatch [:my-event]}])
-  ;
-  ; @usage
-  ; (dispatch-cond [(some? "a") (fn [_ _] {:dispatch [:my-event]})
-  ;                 (nil?  "b") (fn [_ _] {:dispatch [:my-event]})])
-  [conditional-events]
-  (letfn [(dispatch-cond-f [_ dex x]
-                           (if (and (even? dex) x)
-                               (let [event (nth conditional-events (inc dex))]
-                                    (dispatch event))))]
-         (reduce-kv dispatch-cond-f nil conditional-events)))
-
-; @usage
-;  {:dispatch-cond [...]}
-(core/reg-fx :dispatch-cond dispatch-cond)
-
 ;; -- Low sample-rate dispatch functions --------------------------------------
 ;; ----------------------------------------------------------------------------
-
-; Ritkított futású esemény-indítók: dispatch-last, dispatch-once
-;
-; Az dispatch-last és dispatch-once függvények kizárólag event-vector
-; formátumban átadott eseményeket kezelnek, ugyanis más metamorphic-event
-; formátumok nem rendelkeznek kizárólagos azonosítási lehetősséggel.
 
 (defn- reg-event-lock
   ; @param (integer) timeout
@@ -208,9 +153,14 @@
                (reg-event-lock timeout event-id)))))
 
 (defn dispatch-last
-  ; Blokkolja az esemény-meghívásokat mindaddig, amíg az utolsó esemény-meghívás
-  ; után letelik a timeout. Ekkor az utolsó esemény-meghívást engedélyezi,
-  ; az utolsó előttieket pedig figyelmen kívül hagyja.
+  ; @Warning
+  ; The 'dispatch-last' function only handles standard event vectors, because
+  ; the metamorphic events don't have unique identifiers!
+  ;
+  ; @description
+  ; The 'dispatch-last' function only fires an event if you stop calling it
+  ; at least for the given timeout.
+  ; It ignores dispatching the event until the timout elapsed since the last calling.
   ;
   ; @param (integer) timeout
   ; @param (event-vector) event-vector
@@ -226,8 +176,13 @@
               (time/set-timeout! f timeout))))
 
 (defn dispatch-once
-  ; A megadott intervallumonként egy - az utolsó - esemény-meghívást engedélyezi,
-  ; a többit figyelmen kívül hagyja.
+  ; @Warning
+  ; The 'dispatch-once' function only handles standard event vectors, because
+  ; the metamorphic events don't have unique identifiers!
+  ;
+  ; @description
+  ; The 'dispatch-once' function only fires an event once in the given interval.
+  ; It ignores dispatching the event except one time per interval.
   ;
   ; @param (integer) interval
   ; @param (event-vector) event-vector

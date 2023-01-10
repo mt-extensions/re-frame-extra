@@ -1,8 +1,7 @@
 
-
 # re-frame-api documentation
 
-Documentation of the [re-frame-api](https://github.com/bithandshake-hq/re-frame-api) Clojure / ClojureScript library
+Documentation of the [re-frame-api](https://github.com/bithandshake/re-frame-api) Clojure / ClojureScript library
 
 ##### [README](../README.md) > DOCUMENTATION
 
