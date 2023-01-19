@@ -30,7 +30,33 @@ The <strong>re-frame-api</strong> functional documentation is [available here](d
 
 You can track the changes of the <strong>re-frame-api</strong> library [here](CHANGES.md).
 
-# What's in this library?
+### Index
+
+- [event-vector](#event-vector)
+
+- [effects-map](#effects-map)
+
+- [metamorphic-event](#metamorphic-event)
+
+- [metamorphic-handler](#metamorphic-handler)
+
+- [dispatch-once](#dispatch-once)
+
+- [dispatch-last](#dispatch-last)
+
+- [dispatch-later](#dispatch-later)
+
+- [dispatch-tick](#dispatch-tick)
+
+- [r function](#r-function)
+
+- [Stacking handler functions](#stacking-handler-functions)
+
+- [How to use subscription handlers in effect events and db events](#how-to-use-subscription-handlers-in-effect-events-and-db-events)
+
+- [How to use the debug mode?](#how-to-use-the-debug-mode)
+
+# Usage
 
 ### event-vector
 
@@ -95,7 +121,7 @@ And of course you can do this if you want:
 
 The 'metamorphic-handler' is very similar to the previous formula.
 But it allows you to register Re-Frame effect-handlers really flexible.
-You can pass not just a handler-function but an event-vector or an effects-map to the
+You can pass not just a handler function but an event-vector or an effects-map to the
 `reg-event-fx` function.
 
 ```
@@ -218,9 +244,9 @@ queue is ordered in the way we wanted:
 `[:render-app!]`
 `[:render-surface!]`
 
-### r
+### r function
 
-The `r` function helps you not to care about the event-id when you stacking handler-functions.
+The `r` function helps you not to care about the event-id when you stacking handler functions.
 
 Case 1: If you disregard the event-id parameter:
 
@@ -287,9 +313,9 @@ And you can pass more than one parameter by using the `r`:
   (r add-user! db "John" 42))
 ```
 
-### Stacking handler-functions
+### Stacking handler functions
 
-Stacking handler-functions helps you to decrease the Re-Frame database writes.
+Stacking handler functions helps you to decrease the Re-Frame database writes.
 
 In the following example, when you dispatch the `[:handle-data!]` event it followed
 by two db writes by the `[:store-data!]` and `[:update-data!]` events.
@@ -367,7 +393,7 @@ that the `handle-data!` function is not an effect event anymore.
 (reg-event-db :handle-data! handle-data!)
 ```
 
-### Subscribing in an effect event or in a db event, how?
+### How to use subscription handlers in effect events and db events?
 
 If you are register named functions as subscription handlers, you can easily
 apply them in effect events and db events.
