@@ -171,7 +171,7 @@
   ; @return (?)
   [timeout event-vector]
   (let [event-id (event-vector/event-vector->event-id event-vector)]
-       (reg-event-lock    timeout event-id)
+       (reg-event-lock timeout event-id)
        (letfn [(f [] (dispatch-unlocked?! event-vector))]
               (time/set-timeout! f timeout))))
 
