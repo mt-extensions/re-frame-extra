@@ -1,41 +1,9 @@
 
-(ns re-frame.reg
-    (:require [re-frame.core        :as core]
-              [re-frame.log         :as log]
-              [re-frame.metamorphic :as metamorphic]
-              [vector.api           :as vector]))
-
-;; ----------------------------------------------------------------------------
-;; ----------------------------------------------------------------------------
-
-(defn apply-fx-params
-  ; @param (function) handler-f
-  ; @param (* or vector) params
-  ;
-  ; @usage
-  ; (apply-fx-params (fn [a] ...) "a")
-  ;
-  ; @usage
-  ; (apply-fx-params (fn [a] ...) ["a"])
-  ;
-  ; @usage
-  ; (apply-fx-params (fn [a b] ...) ["a" "b"])
-  ;
-  ; @return (*)
-  [handler-f params]
-  (if (sequential?     params)
-      (apply handler-f params)
-      (handler-f       params)))
-
-;; ----------------------------------------------------------------------------
-;; ----------------------------------------------------------------------------
-
-(defn- interceptors<-system-interceptors
-  ; @param (vector) interceptors
-  ;
-  ; @return (vector)
-  [interceptors]
-  (vector/conj-item interceptors log/LOG-EVENT!))
+(ns re-frame.reg.side-effects
+    (:require [re-frame.core         :as core]
+              [re-frame.core.helpers :as core.helpers]
+              [re-frame.reg.helpers  :as reg.helpers]
+              [vector.api            :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -82,7 +50,7 @@
    (reg-event-db event-id nil event-handler))
 
   ([event-id interceptors event-handler]
-   (let [interceptors (interceptors<-system-interceptors interceptors)]
+   (let [interceptors (reg.helpers/interceptors<-system-interceptors interceptors)]
         (core/reg-event-db event-id interceptors event-handler))))
 
 (defn reg-event-fx
@@ -107,9 +75,9 @@
    (reg-event-fx event-id nil event-handler))
 
   ([event-id interceptors event-handler]
-   (let [handler-f    (metamorphic/metamorphic-handler->handler-f event-handler)
-         interceptors (interceptors<-system-interceptors          interceptors)]
-        (core/reg-event-fx event-id interceptors #(metamorphic/metamorphic-event->effects-map (handler-f %1 %2))))))
+   (let [handler-f    (core.helpers/metamorphic-handler->handler-f event-handler)
+         interceptors (reg.helpers/interceptors<-system-interceptors interceptors)]
+        (core/reg-event-fx event-id interceptors #(core.helpers/metamorphic-event->effects-map (handler-f %1 %2))))))
 
 (defn reg-fx
   ; @param (keyword) event-id
@@ -125,4 +93,4 @@
   ; (reg-fx       :your-side-effect your-side-effect-f)
   ; (reg-event-fx :your-effect {:your-my-side-effect-f ["a" "b"]})
   [event-id handler-f]
-  (core/reg-fx event-id #(apply-fx-params handler-f %)))
+  (core/reg-fx event-id #(reg.helpers/apply-fx-params handler-f %)))

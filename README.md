@@ -54,6 +54,8 @@ You can track the changes of the <strong>re-frame-api</strong> library [here](CH
 
 - [How to use subscription handlers in effect events and db events](#how-to-use-subscription-handlers-in-effect-events-and-db-events)
 
+- [How to use the debug interceptor?](#how-to-use-the-debug-interceptor)
+
 - [How to use the debug mode?](#how-to-use-the-debug-mode)
 
 # Usage
@@ -78,12 +80,11 @@ And how an 'effects-map' looks like:
 
 Yeah! The metamorphic stuff! Let's see how the magic works!
 
-The 'metamorphic-event' formula provides you a more flexible way to dispatch
-Re-Frame events.
-You can pass the event to the dispatch function (or the dispatching side-effects)
-as an event-vector, an effects-map or a function which returns with another
-metamorphic-event ooor a function which returns a function which returns
-an event-vector (for example).
+The 'metamorphic-event' formula provides you a more flexible way to dispatch Re-Frame events.
+You can pass the event to the [`re-frame.api/dispatch`](documentation/cljc/re-frame/API.md#dispatch)
+function (or the dispatching side-effects) as an event-vector, an effects-map
+or a function that returns another metamorphic-event ooor a function that returns
+a function that returns an event-vector (for example).
 
 ```
 (dispatch [:my-event])
@@ -432,9 +433,26 @@ apply them in effect events and db events.
            (println my-data))
 ```
 
+### How to use the debug interceptor?
+
+By using the `re-frame.api/debug!` interceptor your event will be printed to
+the console when it get dispatched.
+
+```
+(reg-event-db
+  :my-event
+  [debug!]
+  (fn [db _] ...))
+
+(reg-event-fx
+  :my-event
+  [debug!]
+  (fn [cofx _] ...))
+```
+
 ### How to use the debug mode?
 
-You can control the debug mode by the following functions:
+You can turns on/off the debug mode by using the following functions:
 
 ```
 (ns my-namespace
@@ -446,5 +464,4 @@ You can control the debug mode by the following functions:
 ```
 
 In debug mode, the event handler prints all the dispatched events and
-their parameters to the console, and you can track what happens
-under the hood.
+their parameters to the console, and you can track what happens under the hood.

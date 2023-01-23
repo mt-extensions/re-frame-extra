@@ -1,5 +1,5 @@
 
-(ns re-frame.sub
+(ns re-frame.core.sub
     (:require [re-frame.core :as core]))
 
 ;; ----------------------------------------------------------------------------
@@ -19,6 +19,9 @@
 ;; ----------------------------------------------------------------------------
 
 (defn subscribed
+  ; @description
+  ; Returns the actual derefed value of the given subscription.
+  ;
   ; @param (vector) query-vector
   ;
   ; @usage

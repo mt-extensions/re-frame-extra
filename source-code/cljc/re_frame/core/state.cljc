@@ -1,9 +1,10 @@
 
-(ns re-frame.interceptors
-    (:require [re-frame.core :as core]))
+(ns re-frame.core.state)
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-; re-frame.core
-(def ->interceptor core/->interceptor)
+; @ignore
+;
+; @atom (map)
+(def EVENT-LOCKS (atom {}))

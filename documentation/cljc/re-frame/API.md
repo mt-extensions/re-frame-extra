@@ -47,8 +47,6 @@
 
 - [event-vector->handler-f](#event-vector-handler-f)
 
-- [event-vector<-id-f](#event-vector-id-f)
-
 - [event-vector<-params](#event-vector-params)
 
 - [event-vector?](#event-vector)
@@ -70,8 +68,6 @@
 - [metamorphic-event<-params](#metamorphic-event-params)
 
 - [metamorphic-handler->handler-f](#metamorphic-handler-handler-f)
-
-- [query-vector?](#query-vector)
 
 - [quit-debug-mode!](#quit-debug-mode)
 
@@ -348,7 +344,7 @@
 ```
 (defn context->event-id
   [context]
-  (-> context context->event-vector event-vector/event-vector->event-id))
+  (-> context context->event-vector event-vector->event-id))
 ```
 
 </details>
@@ -443,8 +439,8 @@
 ```
 (defn dispatch
   [event-handler]
-  (letfn [(check! [] (let [event-id      (event-vector/event-vector->event-id      event-handler)
-                           event-exists? (event-handler/event-handler-registered? :event event-id)]
+  (letfn [(check! [] (let [event-id      (core.helpers/event-vector->event-id event-handler)
+                           event-exists? (reg.helpers/event-handler-registered? :event event-id)]
                           (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id))))]
          (if (vector? event-handler) #?(:clj (check!) :cljs nil))
          (if (vector? event-handler)         (core/dispatch event-handler)
@@ -532,8 +528,8 @@ It ignores dispatching the event until the timout elapsed since the last calling
 ```
 (defn dispatch-last
   [timeout event-vector]
-  (let [event-id (event-vector/event-vector->event-id event-vector)]
-       (reg-event-lock timeout event-id)
+  (let [event-id (core.helpers/event-vector->event-id event-vector)]
+       (reg-event-lock! timeout event-id)
        (letfn [(f [] (dispatch-unlocked?! event-vector))]
               (time/set-timeout! f timeout))))
 ```
@@ -662,10 +658,10 @@ It ignores dispatching the event except one time per interval.
 ```
 (defn dispatch-once
   [interval event-vector]
-  (let [event-id (event-vector/event-vector->event-id event-vector)]
+  (let [event-id (core.helpers/event-vector->event-id event-vector)]
        (if (event-unlocked? event-id)
-           (do (core/dispatch  event-vector)
-               (reg-event-lock interval event-id))
+           (do (core/dispatch event-vector)
+               (reg-event-lock! interval event-id))
            (letfn [(f [] (delayed-try interval event-vector))]
                   (time/set-timeout! f interval)))))
 ```
@@ -687,6 +683,11 @@ It ignores dispatching the event except one time per interval.
 ---
 
 ### dispatch-sync
+
+```
+@description
+This function doesn't take metamoprhic handler (for performance reasons).
+```
 
 ```
 @param (event-vector) event-handler
@@ -1013,50 +1014,6 @@ It ignores dispatching the event except one time per interval.
 
 (re-frame.api/event-vector->handler-f ...)
 (event-vector->handler-f              ...)
-```
-
-</details>
-
----
-
-### event-vector<-id-f
-
-```
-@param (map) context
-```
-
-```
-@usage
-(event-vector<-id-f {...})
-```
-
-```
-@return (map)
-```
-
-<details>
-<summary>Source code</summary>
-
-```
-(defn event-vector<-id-f
-  [context]
-  (letfn [(f             [event-vector]
-             (if (->     event-vector second keyword?)
-                 (return event-vector)
-                 (vec (concat [(first event-vector) (random/generate-keyword)] (rest event-vector)))))]
-         (update-in context [:coeffects :event] f)))
-```
-
-</details>
-
-<details>
-<summary>Require</summary>
-
-```
-(ns my-namespace (:require [re-frame.api :refer [event-vector<-id-f]]))
-
-(re-frame.api/event-vector<-id-f ...)
-(event-vector<-id-f              ...)
 ```
 
 </details>
@@ -1455,9 +1412,9 @@ true
 ```
 (defn metamorphic-event->effects-map
   [n]
-  (cond (vector? n) (event-vector/event-vector->effects-map n)
-        (map?    n) (return                                 n)
-        (fn?     n) (metamorphic-event->effects-map        (n))))
+  (cond (vector? n) (event-vector->effects-map       n)
+        (map?    n) (return                          n)
+        (fn?     n) (metamorphic-event->effects-map (n))))
 ```
 
 </details>
@@ -1507,10 +1464,10 @@ true
 ```
 (defn metamorphic-event<-params
   [n & params]
-  (cond (types/event-vector? n) (vector/concat-items n params)
-        (vector?             n) (vector/->items      n #(apply metamorphic-event<-params % params))
-        (map?                n) (map/->values        n #(apply metamorphic-event<-params % params))
-        :return              n))
+  (cond (event-vector? n) (vector/concat-items n params)
+        (vector?       n) (vector/->items      n #(apply metamorphic-event<-params % params))
+        (map?          n) (map/->values        n #(apply metamorphic-event<-params % params))
+        :return        n))
 ```
 
 </details>
@@ -1566,8 +1523,8 @@ true
 ```
 (defn metamorphic-handler->handler-f
   [n]
-  (cond (map?    n) (effects-map/effects-map->handler-f   n)
-        (vector? n) (event-vector/event-vector->handler-f n)
+  (cond (map?    n) (effects-map->handler-f  n)
+        (vector? n) (event-vector->handler-f n)
         :return  n))
 ```
 
@@ -1587,66 +1544,12 @@ true
 
 ---
 
-### query-vector?
-
-```
-@param (*) n
-```
-
-```
-@example
-(query-vector? [:my-namespace/get-something ...])
-=>
-true
-```
-
-```
-@example
-(query-vector? [:my-namespace/something-happened? ...])
-=>
-true
-```
-
-```
-@example
-(query-vector? [:div ...])
-=>
-false
-```
-
-```
-@return (boolean)
-```
-
-<details>
-<summary>Source code</summary>
-
-```
-(defn query-vector?
-  [n]
-  (and (-> n vector?)
-       (and (-> n first keyword?)
-            (or (-> n first name (string/starts-with? "get-"))
-                (-> n first name (string/ends-with?   "?"))))))
-```
-
-</details>
-
-<details>
-<summary>Require</summary>
-
-```
-(ns my-namespace (:require [re-frame.api :refer [query-vector?]]))
-
-(re-frame.api/query-vector? ...)
-(query-vector?              ...)
-```
-
-</details>
-
----
-
 ### quit-debug-mode!
+
+```
+@description
+Turns off the debug mode.
+```
 
 ```
 @usage
@@ -1659,7 +1562,7 @@ false
 ```
 (defn quit-debug-mode!
   []
-  (reset! state/DEBUG-MODE? false))
+  (reset! debug.state/DEBUG-MODE? false))
 ```
 
 </details>
@@ -1701,10 +1604,8 @@ false
 
 ```
 (defn r
-  [f & params]
-  (let [context      (first params)
-        event-vector (vector/cons-item (rest params) nil)]
-       (f context event-vector)))
+  [f & [context & params]]
+  (f context (vector/cons-item params nil)))
 ```
 
 </details>
@@ -1790,7 +1691,7 @@ false
    (reg-event-db event-id nil event-handler))
 
   ([event-id interceptors event-handler]
-   (let [interceptors (interceptors<-system-interceptors interceptors)]
+   (let [interceptors (reg.helpers/interceptors<-system-interceptors interceptors)]
         (core/reg-event-db event-id interceptors event-handler))))
 ```
 
@@ -1847,9 +1748,9 @@ false
    (reg-event-fx event-id nil event-handler))
 
   ([event-id interceptors event-handler]
-   (let [handler-f    (metamorphic/metamorphic-handler->handler-f event-handler)
-         interceptors (interceptors<-system-interceptors          interceptors)]
-        (core/reg-event-fx event-id interceptors #(metamorphic/metamorphic-event->effects-map (handler-f %1 %2))))))
+   (let [handler-f    (core.helpers/metamorphic-handler->handler-f event-handler)
+         interceptors (reg.helpers/interceptors<-system-interceptors interceptors)]
+        (core/reg-event-fx event-id interceptors #(core.helpers/metamorphic-event->effects-map (handler-f %1 %2))))))
 ```
 
 </details>
@@ -1895,7 +1796,7 @@ false
 ```
 (defn reg-fx
   [event-id handler-f]
-  (core/reg-fx event-id #(apply-fx-params handler-f %)))
+  (core/reg-fx event-id #(reg.helpers/apply-fx-params handler-f %)))
 ```
 
 </details>
@@ -1963,6 +1864,11 @@ false
 ### set-debug-mode!
 
 ```
+@description
+Turns on the debug mode.
+```
+
+```
 @usage
 (set-debug-mode!)
 ```
@@ -1973,7 +1879,7 @@ false
 ```
 (defn set-debug-mode!
   []
-  (reset! state/DEBUG-MODE? true))
+  (reset! debug.state/DEBUG-MODE? true))
 ```
 
 </details>
@@ -2035,6 +1941,11 @@ false
 ### subscribed
 
 ```
+@description
+Returns the actual derefed value of the given subscription.
+```
+
+```
 @param (vector) query-vector
 ```
 
@@ -2075,6 +1986,11 @@ false
 ### toggle-debug-mode!
 
 ```
+@description
+Toggles on/off the debug mode.
+```
+
+```
 @usage
 (toggle-debug-mode!)
 ```
@@ -2085,7 +2001,7 @@ false
 ```
 (defn toggle-debug-mode!
   []
-  (swap! state/DEBUG-MODE? not))
+  (swap! debug.state/DEBUG-MODE? not))
 ```
 
 </details>
