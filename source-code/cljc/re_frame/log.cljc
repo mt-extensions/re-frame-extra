@@ -1,6 +1,6 @@
 
 (ns re-frame.log
-    (:require [candy.api             :refer [return]]
+    (:require [noop.api              :refer [return]]
               [re-frame.context      :as context]
               [re-frame.interceptors :as interceptors]
               [re-frame.state        :as state]))

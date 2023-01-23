@@ -1,7 +1,7 @@
 
 (ns re-frame.metamorphic
-    (:require [candy.api             :refer [return]]
-              [map.api               :as map]
+    (:require [map.api               :as map]
+              [noop.api              :refer [return]]
               [re-frame.effects-map  :as effects-map]
               [re-frame.event-vector :as event-vector]
               [re-frame.types        :as types]

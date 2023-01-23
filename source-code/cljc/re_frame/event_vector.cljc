@@ -1,6 +1,6 @@
 
 (ns re-frame.event-vector
-    (:require [candy.api  :refer [return]]
+    (:require [noop.api   :refer [return]]
               [vector.api :as vector]))
 
 ;; ----------------------------------------------------------------------------

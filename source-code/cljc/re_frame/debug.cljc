@@ -1,7 +1,7 @@
 
 (ns re-frame.debug
-    (:require [candy.api        :refer [return]]
-              [format.api       :as format]
+    (:require [format.api       :as format]
+              [noop.api         :refer [return]]
               [re-frame.context :as context]
               [re-frame.core    :as core]
               [re-frame.state   :as state]
@@ -38,7 +38,7 @@
   ; (quit-debug-mode!)
   []
   (reset! state/DEBUG-MODE? false))
-  
+
 (defn toggle-debug-mode!
   ; @usage
   ; (toggle-debug-mode!)
