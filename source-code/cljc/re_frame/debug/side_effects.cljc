@@ -1,6 +1,6 @@
 
 (ns re-frame.debug.side-effects
-    (:require [re-frame.debug.state :as debug.state]))
+    (:require [re-frame.debug.state :as state]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -12,7 +12,7 @@
   ; @usage
   ; (set-debug-mode!)
   []
-  (reset! debug.state/DEBUG-MODE? true))
+  (reset! state/DEBUG-MODE? true))
 
 (defn quit-debug-mode!
   ; @description
@@ -21,7 +21,7 @@
   ; @usage
   ; (quit-debug-mode!)
   []
-  (reset! debug.state/DEBUG-MODE? false))
+  (reset! state/DEBUG-MODE? false))
 
 (defn toggle-debug-mode!
   ; @description
@@ -30,4 +30,4 @@
   ; @usage
   ; (toggle-debug-mode!)
   []
-  (swap! debug.state/DEBUG-MODE? not))
+  (swap! state/DEBUG-MODE? not))

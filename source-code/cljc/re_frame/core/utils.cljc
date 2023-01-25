@@ -1,5 +1,5 @@
 
-(ns re-frame.core.helpers
+(ns re-frame.core.utils
     (:require [map.api    :as map :refer [update-some]]
               [noop.api   :refer [return]]
               [vector.api :as vector]))
@@ -312,3 +312,25 @@
         (vector?       n) (vector/->items      n #(apply metamorphic-event<-params % params))
         (map?          n) (map/->values        n #(apply metamorphic-event<-params % params))
         :return        n))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
+(defn apply-fx-params
+  ; @param (function) handler-f
+  ; @param (* or vector) params
+  ;
+  ; @usage
+  ; (apply-fx-params (fn [a] ...) "a")
+  ;
+  ; @usage
+  ; (apply-fx-params (fn [a] ...) ["a"])
+  ;
+  ; @usage
+  ; (apply-fx-params (fn [a b] ...) ["a" "b"])
+  ;
+  ; @return (*)
+  [handler-f params]
+  (if (sequential?     params)
+      (apply handler-f params)
+      (handler-f       params)))

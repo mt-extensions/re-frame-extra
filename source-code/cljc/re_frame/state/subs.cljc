@@ -1,5 +1,5 @@
 
-(ns re-frame.db.subs
+(ns re-frame.state.subs
     (:require [noop.api      :refer [return]]
               [re-frame.core :as core]))
 
@@ -33,7 +33,7 @@
   ;
   ; @return (boolean)
   [db [_ item-path]]
-  (some? (r get-item db item-path)))
+  (some? (get-in db item-path)))
 
 (defn get-item-count
   ; @param (vector) item-path

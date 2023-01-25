@@ -1,31 +1,14 @@
 
-(ns re-frame.core.side-effects
-    (:require [re-frame.core         :as core]
-              [re-frame.core.helpers :as core.helpers]
-              [re-frame.core.state   :as core.state]
-              [re-frame.loggers      :refer [console]]
-              [re-frame.reg.helpers  :as reg.helpers]
-              [re-frame.registrar    :as registrar]
-              [time.api              :as time]
-              [vector.api            :as vector]))
+; Namespace re-frame.core.dispatch clashes with var re-frame.core/dispatch
 
-;; ----------------------------------------------------------------------------
-;; ----------------------------------------------------------------------------
-
-(defn inject-cofx
-  ; @param (keyword) handler-id
-  ; @param (*)(opt) param
-  ;
-  ; @usage
-  ; (inject-cofx :my-handler)
-  ;
-  ; @usage
-  ; (inject-cofx :my-handler "My param")
-  ([handler-id]
-   (core/inject-cofx handler-id))
-
-  ([handler-id param]
-   (core/inject-cofx handler-id param)))
+(ns re-frame.core.dispatch-set
+    (:require [re-frame.core       :as core]
+              [re-frame.core.env   :as env]
+              [re-frame.core.state :as state]
+              [re-frame.core.utils :as utils]
+              [re-frame.registrar  :as registrar]
+              [time.api            :as time]
+              [vector.api          :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -38,7 +21,7 @@
   ;
   ; @usage
   ; [:dispatch-metamorphic-event {:dispatch [...]}]
-  (fn [_ [_ n]] (core.helpers/metamorphic-event->effects-map n)))
+  (fn [_ [_ n]] (utils/metamorphic-event->effects-map n)))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -60,8 +43,8 @@
   [event-handler]
   ; By default the Re-Frame doesn't print errors on server-side when an event doesn't
   ; registered when it dispatched.
-  (letfn [(check! [] (let [event-id      (core.helpers/event-vector->event-id event-handler)
-                           event-exists? (reg.helpers/event-handler-registered? :event event-id)]
+  (letfn [(check! [] (let [event-id      (utils/event-vector->event-id event-handler)
+                           event-exists? (env/event-handler-registered? :event event-id)]
                           (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id))))]
          (if (vector? event-handler) #?(:clj (check!) :cljs nil))
          (if (vector? event-handler)         (core/dispatch event-handler)
@@ -141,7 +124,7 @@
   [timeout event-id]
   (let [elapsed-time (time/elapsed)
         unlock-time  (+ timeout elapsed-time)]
-       (swap! core.state/EVENT-LOCKS assoc event-id unlock-time)))
+       (swap! state/EVENT-LOCKS assoc event-id unlock-time)))
 
 (defn- event-unlocked?
   ; @ignore
@@ -151,7 +134,7 @@
   ; @return (boolean)
   [event-id]
   (let [elapsed-time (time/elapsed)
-        unlock-time  (get @core.state/EVENT-LOCKS event-id)]
+        unlock-time  (get @state/EVENT-LOCKS event-id)]
        (> elapsed-time unlock-time)))
 
 (defn- dispatch-unlocked?!
@@ -164,7 +147,7 @@
   ;
   ; @return (?)
   [event-vector]
-  (if (-> event-vector core.helpers/event-vector->event-id event-unlocked?)
+  (if (-> event-vector utils/event-vector->event-id event-unlocked?)
       (core/dispatch event-vector)))
 
 (defn- delayed-try
@@ -175,7 +158,7 @@
   ;
   ; @return (?)
   [timeout event-vector]
-  (let [event-id (core.helpers/event-vector->event-id event-vector)]
+  (let [event-id (utils/event-vector->event-id event-vector)]
        (when (event-unlocked? event-id)
              (core/dispatch   event-vector)
              (reg-event-lock! timeout event-id))))
@@ -198,7 +181,7 @@
   ;
   ; @return (?)
   [timeout event-vector]
-  (let [event-id (core.helpers/event-vector->event-id event-vector)]
+  (let [event-id (utils/event-vector->event-id event-vector)]
        (reg-event-lock! timeout event-id)
        (letfn [(f [] (dispatch-unlocked?! event-vector))]
               (time/set-timeout! f timeout))))
@@ -220,50 +203,12 @@
   ;
   ; @return (?)
   [interval event-vector]
-  (let [event-id (core.helpers/event-vector->event-id event-vector)]
+  (let [event-id (utils/event-vector->event-id event-vector)]
        (if (event-unlocked? event-id)
            (do (core/dispatch event-vector)
                (reg-event-lock! interval event-id))
            (letfn [(f [] (delayed-try interval event-vector))]
                   (time/set-timeout! f interval)))))
-
-;; ----------------------------------------------------------------------------
-;; ----------------------------------------------------------------------------
-
-(defn fx
-  ; @param (vector) effect-vector
-  ;
-  ; @usage
-  ; (reg-fx :my-side-effect (fn [a b c]))
-  ; (fx [:my-side-effect "a" "b" "c"])
-  [[effect-id & params :as effect-vector]]
-  (when (= :db effect-id)
-        (console :warn "re-frame: \":fx\" effect should not contain a :db effect"))
-  (if-let [effect-f (registrar/get-handler :fx effect-id false)]
-          (effect-f params)
-          (console :warn "re-frame: in \":fx\" effect found " effect-id " which has no associated handler. Ignoring.")))
-
-; @usage
-; {:fx [...]}
-(registrar/clear-handlers :fx :fx)
-(core/reg-fx              :fx  fx)
-
-(defn fx-n
-  ; @param (vectors in vector) effect-vector-list
-  ;
-  ; @usage
-  ; (reg-fx :my-side-effect (fn [a b c]))
-  ; (fx-n [[:my-side-effect "a" "b" "c"]
-  ;        [...]])
-  [effect-vector-list]
-  (if-not (sequential? effect-vector-list)
-          (console :warn "re-frame: \":fx\" effect expects a seq, but was given " (type effect-vector-list))
-          (doseq [effect-vector (remove nil? effect-vector-list)]
-                 (fx effect-vector))))
-
-; @usage
-; {:fx-n [[...] [...]]}
-(core/reg-fx :fx-n fx-n)
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -283,10 +228,10 @@
   (core/dispatch [:dispatch-tick effects-maps-vector]))
 
 ; @usage
-;  (reg-event-fx :my-event
-;    (fn [_ _]
-;        {:dispatch-tick [{:dispatch [:my-event]
-;                          :tick     10}]}))
+; (reg-event-fx :my-event
+;   (fn [_ _]
+;       {:dispatch-tick [{:dispatch [:my-event]
+;                         :tick     10}]}))
 (core/reg-fx :dispatch-tick dispatch-tick)
 
 (core/reg-event-fx :dispatch-tick
@@ -296,8 +241,6 @@
   ;   :dispatch       [:my-event]
   ;   :dispatch-n     [[:my-event]]
   ;   :dispatch-later [ ... ]}
-  ;
-  ;  { ... }]
   (fn [_ [_ effects-maps-vector]]
       (letfn [(f [merged-effects-map effects-map]
                  (if
@@ -305,7 +248,7 @@
                      (= 0 (:tick effects-map))
 
                      ; Tick now!
-                     (core.helpers/merge-effects-maps merged-effects-map effects-map)
+                     (utils/merge-effects-maps merged-effects-map effects-map)
 
                      ; Tick later!
                      (update merged-effects-map :dispatch-tick vector/conj-item (update effects-map :tick dec))))]

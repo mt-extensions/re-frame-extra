@@ -1,5 +1,5 @@
 
-(ns re-frame.db.events
+(ns re-frame.state.events
     (:require [map.api       :refer [dissoc-in]]
               [noop.api      :refer [return]]
               [re-frame.core :as core]
@@ -78,7 +78,7 @@
 
 (defn set-vector-item!
   ; @warning
-  ; The last item of the item path has to be an integer!
+  ; Last item of the item path must be an integer!
   ;
   ; @param (vector) item-path
   ; @param (*) item
@@ -136,7 +136,7 @@
 
 (defn remove-vector-item!
   ; @warning
-  ; The last item of the item path has to be an integer!
+  ; Last item of the item path must be an integer!
   ;
   ; @param (vector) item-path
   ;

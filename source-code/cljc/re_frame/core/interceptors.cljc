@@ -1,8 +1,10 @@
 
 (ns re-frame.core.interceptors
-    (:require [noop.api      :refer [return]]
-              [random.api    :as random]
-              [re-frame.core :as core]))
+    (:require [noop.api                    :refer [return]]
+              [random.api                  :as random]
+              [re-frame.core               :as core]
+              [re-frame.debug.interceptors :as debug.interceptors]
+              [vector.api                  :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -11,12 +13,12 @@
   ; @ignore
   ;
   ; @description
-  ; Puts a random generated keyword type ID as the second item of the event vector,
-  ; in case of the second item is not a keyword item.
+  ; Puts a random generated keyword type ID as the second parameter into the
+  ; event vector, in case of the second parameter is not a keyword.
   ;
   ; By using this interceptor you can make sure that your event takes a keyword
-  ; as its second item that you can use as an ID.
-  ; (The first item of the event vector is the ID of the event itself.)
+  ; as its second parameter that you can use as an ID.
+  ; (The first parameter is the ID of the event itself.)
   ;
   ; @param (map) context
   ;
@@ -30,7 +32,7 @@
   ;   (fn [_ [_ my-id my-params]]
   ;       (println "The second item of the event vector is always a keyword!")))
   ;
-  ; (dispatch [:my-effect-event        "My param"]) <- It puts a random gen. keyword to the second place
+  ; (dispatch [:my-effect-event        "My param"]) <- In this case it puts a random gen. keyword to the second place
   ; (dispatch [:my-effect-event :my-id "My param"])
   ;
   ; @return (map)
@@ -58,3 +60,15 @@
 ; @constant (?)
 (def event-vector<-id (core/->interceptor :id :re-frame/event-vector<-id
                                           :before event-vector<-id-f))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
+(defn interceptors<-system-interceptors
+  ; @ignore
+  ;
+  ; @param (vector) interceptors
+  ;
+  ; @return (vector)
+  [interceptors]
+  (vector/conj-item interceptors debug.interceptors/LOG-EVENT!))

@@ -1,5 +1,5 @@
 
-(ns re-frame.db.helpers
+(ns re-frame.state.helpers
     (:require [re-frame.core :as core]))
 
 ;; ----------------------------------------------------------------------------
@@ -20,6 +20,9 @@
    (-> [:get-item item-path default-value] core/subscribe)))
 
 (defn subscribed-item
+  ; @description
+  ; Returns the actual derefed value of a db item.
+  ;
   ; @param (vector) item-path
   ; @param (*)(opt) default-value
   ;

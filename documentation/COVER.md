@@ -8,6 +8,9 @@ Documentation of the [re-frame-api](https://github.com/bithandshake/re-frame-api
 ### Isomorphic namespaces
 
 * [re-frame.api](cljc/re-frame/API.md)
+* [re-frame.core.api](cljc/re-frame/core/API.md)
+* [re-frame.debug.api](cljc/re-frame/debug/API.md)
+* [re-frame.state.api](cljc/re-frame/state/API.md)
 
 ---
 

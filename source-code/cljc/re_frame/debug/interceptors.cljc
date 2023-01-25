@@ -1,11 +1,9 @@
 
 (ns re-frame.debug.interceptors
-    (:require [format.api            :as format]
-              [noop.api              :refer [return]]
-              [re-frame.core         :as core]
-              [re-frame.core.helpers :as core.helpers]
-              [re-frame.debug.state  :as debug.state]
-              [time.api              :as time]))
+    (:require [noop.api             :refer [return]]
+              [re-frame.core        :as core]
+              [re-frame.debug.state :as state]
+              [vector.api           :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -20,7 +18,7 @@
   ;
   ; @return (map)
   [context]
-  (if @debug.state/DEBUG-MODE? (-> context core.helpers/context->event-vector println))
+  (if @state/DEBUG-MODE? (-> context :coeffects :event println))
   (return context))
 
 ; @constant (?)
@@ -39,7 +37,7 @@
   ;
   ; @return (map)
   [context]
-  (-> context core.helpers/context->event-vector println)
+  (-> context :coeffects :event println)
   (return context))
 
 ; @constant (?)

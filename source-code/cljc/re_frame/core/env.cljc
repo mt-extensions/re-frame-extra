@@ -1,42 +1,6 @@
 
-(ns re-frame.reg.helpers
-    (:require [re-frame.debug.interceptors :as debug.interceptors]
-              [re-frame.registrar          :as registrar]
-              [vector.api                  :as vector]))
-
-;; ----------------------------------------------------------------------------
-;; ----------------------------------------------------------------------------
-
-(defn apply-fx-params
-  ; @param (function) handler-f
-  ; @param (* or vector) params
-  ;
-  ; @usage
-  ; (apply-fx-params (fn [a] ...) "a")
-  ;
-  ; @usage
-  ; (apply-fx-params (fn [a] ...) ["a"])
-  ;
-  ; @usage
-  ; (apply-fx-params (fn [a b] ...) ["a" "b"])
-  ;
-  ; @return (*)
-  [handler-f params]
-  (if (sequential?     params)
-      (apply handler-f params)
-      (handler-f       params)))
-
-;; ----------------------------------------------------------------------------
-;; ----------------------------------------------------------------------------
-
-(defn interceptors<-system-interceptors
-  ; @ignore
-  ;
-  ; @param (vector) interceptors
-  ;
-  ; @return (vector)
-  [interceptors]
-  (vector/conj-item interceptors debug.interceptors/LOG-EVENT!))
+(ns re-frame.core.env
+    (:require [re-frame.registrar :as registrar]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
