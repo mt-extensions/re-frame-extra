@@ -1,5 +1,5 @@
 
-(ns re-frame.state.helpers
+(ns re-frame.db.helpers
     (:require [re-frame.core :as core]))
 
 ;; ----------------------------------------------------------------------------

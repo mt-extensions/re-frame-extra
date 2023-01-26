@@ -1,5 +1,5 @@
 
-(ns re-frame.state.subs
+(ns re-frame.db.subs
     (:require [noop.api      :refer [return]]
               [re-frame.core :as core]))
 

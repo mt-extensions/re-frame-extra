@@ -1,5 +1,5 @@
 
-(ns re-frame.state.events
+(ns re-frame.db.events
     (:require [map.api       :refer [dissoc-in]]
               [noop.api      :refer [return]]
               [re-frame.core :as core]

@@ -1,13 +1,13 @@
 
-(ns re-frame.state.api
-    (:require [re-frame.state.events  :as events]
-              [re-frame.state.helpers :as helpers]
-              [re-frame.state.subs    :as subs]))
+(ns re-frame.db.api
+    (:require [re-frame.db.events  :as events]
+              [re-frame.db.helpers :as helpers]
+              [re-frame.db.subs    :as subs]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-; re-frame.state.events
+; re-frame.db.events
 (def empty-db!           events/empty-db!)
 (def toggle-item!        events/toggle-item!)
 (def toggle-item-value!  events/toggle-item-value!)
@@ -22,11 +22,11 @@
 (def dec-item-n!         events/dec-item-n!)
 (def apply-item!         events/apply-item!)
 
-; re-frame.state.helpers
+; re-frame.db.helpers
 (def subscribe-item  helpers/subscribe-item)
 (def subscribed-item helpers/subscribed-item)
 
-; re-frame.state.subs
+; re-frame.db.subs
 (def get-db           subs/get-db)
 (def get-item         subs/get-item)
 (def item-exists?     subs/item-exists?)
