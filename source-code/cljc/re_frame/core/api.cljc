@@ -42,11 +42,11 @@
 (def fx-n fx/fx-n)
 
 ; re-frame.core.reg
-(def reg-cofx     core.reg/reg-cofx)
-(def reg-sub      core.reg/reg-sub)
-(def reg-event-db core.reg/reg-event-db)
-(def reg-event-fx core.reg/reg-event-fx)
-(def reg-fx       core.reg/reg-fx)
+(def reg-cofx     reg/reg-cofx)
+(def reg-sub      reg/reg-sub)
+(def reg-event-db reg/reg-event-db)
+(def reg-event-fx reg/reg-event-fx)
+(def reg-fx       reg/reg-fx)
 
 ; re-frame.core.sub
 (def subscribe  sub/subscribe)

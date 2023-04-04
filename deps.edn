@@ -3,5 +3,5 @@
  :deps  {re-frame/re-frame        {:mvn/version "1.2.0"}
          bithandshake/cljc-fruits {:git/url "https://github.com/bithandshake/cljc-fruits"
                                    :sha     "32561d815e30ce19472958210448fd13ce47b4b4"}
-         bithandshake/time-api    {:git/url "https://github.com/bithandshake/time-api"
+         bithandshake/cljc-time   {:git/url "https://github.com/bithandshake/cljc-time"
                                    :sha     "2a84d117d2340b23d60b7ec9b3c4613376c0b959"}}}

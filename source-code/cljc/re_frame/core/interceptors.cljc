@@ -13,12 +13,11 @@
   ; @ignore
   ;
   ; @description
-  ; Puts a random generated keyword type ID as the second parameter into the
-  ; event vector, in case of the second parameter is not a keyword.
+  ; Puts a random generated keyword as the second parameter into the
+  ; event vector only in case of the second parameter is not a keyword.
   ;
   ; By using this interceptor you can make sure that your event takes a keyword
-  ; as its second parameter that you can use as an ID.
-  ; (The first parameter is the ID of the event itself.)
+  ; as its second parameter. (The first parameter is the ID of the event itself.)
   ;
   ; @param (map) context
   ;
@@ -30,7 +29,7 @@
   ;   :my-effect-event
   ;   [event-vector<-id]
   ;   (fn [_ [_ my-id my-params]]
-  ;       (println "The second item of the event vector is always a keyword!")))
+  ;       (println "It's sure that the second item of the event vector is a keyword!")))
   ;
   ; (dispatch [:my-effect-event        "My param"]) <- In this case it puts a random gen. keyword to the second place
   ; (dispatch [:my-effect-event :my-id "My param"])
