@@ -2,7 +2,7 @@
 (ns re-frame.reg
     (:require [re-frame.core         :as core]
               [re-frame.interceptors :as interceptors]
-              [re-frame.utils        :as utils]
+              [re-frame.utilities    :as utilities]
               [vector.api            :as vector]))
 
 ;; ----------------------------------------------------------------------------
@@ -75,9 +75,9 @@
    (reg-event-fx event-id nil event-handler))
 
   ([event-id interceptors event-handler]
-   (let [handler-f    (utils/metamorphic-handler->handler-f event-handler)
+   (let [handler-f    (utilities/metamorphic-handler->handler-f event-handler)
          interceptors (interceptors/interceptors<-system-interceptors interceptors)]
-        (core/reg-event-fx event-id interceptors #(utils/metamorphic-event->effects-map (handler-f %1 %2))))))
+        (core/reg-event-fx event-id interceptors #(utilities/metamorphic-event->effects-map (handler-f %1 %2))))))
 
 (defn reg-fx
   ; @param (keyword) event-id
@@ -93,4 +93,4 @@
   ; (reg-fx       :your-side-effect your-side-effect-f)
   ; (reg-event-fx :your-effect {:your-my-side-effect-f ["a" "b"]})
   [event-id handler-f]
-  (core/reg-fx event-id #(utils/apply-fx-params handler-f %)))
+  (core/reg-fx event-id #(utilities/apply-fx-params handler-f %)))

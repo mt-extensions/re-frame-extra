@@ -1,10 +1,11 @@
 
-(ns re-frame.dispatch
+(ns re-frame.handlers
     (:require [re-frame.core      :as core]
               [re-frame.env       :as env]
+              [re-frame.loggers   :refer [console]]
               [re-frame.registrar :as registrar]
               [re-frame.state     :as state]
-              [re-frame.utils     :as utils]
+              [re-frame.utilities :as utilities]
               [time.api           :as time]
               [vector.api         :as vector]))
 
@@ -19,7 +20,7 @@
   ;
   ; @usage
   ; [:dispatch-metamorphic-event {:dispatch [...]}]
-  (fn [_ [_ n]] (utils/metamorphic-event->effects-map n)))
+  (fn [_ [_ n]] (utilities/metamorphic-event->effects-map n)))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -41,7 +42,7 @@
   [event-handler]
   ; By default the Re-Frame doesn't print errors on server-side when an event doesn't
   ; registered when it dispatched.
-  (letfn [(check! [] (let [event-id      (utils/event-vector->event-id event-handler)
+  (letfn [(check! [] (let [event-id      (utilities/event-vector->event-id event-handler)
                            event-exists? (env/event-handler-registered? :event event-id)]
                           (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id))))]
          (if (vector? event-handler) #?(:clj (check!) :cljs nil))
@@ -63,7 +64,7 @@
 
 (defn dispatch-sync
   ; @description
-  ; This function doesn't take metamoprhic handler (for performance reasons).
+  ; This function doesn't take metamoprhic handlers (for performance reasons).
   ;
   ; @param (event-vector) event-handler
   ;
@@ -145,7 +146,7 @@
   ;
   ; @return (?)
   [event-vector]
-  (if (-> event-vector utils/event-vector->event-id event-unlocked?)
+  (if (-> event-vector utilities/event-vector->event-id event-unlocked?)
       (core/dispatch event-vector)))
 
 (defn- delayed-try
@@ -156,7 +157,7 @@
   ;
   ; @return (?)
   [timeout event-vector]
-  (let [event-id (utils/event-vector->event-id event-vector)]
+  (let [event-id (utilities/event-vector->event-id event-vector)]
        (when (event-unlocked? event-id)
              (core/dispatch   event-vector)
              (reg-event-lock! timeout event-id))))
@@ -179,7 +180,7 @@
   ;
   ; @return (?)
   [timeout event-vector]
-  (let [event-id (utils/event-vector->event-id event-vector)]
+  (let [event-id (utilities/event-vector->event-id event-vector)]
        (reg-event-lock! timeout event-id)
        (letfn [(f [] (dispatch-unlocked?! event-vector))]
               (time/set-timeout! f timeout))))
@@ -201,7 +202,7 @@
   ;
   ; @return (?)
   [interval event-vector]
-  (let [event-id (utils/event-vector->event-id event-vector)]
+  (let [event-id (utilities/event-vector->event-id event-vector)]
        (if (event-unlocked? event-id)
            (do (core/dispatch event-vector)
                (reg-event-lock! interval event-id))
@@ -246,9 +247,47 @@
                      (= 0 (:tick effects-map))
 
                      ; Tick now!
-                     (utils/merge-effects-maps merged-effects-map effects-map)
+                     (utilities/merge-effects-maps merged-effects-map effects-map)
 
                      ; Tick later!
                      (update merged-effects-map :dispatch-tick vector/conj-item (update effects-map :tick dec))))]
 
              (reduce f {} effects-maps-vector))))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
+(defn fx
+  ; @param (vector) effect-vector
+  ;
+  ; @usage
+  ; (reg-fx :my-side-effect (fn [a b c]))
+  ; (fx [:my-side-effect "a" "b" "c"])
+  [[effect-id & params :as effect-vector]]
+  (when (= :db effect-id)
+        (console :warn "re-frame: \":fx\" effect should not contain a :db effect"))
+  (if-let [effect-f (registrar/get-handler :fx effect-id false)]
+          (effect-f params)
+          (console :warn "re-frame: in \":fx\" effect found " effect-id " which has no associated handler. Ignoring.")))
+
+; @usage
+; {:fx [...]}
+(registrar/clear-handlers :fx :fx)
+(core/reg-fx              :fx  fx)
+
+(defn fx-n
+  ; @param (vectors in vector) effect-vector-list
+  ;
+  ; @usage
+  ; (reg-fx :my-side-effect (fn [a b c]))
+  ; (fx-n [[:my-side-effect "a" "b" "c"]
+  ;        [...]])
+  [effect-vector-list]
+  (if-not (sequential? effect-vector-list)
+          (console :warn "re-frame: \":fx\" effect expects a seq, but was given " (type effect-vector-list))
+          (doseq [effect-vector (remove nil? effect-vector-list)]
+                 (fx effect-vector))))
+
+; @usage
+; {:fx-n [[...] [...]]}
+(core/reg-fx :fx-n fx-n)

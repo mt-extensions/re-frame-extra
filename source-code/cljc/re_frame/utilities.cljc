@@ -1,5 +1,5 @@
 
-(ns re-frame.utils
+(ns re-frame.utilities
     (:require [map.api    :as map :refer [update-some]]
               [noop.api   :refer [return]]
               [vector.api :as vector]))
@@ -13,7 +13,7 @@
   ;
   ; @usage
   ; (defn remove-item! [db [event-id item-path]])
-  ; (remove-item! db [nil [:my-item]])
+  ; (remove-item! db [:my-event [:my-item]])
   ; (r remove-item! db [:my-item])
   ;
   ; @return (*)

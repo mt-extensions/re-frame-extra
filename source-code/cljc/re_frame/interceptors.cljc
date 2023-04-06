@@ -1,9 +1,10 @@
 
 (ns re-frame.interceptors
-    (:require [noop.api      :refer [return]]
-              [random.api    :as random]
-              [re-frame.core :as core]
-              [vector.api    :as vector]))
+    (:require [noop.api       :refer [return]]
+              [random.api     :as random]
+              [re-frame.core  :as core]
+              [re-frame.state :as state]
+              [vector.api     :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
