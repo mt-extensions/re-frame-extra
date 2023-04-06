@@ -1,5 +1,5 @@
 
-(ns re-frame.core.utils
+(ns re-frame.utils
     (:require [map.api    :as map :refer [update-some]]
               [noop.api   :refer [return]]
               [vector.api :as vector]))
@@ -11,29 +11,14 @@
   ; @param (function) f
   ; @param (*) params
   ;
-  ; @example
-  ; (r db/remove-item! db [:my-item])
-  ; =>
-  ; (db/remove-item! db [nil [:my-item]])
+  ; @usage
+  ; (defn remove-item! [db [event-id item-path]])
+  ; (remove-item! db [nil [:my-item]])
+  ; (r remove-item! db [:my-item])
   ;
   ; @return (*)
   [f & [context & params]]
   (f context (vector/cons-item params nil)))
-
-(defn r_
-  ; @param (function) f
-  ; @param (*) params
-  ;
-  ; @example
-  ; (r db/remove-item! db [:my-item])
-  ; =>
-  ; (db/remove-item! db [nil [:my-item]])
-  ;
-  ; @return (*)
-  [f & params]
-  (let [context      (first params)
-        event-vector (vector/cons-item (rest params) nil)]
-       (f context event-vector)))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

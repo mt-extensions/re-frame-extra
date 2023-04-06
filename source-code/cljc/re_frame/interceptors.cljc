@@ -1,10 +1,9 @@
 
-(ns re-frame.core.interceptors
-    (:require [noop.api                    :refer [return]]
-              [random.api                  :as random]
-              [re-frame.core               :as core]
-              [re-frame.debug.interceptors :as debug.interceptors]
-              [vector.api                  :as vector]))
+(ns re-frame.interceptors
+    (:require [noop.api      :refer [return]]
+              [random.api    :as random]
+              [re-frame.core :as core]
+              [vector.api    :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -63,6 +62,44 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
+(defn log-event-f
+  ; @ignore
+  ;
+  ; @description
+  ; Prints the event vector to the console only in debug mode.
+  ;
+  ; @param (map) context
+  ;
+  ; @return (map)
+  [context]
+  (if @state/DEBUG-MODE? (-> context :coeffects :event println))
+  (return context))
+
+; @constant (?)
+(def log-event! (core/->interceptor :id :re-frame/log-event! :before log-event-f))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
+(defn debug-f
+  ; @ignore
+  ;
+  ; @description
+  ; Prints the event vector to the console.
+  ;
+  ; @param (map) context
+  ;
+  ; @return (map)
+  [context]
+  (-> context :coeffects :event println)
+  (return context))
+
+; @constant (?)
+(def debug! (core/->interceptor :id :re-frame/debug! :after debug-f))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
 (defn interceptors<-system-interceptors
   ; @ignore
   ;
@@ -70,4 +107,4 @@
   ;
   ; @return (vector)
   [interceptors]
-  (vector/conj-item interceptors debug.interceptors/LOG-EVENT!))
+  (vector/conj-item interceptors log-event!))

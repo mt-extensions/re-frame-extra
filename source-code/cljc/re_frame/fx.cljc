@@ -1,5 +1,5 @@
 
-(ns re-frame.core.fx
+(ns re-frame.fx
     (:require [re-frame.core      :as core]
               [re-frame.loggers   :refer [console]]
               [re-frame.registrar :as registrar]))

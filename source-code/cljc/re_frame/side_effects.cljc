@@ -1,6 +1,6 @@
 
-(ns re-frame.debug.side-effects
-    (:require [re-frame.debug.state :as state]))
+(ns re-frame.side-effects
+    (:require [re-frame.state :as state]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

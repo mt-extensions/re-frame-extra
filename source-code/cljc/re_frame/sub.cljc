@@ -1,5 +1,5 @@
 
-(ns re-frame.core.sub
+(ns re-frame.sub
     (:require [re-frame.core :as core]))
 
 ;; ----------------------------------------------------------------------------

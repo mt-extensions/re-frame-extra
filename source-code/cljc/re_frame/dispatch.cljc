@@ -1,14 +1,12 @@
 
-; Namespace re-frame.core.dispatch clashes with var re-frame.core/dispatch
-
-(ns re-frame.core.dispatch-set
-    (:require [re-frame.core       :as core]
-              [re-frame.core.env   :as env]
-              [re-frame.core.state :as state]
-              [re-frame.core.utils :as utils]
-              [re-frame.registrar  :as registrar]
-              [time.api            :as time]
-              [vector.api          :as vector]))
+(ns re-frame.dispatch
+    (:require [re-frame.core      :as core]
+              [re-frame.env       :as env]
+              [re-frame.registrar :as registrar]
+              [re-frame.state     :as state]
+              [re-frame.utils     :as utils]
+              [time.api           :as time]
+              [vector.api         :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

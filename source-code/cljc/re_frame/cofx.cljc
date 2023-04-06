@@ -1,5 +1,5 @@
 
-(ns re-frame.core.cofx
+(ns re-frame.cofx
     (:require [re-frame.core :as core]))
 
 ;; ----------------------------------------------------------------------------
