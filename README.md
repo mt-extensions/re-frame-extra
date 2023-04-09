@@ -7,8 +7,8 @@
 ### Overview
 
 The <strong>re-frame-api</strong> library is an implementation of the Re-Frame
-Clojure/ClojureScript framework with some extra features such as metamorphic-events
-(which allows you to register and dispatch your events in a freestyle way).
+Clojure/ClojureScript framework with extra features such as metamorphic-events
+that allows you to register and dispatch your events in a freestyle way.
 
 ### deps.edn
 
