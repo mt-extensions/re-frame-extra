@@ -29,6 +29,8 @@ The <strong>re-frame-api</strong> functional documentation is [available here](d
 
 You can track the changes of the <strong>re-frame-api</strong> library [here](CHANGES.md).
 
+# Usage
+
 ### Index
 
 - [event-vector](#event-vector)
@@ -56,8 +58,6 @@ You can track the changes of the <strong>re-frame-api</strong> library [here](CH
 - [How to use the debug interceptor?](#how-to-use-the-debug-interceptor)
 
 - [How to use the debug mode?](#how-to-use-the-debug-mode)
-
-# Usage
 
 ### event-vector
 
