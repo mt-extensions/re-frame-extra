@@ -7,7 +7,7 @@
 
 (defn set-debug-mode!
   ; @description
-  ; Turns on the debug mode.
+  ; Turns the debug mode on.
   ;
   ; @usage
   ; (set-debug-mode!)
@@ -16,7 +16,7 @@
 
 (defn quit-debug-mode!
   ; @description
-  ; Turns off the debug mode.
+  ; Turns the debug mode off.
   ;
   ; @usage
   ; (quit-debug-mode!)
@@ -25,7 +25,7 @@
 
 (defn toggle-debug-mode!
   ; @description
-  ; Toggles on/off the debug mode.
+  ; Toggles the debug mode on/off.
   ;
   ; @usage
   ; (toggle-debug-mode!)
