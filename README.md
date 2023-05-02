@@ -61,7 +61,7 @@ You can track the changes of the <strong>re-frame-api</strong> library [here](CH
 
 ### event-vector
 
-Just to clarify what we called as an 'event-vector':
+To clarify what we called as an 'event-vector':
 
 ```
 [:my-event "My param"]
@@ -79,8 +79,8 @@ And how an 'effects-map' looks like:
 
 Yeah! The metamorphic stuff! Let's see how the magic works!
 
-The 'metamorphic-event' formula provides you a more flexible way to dispatch Re-Frame events.
-You can pass the event to the [`re-frame.api/dispatch`](documentation/cljc/re-frame/API.md#dispatch)
+The 'metamorphic-event' formula provides a more flexible way to dispatch Re-Frame events.
+You can pass an event to the [`re-frame.api/dispatch`](documentation/cljc/re-frame/API.md#dispatch)
 function (or the dispatching side-effects) as an event-vector, an effects-map
 or a function that returns another metamorphic-event ooor a function that returns
 a function that returns an event-vector (for example).
@@ -121,8 +121,8 @@ And of course you can do this if you want:
 
 The 'metamorphic-handler' is very similar to the previous formula.
 But it allows you to register Re-Frame effect-handlers really flexible.
-You can pass not just a handler function but an event-vector or an effects-map to the
-`reg-event-fx` function.
+You can pass not just a handler function but an event-vector or an effects-map
+to the `reg-event-fx` function.
 
 ```
 (reg-event-fx :my-effects [:my-event])
@@ -148,10 +148,9 @@ And yes, it is possible too ...
 
 ### dispatch-once
 
-Do you remember the first time when you tried to store the scroll-position
-in the Re-Frame database? Yes you do! Your poor CPU was melting down slowly when
-it tried to calculate all of your subscriptions at least hundred times per every
-second when you scrolled the viewport.
+I remember the first time when I tried to store the scroll-position in the Re-Frame
+database. My poor CPU was melting down slowly when it tried to calculate all of
+my subscriptions at least hundred times per every second when I scrolled the viewport.
 
 > The Re-Frame calculates the subscriptions every time when the state changes!
   It is part of the magic under the hood.
@@ -199,7 +198,8 @@ And what about the event-delaying based on not the time? What if you want to add
 just a little slip into the event queue? When you composing your effect-events,
 sometimes you face with the fact that the Re-Frame uses a very logical but strict
 event queue.
-So you can delay your events in the queue easily with the `:dispatch-tick` handler.
+
+You can delay your events in the queue easily with the `:dispatch-tick` handler.
 
 ```
 (reg-event-fx :init-app! [:import-data!])
@@ -221,7 +221,7 @@ look like this:
 `[:import-data!]`
 `[:render-surface!]`
 
-If you want the `[:import-data!]` to happens before the rendering started, you
+If you want the `[:import-data!]` to happen before the rendering started, you
 need to add a slippage. So let's try again with the `:dispatch-tick` handler!
 
 ```
@@ -248,7 +248,7 @@ queue is ordered in the way we wanted:
 
 The `r` function helps you not to care about the event-id when you stacking handler functions.
 
-Case 1: If you disregard the event-id parameter:
+Case 1: Disregarding the event-id parameter:
 
 ```
 (defn store-data!
@@ -260,7 +260,7 @@ Case 1: If you disregard the event-id parameter:
   (store-data! db [nil 420]))
 ```
 
-Case 2: If you pass the event-id parameter:
+Case 2: Passing the event-id parameter:
 
 ```
 (defn store-data!
@@ -272,7 +272,7 @@ Case 2: If you pass the event-id parameter:
   (store-data! db [event-id 420]))
 ```
 
-Case 3: If you use the `r` function:
+Case 3: Useing the `r` function:
 
 ```
 (defn store-data!
@@ -301,7 +301,7 @@ You can apply functions with `r` one after another if you use the as-> function:
              (r update-data! %)))
 ```
 
-And you can pass more than one parameter by using the `r`:
+And also you can pass more than one parameter by using the `r`:
 
 ```
 (defn add-user!
@@ -317,8 +317,8 @@ And you can pass more than one parameter by using the `r`:
 
 Stacking handler functions helps you to decrease the Re-Frame database writes.
 
-In the following example, when you dispatch the `[:handle-data!]` event it followed
-by two db writes by the `[:store-data!]` and `[:update-data!]` events.
+In the following example, when you dispatch the `[:handle-data!]` event that
+followed by two db writes, the `[:store-data!]` and `[:update-data!]` events.
 
 ```
 (reg-event-db
@@ -339,7 +339,7 @@ If you want to do the same thing with only one db write you have several choices
 
 Case 1: Keep the `[:handle-data!]` event as an effect event and use the `:db`
 handler to stack the `store-data!` and `update-data!` functions which were anonymous
-functions in the previous example and now they are named functions.
+functions in the previous example and now they are named functions in the next example.
 
 ```
 ; Defining the 'store-data!' handler as a named function:
@@ -365,7 +365,7 @@ functions in the previous example and now they are named functions.
 ```
 
 Case 2: The key is the same as in the previous example the only difference is
-that the `handle-data!` function is not an effect event anymore.
+that the `handle-data!` function is not an effect event.
 
 ```
 ; Defining the 'store-data!' handler as a named function:
@@ -395,8 +395,8 @@ that the `handle-data!` function is not an effect event anymore.
 
 ### How to use subscription handlers in effect events and db events?
 
-If you are register named functions as subscription handlers, you can easily
-apply them in effect events and db events.
+If you register named functions as subscription handlers, you can use them in
+effect events and db events.
 
 ```
 ; Defining the 'get-data' handler as a named function:
@@ -451,7 +451,7 @@ the console when it get dispatched.
 
 ### How to use the debug mode?
 
-You can turns on/off the debug mode by using the following functions:
+You can turn on/off the debug mode by using the following functions:
 
 ```
 (ns my-namespace
@@ -463,4 +463,4 @@ You can turns on/off the debug mode by using the following functions:
 ```
 
 In debug mode, the event handler prints all the dispatched events and
-their parameters to the console, and you can track what happens under the hood.
+their parameters to the console and you can track what happens under the hood.
