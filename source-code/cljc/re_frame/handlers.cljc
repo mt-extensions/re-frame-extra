@@ -266,9 +266,12 @@
   [[effect-id & params :as effect-vector]]
   (when (= :db effect-id)
         (console :warn "re-frame: \":fx\" effect should not contain a :db effect"))
-  (if-let [effect-f (registrar/get-handler :fx effect-id false)]
-          (effect-f params)
-          (console :warn "re-frame: in \":fx\" effect found " effect-id " which has no associated handler. Ignoring.")))
+  ; This function ...
+  ; ... ignores dispatching the effect when the effect-vector is NIL.
+  ; ... warns when the effect-vector is NOT NIL, but no registered effect found with the given ID.
+  (if effect-vector (if-let [effect-f (registrar/get-handler :fx effect-id false)]
+                            (effect-f params)
+                            (console :warn "re-frame: in \":fx\" effect found " effect-id " which has no associated handler. Ignoring."))))
 
 ; @usage
 ; {:fx [...]}

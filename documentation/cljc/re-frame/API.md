@@ -1124,9 +1124,9 @@ true
   [[effect-id & params :as effect-vector]]
   (when (= :db effect-id)
         (console :warn "re-frame: \":fx\" effect should not contain a :db effect"))
-  (if-let [effect-f (registrar/get-handler :fx effect-id false)]
-          (effect-f params)
-          (console :warn "re-frame: in \":fx\" effect found " effect-id " which has no associated handler. Ignoring.")))
+  (if effect-vector (if-let [effect-f (registrar/get-handler :fx effect-id false)]
+                            (effect-f params)
+                            (console :warn "re-frame: in \":fx\" effect found " effect-id " which has no associated handler. Ignoring."))))
 ```
 
 </details>
