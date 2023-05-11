@@ -2,6 +2,6 @@
 {:paths ["source-code/cljc"]
  :deps  {re-frame/re-frame        {:mvn/version "1.2.0"}
          bithandshake/cljc-fruits {:git/url "https://github.com/bithandshake/cljc-fruits"
-                                   :sha     "aad6e1d6d74899054bfe515a2acc5f80a171c31b"}
+                                   :sha     "3af14c0f8099889661a6e04b2b7b2c8930181865"}
          bithandshake/cljc-time   {:git/url "https://github.com/bithandshake/cljc-time"
-                                   :sha     "9c8519de1cce592db69d5cd33f03045a030e0689"}}}
+                                   :sha     "4a6f0581f75b860f1d1c6cfef2a7e8a40b973c51"}}}
