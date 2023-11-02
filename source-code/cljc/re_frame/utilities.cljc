@@ -1,7 +1,6 @@
 
 (ns re-frame.utilities
     (:require [map.api    :as map :refer [update-some]]
-              [noop.api   :refer [return]]
               [vector.api :as vector]))
 
 ;; ----------------------------------------------------------------------------
@@ -269,9 +268,9 @@
   ;
   ; @return (map)
   [n]
-  (cond (vector? n) (event-vector->effects-map       n)
-        (map?    n) (return                          n)
-        (fn?     n) (metamorphic-event->effects-map (n))))
+  (cond (vector? n) (->  n event-vector->effects-map)
+        (map?    n) (->  n)
+        (fn?     n) (-> (n) metamorphic-event->effects-map)))
 
 (defn metamorphic-event<-params
   ; @param (metamorphic-event) n

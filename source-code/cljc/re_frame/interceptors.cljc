@@ -1,7 +1,6 @@
 
 (ns re-frame.interceptors
-    (:require [noop.api       :refer [return]]
-              [random.api     :as random]
+    (:require [random.api     :as random]
               [re-frame.core  :as core]
               [re-frame.state :as state]
               [vector.api     :as vector]))
@@ -51,8 +50,8 @@
           ;
           ; @return (vector)
           (f [event-vector]
-             (if (->     event-vector second keyword?)
-                 (return event-vector)
+             (if (-> event-vector second keyword?)
+                 (-> event-vector)
                  (vec (concat [(first event-vector) (random/generate-keyword)] (rest event-vector)))))]
          (update-in context [:coeffects :event] f)))
 
@@ -74,7 +73,7 @@
   ; @return (map)
   [context]
   (if @state/DEBUG-MODE? (-> context :coeffects :event println))
-  (return context))
+  (-> context))
 
 ; @constant (?)
 (def log-event! (core/->interceptor :id :re-frame/log-event! :before log-event-f))
@@ -93,7 +92,7 @@
   ; @return (map)
   [context]
   (-> context :coeffects :event println)
-  (return context))
+  (-> context))
 
 ; @constant (?)
 (def debug! (core/->interceptor :id :re-frame/debug! :after debug-f))
