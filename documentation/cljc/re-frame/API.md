@@ -1365,9 +1365,9 @@ true
 ```
 (defn metamorphic-event->effects-map
   [n]
-  (cond (vector? n) (event-vector->effects-map       n)
-        (map?    n) (return                          n)
-        (fn?     n) (metamorphic-event->effects-map (n))))
+  (cond (vector? n) (->  n event-vector->effects-map)
+        (map?    n) (->  n)
+        (fn?     n) (-> (n) metamorphic-event->effects-map)))
 ```
 
 </details>
