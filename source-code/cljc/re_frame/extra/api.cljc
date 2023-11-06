@@ -1,5 +1,5 @@
 
-(ns re-frame.api
+(ns re-frame.extra.api
     (:require [re-frame.core         :as core]
               [re-frame.handlers     :as handlers]
               [re-frame.interceptors :as interceptors]

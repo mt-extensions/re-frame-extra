@@ -1,14 +1,13 @@
 
 # re-frame-api
 
-> "A person had to work hard for it, but a minute of perfection was worth the effort.
-   A moment was the most you could ever expect from perfection." – Tyler Durden
-
 ### Overview
 
 The <strong>re-frame-api</strong> library is an implementation of the Re-Frame
 Clojure/ClojureScript framework with extra features such as metamorphic-events
 that allows you to register and dispatch your events in a freestyle way.
+
+> This library implements the 1.2.0 version of Re-Frame.
 
 ### deps.edn
 
@@ -77,13 +76,11 @@ And how an 'effects-map' looks like:
 
 ### metamorphic-event
 
-Yeah! The metamorphic stuff! Let's see how the magic works!
-
 The 'metamorphic-event' formula provides a more flexible way to dispatch Re-Frame events.
 You can pass an event to the [`re-frame.api/dispatch`](documentation/cljc/re-frame/API.md#dispatch)
-function (or the dispatching side-effects) as an event-vector, an effects-map
-or a function that returns another metamorphic-event ooor a function that returns
-a function that returns an event-vector (for example).
+function (or to the dispatching side-effects) as an event-vector, an effects-map
+or a function that returns another 'metamorphic-event' ooor a function that returns
+a function that returns an event-vector and so on.
 
 ```
 (dispatch [:my-event])
@@ -148,16 +145,10 @@ And yes, it is possible too ...
 
 ### dispatch-once
 
-I remember the first time when I tried to store the scroll-position in the Re-Frame
-database. My poor CPU was melting down slowly when it tried to calculate all of
-my subscriptions at least hundred times per every second when I scrolled the viewport.
+To spare some CPU when dispatching an event in high frequency we we can use the `dispatch-once` function
+which only fires an event once in the given interval.
 
-> The Re-Frame calculates the subscriptions every time when the state changes!
-  It is part of the magic under the hood.
-
-The solution is very simple. We have to decrease the number of writes in a specific
-interval. So you can use the `dispatch-once` function which only fires an event once
-in the given interval.
+> Re-Frame calculates the subscriptions every time when the state changes!
 
 ```
 (dispatch-once 500 [:my-event])
@@ -168,8 +159,8 @@ callings except two times per second (500 ms interval).
 
 ### dispatch-last
 
-It is quite similar to the previous function but the `dispatch-last` only fires
-an event if you stop calling it at least for the given timeout.
+It is quite similar to the previous function but the `dispatch-last` function only
+fires an event if you stop calling it at least for the given timeout.
 
 ```
 (dispatch-last 500 [:my-event])
@@ -181,7 +172,7 @@ at least for the given timeout.
 
 ### dispatch-later
 
-I put some extra magic to the dispatch-later handler too. So you can use not just
+I put some extra magic into the dispatch-later handler too. So you can use not just
 the `:dispatch` handler delayed but all of the Re-Frame handlers and any of
 your own handlers.
 
@@ -194,12 +185,12 @@ your own handlers.
 
 ### dispatch-tick
 
-And what about the event-delaying based on not the time? What if you want to add
-just a little slip into the event queue? When you composing your effect-events,
-sometimes you face with the fact that the Re-Frame uses a very logical but strict
-event queue.
+If you need event delaying based on not the time you can delay your events in the event queue
+easily with the `:dispatch-tick` handler.
 
-You can delay your events in the queue easily with the `:dispatch-tick` handler.
+> One tick in the Re-Frame queue is about 16 ms.
+
+Here is an example for the `:dispatch-tick` handler:
 
 ```
 (reg-event-fx :init-app! [:import-data!])
@@ -246,7 +237,7 @@ queue is ordered in the way we wanted:
 
 ### r function
 
-The `r` function helps you not to care about the event-id when you stacking handler functions.
+The `r` function helps you not to care about the event ID when you stacking handler functions.
 
 Case 1: Disregarding the event-id parameter:
 
@@ -284,7 +275,7 @@ Case 3: Useing the `r` function:
   (r store-data! db 420))
 ```
 
-You can apply functions with `r` one after another if you use the as-> function:
+You can apply functions with `r` one after another by using the `as->` function:
 
 ```
 (defn store-data!
@@ -317,8 +308,8 @@ And also you can pass more than one parameter by using the `r`:
 
 Stacking handler functions helps you to decrease the Re-Frame database writes.
 
-In the following example, when you dispatch the `[:handle-data!]` event that
-followed by two db writes, the `[:store-data!]` and `[:update-data!]` events.
+In the following example, when you dispatch the `[:handle-data!]` event that is
+followed by two other db writes by the `[:store-data!]` and the `[:update-data!]` events.
 
 ```
 (reg-event-db
@@ -335,11 +326,11 @@ followed by two db writes, the `[:store-data!]` and `[:update-data!]` events.
                           [:update-data!]]}))
 ```
 
-If you want to do the same thing with only one db write you have several choices:
+If you want to do the same thing but with only one db write you have several choices:
 
 Case 1: Keep the `[:handle-data!]` event as an effect event and use the `:db`
 handler to stack the `store-data!` and `update-data!` functions which were anonymous
-functions in the previous example and now they are named functions in the next example.
+functions in the previous example and they are named functions in the next example.
 
 ```
 ; Defining the 'store-data!' handler as a named function:
@@ -364,7 +355,7 @@ functions in the previous example and now they are named functions in the next e
                             (r update-data! %))}))
 ```
 
-Case 2: The key is the same as in the previous example the only difference is
+Case 2: The key is the same as in the previous example but the only difference is
 that the `handle-data!` function is not an effect event.
 
 ```

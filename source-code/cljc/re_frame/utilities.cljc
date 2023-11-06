@@ -12,7 +12,6 @@
   ;
   ; @usage
   ; (defn remove-item! [db [event-id item-path]])
-  ; (remove-item! db [:my-event [:my-item]])
   ; (r remove-item! db [:my-item])
   ;
   ; @return (*)

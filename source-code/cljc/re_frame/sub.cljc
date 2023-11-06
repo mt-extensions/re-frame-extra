@@ -20,7 +20,7 @@
 
 (defn subscribed
   ; @description
-  ; Returns the actual derefed value of the given subscription.
+  ; Returns the actual deref'ed value of the given subscription.
   ;
   ; @param (vector) query-vector
   ;

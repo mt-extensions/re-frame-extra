@@ -8,6 +8,3 @@
 ;
 ; @atom (map)
 (def EVENT-LOCKS (atom {}))
-
-; @atom (boolean)
-(def DEBUG-MODE? (atom false))

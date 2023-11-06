@@ -1,7 +1,7 @@
 
 (ns re-frame.handlers
     (:require [re-frame.core      :as core]
-              [re-frame.env       :as env]
+              [re-frame.dev.api   :as re-frame.dev]
               [re-frame.loggers   :refer [console]]
               [re-frame.registrar :as registrar]
               [re-frame.state     :as state]
@@ -43,7 +43,7 @@
   ; By default the Re-Frame doesn't print errors on server-side when an event doesn't
   ; registered when it dispatched.
   (letfn [(check! [] (let [event-id      (utilities/event-vector->event-id event-handler)
-                           event-exists? (env/event-handler-registered? :event event-id)]
+                           event-exists? (re-frame.dev/event-handler-registered? :event event-id)]
                           (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id))))]
          (if (vector? event-handler) #?(:clj (check!) :cljs nil))
          (if (vector? event-handler)         (core/dispatch event-handler)
@@ -163,7 +163,7 @@
              (reg-event-lock! timeout event-id))))
 
 (defn dispatch-last
-  ; @Warning
+  ; @warning
   ; The 'dispatch-last' function only handles standard event vectors, because
   ; the metamorphic events don't have unique identifiers!
   ;
@@ -186,7 +186,7 @@
               (time/set-timeout! f timeout))))
 
 (defn dispatch-once
-  ; @Warning
+  ; @warning
   ; The 'dispatch-once' function only handles standard event vectors, because
   ; a metamorphic event doesn't have unique identifier!
   ;
@@ -244,7 +244,7 @@
       (letfn [(f [merged-effects-map effects-map]
                  (if
                      ; Tick now?
-                     (= 0 (:tick effects-map))
+                     (-> effects-map :tick zero?)
 
                      ; Tick now!
                      (utilities/merge-effects-maps merged-effects-map effects-map)
