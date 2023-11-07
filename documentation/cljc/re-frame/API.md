@@ -25,6 +25,8 @@ Functional documentation of the re-frame.api isomorphic namespace
 
 - [dispatch](#dispatch)
 
+- [dispatch-f](#dispatch-f)
+
 - [dispatch-fx](#dispatch-fx)
 
 - [dispatch-last](#dispatch-last)
@@ -433,7 +435,8 @@ Functional documentation of the re-frame.api isomorphic namespace
   [event-handler]
   (letfn [(check! [] (let [event-id      (utilities/event-vector->event-id event-handler)
                            event-exists? (re-frame.dev/event-handler-registered? :event event-id)]
-                          (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id))))]
+                          (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id)
+                                                  (println event-handler))))]
          (if (vector? event-handler) #?(:clj (check!) :cljs nil))
          (if (vector? event-handler)         (core/dispatch event-handler)
                                              (core/dispatch [:dispatch-metamorphic-event event-handler]))))
@@ -449,6 +452,47 @@ Functional documentation of the re-frame.api isomorphic namespace
 
 (re-frame.api/dispatch ...)
 (dispatch              ...)
+```
+
+</details>
+
+---
+
+### dispatch-f
+
+```
+@description
+Applies the given 'f' function.
+```
+
+```
+@param (function) f
+```
+
+```
+@usage
+(dispatch-f (fn [] ...))
+```
+
+<details>
+<summary>Source code</summary>
+
+```
+(defn dispatch-f
+  [f]
+  (f))
+```
+
+</details>
+
+<details>
+<summary>Require</summary>
+
+```
+(ns my-namespace (:require [re-frame.api :refer [dispatch-f]]))
+
+(re-frame.api/dispatch-f ...)
+(dispatch-f              ...)
 ```
 
 </details>

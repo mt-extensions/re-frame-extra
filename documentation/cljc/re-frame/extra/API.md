@@ -433,7 +433,8 @@ Functional documentation of the re-frame.extra.api isomorphic namespace
   [event-handler]
   (letfn [(check! [] (let [event-id      (utilities/event-vector->event-id event-handler)
                            event-exists? (re-frame.dev/event-handler-registered? :event event-id)]
-                          (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id))))]
+                          (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id)
+                                                  (println event-handler))))]
          (if (vector? event-handler) #?(:clj (check!) :cljs nil))
          (if (vector? event-handler)         (core/dispatch event-handler)
                                              (core/dispatch [:dispatch-metamorphic-event event-handler]))))

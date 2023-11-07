@@ -40,11 +40,11 @@
   ; @usage
   ; (dispatch nil)
   [event-handler]
-  ; By default the Re-Frame doesn't print errors on server-side when an event doesn't
-  ; registered when it dispatched.
+  ; By default the Re-Frame doesn't print errors on server-side if an event isn't registered when it is dispatched.
   (letfn [(check! [] (let [event-id      (utilities/event-vector->event-id event-handler)
                            event-exists? (re-frame.dev/event-handler-registered? :event event-id)]
-                          (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id))))]
+                          (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id)
+                                                  (println event-handler))))]
          (if (vector? event-handler) #?(:clj (check!) :cljs nil))
          (if (vector? event-handler)         (core/dispatch event-handler)
                                              (core/dispatch [:dispatch-metamorphic-event event-handler]))))
@@ -54,6 +54,27 @@
 (registrar/clear-handlers :fx      :dispatch)
 (core/reg-fx              :dispatch dispatch)
 
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
+(defn dispatch-f
+  ; @description
+  ; Applies the given 'f' function.
+  ;
+  ; @param (function) f
+  ;
+  ; @usage
+  ; (dispatch-f (fn [] ...))
+  [f]
+  (f))
+
+; @usage
+; {:dispatch-f (fn [] ...)}
+(core/reg-fx :dispatch-f dispatch-f)
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
 (defn dispatch-fx
   ; @param (event-vector) event-handler
   ;
@@ -61,6 +82,9 @@
   ; (dispatch-fx [:my-side-effect-event ...])
   [event-handler]
   (dispatch {:fx event-handler}))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
 
 (defn dispatch-sync
   ; @description
@@ -73,6 +97,9 @@
   ;
   [event-handler]
   (core/dispatch-sync event-handler))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
 
 (defn dispatch-n
   ; @param (metamorphic-events in vector) event-list
@@ -89,6 +116,9 @@
 ; {:dispatch-n [[...] [...]}
 (registrar/clear-handlers :fx        :dispatch-n)
 (core/reg-fx              :dispatch-n dispatch-n)
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
 
 (defn dispatch-later
   ; @param (maps in vector) effects-map-list
@@ -277,6 +307,9 @@
 ; {:fx [...]}
 (registrar/clear-handlers :fx :fx)
 (core/reg-fx              :fx  fx)
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
 
 (defn fx-n
   ; @param (vectors in vector) effect-vector-list

@@ -16,6 +16,7 @@
 
 ; re-frame.handlers
 (def dispatch       handlers/dispatch)
+(def dispatch-f     handlers/dispatch-f)
 (def dispatch-fx    handlers/dispatch-fx)
 (def dispatch-sync  handlers/dispatch-sync)
 (def dispatch-n     handlers/dispatch-n)
