@@ -3,7 +3,7 @@
  :deps  {bithandshake/cljc-fruits    {:git/url "https://github.com/bithandshake/cljc-fruits"
                                       :sha     "aeab860b3dd44aec44b99c2ddde2feb8b10013df"}
          bithandshake/cljc-time      {:git/url "https://github.com/bithandshake/cljc-time"
-                                      :sha     "017b6f55ba96961e85f362daf8ce54cb12730f8b"}
+                                      :sha     "ae30bf98668a05b998804eb596629e1cd2cce8a4"}
          bithandshake/re-frame-utils {:git/url "https://github.com/bithandshake/re-frame-utils"
                                       :sha     "00cfaa1017efae0544ddefb8cc3cd79e5434e882"}
          org.clojure/clojure         {:mvn/version "1.10.1"}
