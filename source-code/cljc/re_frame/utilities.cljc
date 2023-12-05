@@ -113,13 +113,13 @@
   ;
   ; @return (map)
   [a b]
-  (letfn [; Only applies the given 'f' function ('conj-item' / 'concat-items') if the passed value is not NIL.
-          (f [a key f value] (if value (update a key f value) a))]
-         (-> a (f :fx-n           vector/conj-item    (:fx             b))
-               (f :fx-n           vector/concat-items (:fx-n           b))
-               (f :dispatch-n     vector/conj-item    (:dispatch       b))
-               (f :dispatch-n     vector/concat-items (:dispatch-n     b))
-               (f :dispatch-later vector/concat-items (:dispatch-later b)))))
+  (letfn [; Applies the given 'f' function ('conj-item' / 'concat-items') only if the passed value is not NIL.
+          (f0 [a key f value] (if value (update a key f value) a))]
+         (-> a (f0 :fx-n           vector/conj-item    (:fx             b))
+               (f0 :fx-n           vector/concat-items (:fx-n           b))
+               (f0 :dispatch-n     vector/conj-item    (:dispatch       b))
+               (f0 :dispatch-n     vector/concat-items (:dispatch-n     b))
+               (f0 :dispatch-later vector/concat-items (:dispatch-later b)))))
 
 (defn effects-map->handler-f
   ; @param (map) effects-map

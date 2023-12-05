@@ -132,8 +132,8 @@
   ; The original dispatch-later function of Re-Frame doesn't set a timeout on
   ; events in server-side (Clojure) environment.
   (doseq [{:keys [ms] :as effects-map} (remove nil? effects-map-list)]
-         (if ms (letfn [(f [] (dispatch (dissoc effects-map :ms)))]
-                       (time/set-timeout! f ms)))))
+         (if ms (letfn [(f0 [] (dispatch (dissoc effects-map :ms)))]
+                       (time/set-timeout! f0 ms)))))
 
 ; @usage
 ; {:dispatch-later [{...} {...}]}
@@ -212,8 +212,8 @@
   [timeout event-vector]
   (let [event-id (utilities/event-vector->event-id event-vector)]
        (reg-event-lock! timeout event-id)
-       (letfn [(f [] (dispatch-unlocked?! event-vector))]
-              (time/set-timeout! f timeout))))
+       (letfn [(f0 [] (dispatch-unlocked?! event-vector))]
+              (time/set-timeout! f0 timeout))))
 
 (defn dispatch-once
   ; @warning
@@ -236,8 +236,8 @@
        (if (event-unlocked? event-id)
            (do (core/dispatch event-vector)
                (reg-event-lock! interval event-id))
-           (letfn [(f [] (delayed-try interval event-vector))]
-                  (time/set-timeout! f interval)))))
+           (letfn [(f0 [] (delayed-try interval event-vector))]
+                  (time/set-timeout! f0 interval)))))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -271,18 +271,14 @@
   ;   :dispatch-n     [[:my-event]]
   ;   :dispatch-later [ ... ]}
   (fn [_ [_ effects-maps-vector]]
-      (letfn [(f [merged-effects-map effects-map]
-                 (if
-                     ; Tick now?
-                     (-> effects-map :tick zero?)
-
-                     ; Tick now!
-                     (utilities/merge-effects-maps merged-effects-map effects-map)
-
-                     ; Tick later!
-                     (update merged-effects-map :dispatch-tick vector/conj-item (update effects-map :tick dec))))]
-
-             (reduce f {} effects-maps-vector))))
+      (letfn [(f0 [merged-effects-map effects-map]
+                  (if ; Tick now?
+                      (-> effects-map :tick zero?)
+                      ; Tick now!
+                      (utilities/merge-effects-maps merged-effects-map effects-map)
+                      ; Tick later!
+                      (update merged-effects-map :dispatch-tick vector/conj-item (update effects-map :tick dec))))]
+             (reduce f0 {} effects-maps-vector))))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

@@ -39,21 +39,21 @@
           ; @param (vector) event-vector
           ;
           ; @example
-          ; (f [:my-event :my-id {...}])
+          ; (f0 [:my-event :my-id {...}])
           ; =>
           ; [:my-event :my-id {...}]
           ;
           ; @example
-          ; (f [:my-event {...}])
+          ; (f0 [:my-event {...}])
           ; =>
           ; [:my-event :0ce14671-e916-43ab-b057-0939329d4c1b {...}]
           ;
           ; @return (vector)
-          (f [event-vector]
-             (if (-> event-vector second keyword?)
-                 (-> event-vector)
-                 (vec (concat [(first event-vector) (random/generate-keyword)] (rest event-vector)))))]
-         (update-in context [:coeffects :event] f)))
+          (f0 [event-vector]
+              (if (-> event-vector second keyword?)
+                  (-> event-vector)
+                  (vec (concat [(first event-vector) (random/generate-keyword)] (rest event-vector)))))]
+         (update-in context [:coeffects :event] f0)))
 
 ; @constant (?)
 (def event-vector<-id (core/->interceptor :id :re-frame/event-vector<-id
