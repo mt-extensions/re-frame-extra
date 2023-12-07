@@ -10,11 +10,11 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-; re-frame.core
+; @redirect (re-frame.core)
 (def ->interceptor core/->interceptor)
 (def inject-cofx   core/inject-cofx)
 
-; re-frame.handlers
+; @redirect (re-frame.handlers)
 (def dispatch       handlers/dispatch)
 (def dispatch-f     handlers/dispatch-f)
 (def dispatch-fx    handlers/dispatch-fx)
@@ -27,21 +27,21 @@
 (def fx             handlers/fx)
 (def fx-n           handlers/fx-n)
 
-; re-frame.interceptors
+; @redirect (re-frame.interceptors)
 (def event-vector<-id interceptors/event-vector<-id)
 
-; re-frame.reg
+; @redirect (re-frame.reg)
 (def reg-cofx     reg/reg-cofx)
 (def reg-sub      reg/reg-sub)
 (def reg-event-db reg/reg-event-db)
 (def reg-event-fx reg/reg-event-fx)
 (def reg-fx       reg/reg-fx)
 
-; re-frame.sub
+; @redirect (re-frame.sub)
 (def subscribe  sub/subscribe)
 (def subscribed sub/subscribed)
 
-; re-frame.utilities
+; @redirect (re-frame.utilities)
 (def r                              utilities/r)
 (def event-vector?                  utilities/event-vector?)
 (def event-vector<-params           utilities/event-vector<-params)
