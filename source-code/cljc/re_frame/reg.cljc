@@ -1,9 +1,9 @@
 
 (ns re-frame.reg
-    (:require [re-frame.core         :as core]
+    (:require [fruits.vector.api     :as vector]
+              [re-frame.core         :as core]
               [re-frame.interceptors :as interceptors]
-              [re-frame.utilities    :as utilities]
-              [vector.api            :as vector]))
+              [re-frame.utilities    :as utilities]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

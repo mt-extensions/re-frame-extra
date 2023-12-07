@@ -1,9 +1,9 @@
 
 (ns re-frame.interceptors
-    (:require [random.api       :as random]
-              [re-frame.core    :as core]
-              [re-frame.dev.api :as re-frame.dev]
-              [vector.api       :as vector]))
+    (:require [fruits.random.api :as random]
+              [fruits.vector.api :as vector]
+              [re-frame.core     :as core]
+              [re-frame.dev.api  :as re-frame.dev]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

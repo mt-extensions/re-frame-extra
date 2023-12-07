@@ -1,7 +1,7 @@
 
 (ns re-frame.utilities
-    (:require [map.api    :as map]
-              [vector.api :as vector]))
+    (:require [fruits.map.api    :as map]
+              [fruits.vector.api :as vector]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

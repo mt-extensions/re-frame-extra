@@ -1,13 +1,13 @@
 
 (ns re-frame.handlers
-    (:require [re-frame.core      :as core]
+    (:require [fruits.vector.api  :as vector]
+              [re-frame.core      :as core]
               [re-frame.dev.api   :as re-frame.dev]
               [re-frame.loggers   :refer [console]]
               [re-frame.registrar :as registrar]
               [re-frame.state     :as state]
               [re-frame.utilities :as utilities]
-              [time.api           :as time]
-              [vector.api         :as vector]))
+              [time.api           :as time]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
