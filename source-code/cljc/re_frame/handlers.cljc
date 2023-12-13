@@ -193,7 +193,7 @@
              (reg-event-lock! timeout event-id))))
 
 (defn dispatch-last
-  ; @warning
+  ; @important
   ; The 'dispatch-last' function only handles standard event vectors, because
   ; the metamorphic events don't have unique identifiers!
   ;
@@ -216,9 +216,9 @@
               (time/set-timeout! f0 timeout))))
 
 (defn dispatch-once
-  ; @warning
-  ; The 'dispatch-once' function only handles standard event vectors, because
-  ; a metamorphic event doesn't have unique identifier!
+  ; @important
+  ; The 'dispatch-once' function handles only standard event vectors, because
+  ; metamorphic events don't have unique identifiers!
   ;
   ; @description
   ; The 'dispatch-once' function only fires an event once in the given interval.
