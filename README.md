@@ -22,7 +22,7 @@ Check out the latest commit on the [release branch](https://github.com/bithandsh
 
 ### Documentation
 
-The <strong>re-frame-api</strong> functional documentation is [available here](documentation/COVER.md).
+The <strong>re-frame-api</strong> functional documentation is [available here](https://bithandshake.github.io/re-frame-api).
 
 ### Changelog
 
