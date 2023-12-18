@@ -1,16 +1,10 @@
 
-# Changelog
+### [1.3.2.1] - 2022-11-28
 
-## [1.3.2.1] - 2022-11-28
+- CHANGES.md [added]
 
-### Added
+### [1.3.5.0] - 2023-01-09
 
-- CHANGES.md
+- dispatch-if [removed]
 
-## [1.3.5.0] - 2023-01-09
-
-### Removed
-
-- dispatch-if
-
-- dispatch-cond
+- dispatch-cond [removed]

@@ -13,7 +13,7 @@ that allows you to register and dispatch your events in a freestyle way.
 
 ```
 {:deps {bithandshake/re-frame-api {:git/url "https://github.com/bithandshake/re-frame-api"
-                                   :sha     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}}
+                                   :sha     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}}}
 ```
 
 ### Current version
