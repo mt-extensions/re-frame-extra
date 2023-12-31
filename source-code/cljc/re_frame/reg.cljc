@@ -27,10 +27,10 @@
   ; (reg-sub :my-subscription my-handler-f)
   ;
   ; @usage
-  ; (defn my-signal-f      [db _])
-  ; (defn your-signal-f    [db _])
-  ; (defn my-computation-f [[my-signal your-signal] _])
-  ; (reg-sub :my-subscription my-signal-f your-signal-f my-computation-f)
+  ; (defn my-signal-f         [db _])
+  ; (defn another-signal-f    [db _])
+  ; (defn my-computation-f [[my-signal another-signal] _])
+  ; (reg-sub :my-subscription my-signal-f another-signal-f my-computation-f)
   [query-id & fs]
   (apply core/reg-sub query-id fs))
 
@@ -61,16 +61,16 @@
   ; @param (metamorphic-event) event-handler
   ;
   ; @usage
-  ; (reg-event-fx :my-event [:your-event])
+  ; (reg-event-fx :my-event [:another-event])
   ;
   ; @usage
-  ; (reg-event-fx :my-event {:dispatch [:your-event]})
+  ; (reg-event-fx :my-event {:dispatch [:another-event]})
   ;
   ; @usage
-  ; (reg-event-fx :my-event (fn [cofx event-vector] [:your-event]))
+  ; (reg-event-fx :my-event (fn [cofx event-vector] [:another-event]))
   ;
   ; @usage
-  ; (reg-event-fx :my-event (fn [cofx event-vector] {:dispatch [:your-event]}))
+  ; (reg-event-fx :my-event (fn [cofx event-vector] {:dispatch [:another-event]}))
   ([event-id event-handler]
    (reg-event-fx event-id nil event-handler))
 
@@ -86,11 +86,11 @@
   ; @usage
   ; (defn my-side-effect-f [a])
   ; (reg-fx       :my-side-effect my-side-effect-f)
-  ; (reg-event-fx :my-effect {:my-my-side-effect-f "A"})
+  ; (reg-event-fx :my-effect {:my-side-effect-f "A"})
   ;
   ; @usage
-  ; (defn your-side-effect-f [a b])
-  ; (reg-fx       :your-side-effect your-side-effect-f)
-  ; (reg-event-fx :your-effect {:your-my-side-effect-f ["a" "b"]})
+  ; (defn my-side-effect-f [a b])
+  ; (reg-fx       :my-side-effect my-side-effect-f)
+  ; (reg-event-fx :my-effect {:my-side-effect-f ["a" "b"]})
   [event-id handler-f]
   (core/reg-fx event-id #(utilities/apply-fx-params handler-f %)))

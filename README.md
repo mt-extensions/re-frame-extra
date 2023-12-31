@@ -81,9 +81,7 @@ And how an 'effects-map' looks like:
 
 The 'metamorphic-event' formula provides a more flexible way to dispatch Re-Frame events.
 You can pass an event to the [`re-frame.api/dispatch`](documentation/cljc/re-frame/API.md#dispatch)
-function (or to the dispatching side-effects) as an event-vector, an effects-map
-or a function that returns another 'metamorphic-event' ooor a function that returns
-a function that returns an event-vector and so on.
+function (or to any dispatching side-effect) as an event-vector or an effects-map.
 
 ```
 (dispatch [:my-event])
@@ -94,33 +92,13 @@ a function that returns an event-vector and so on.
 ```
 
 ```
-(dispatch (fn [] {:dispatch [:my-event]}))
-```
-
-```
-(dispatch (fn [] [:my-event]))
-```
-
-```
-(dispatch (fn [] (fn [] [:my-event])))
-```
-
-```
-(dispatch (fn [] (println "You can put some side-effects here!")
-                 {:dispatch [:my-event]}))
-
-```
-
-And of course you can do this if you want:
-
-```
-(dispatch (fn [] {:dispatch {:dispatch-n [{:dispatch-later [{:ms 420 :fx-n [[:my-side-effect]]}]}]}}))
+(dispatch {:dispatch {:dispatch-n [{:dispatch-later [{:ms 420 :fx-n [[:my-side-effect]]}]}]}})
 ```
 
 ### metamorphic-handler
 
 The 'metamorphic-handler' is very similar to the previous formula.
-But it allows you to register Re-Frame effect-handlers really flexible.
+It allows you to register Re-Frame effect-handlers really flexible.
 You can pass not just a handler function but an event-vector or an effects-map
 to the `reg-event-fx` function.
 
@@ -140,8 +118,6 @@ to the `reg-event-fx` function.
 (reg-event-fx :my-effects (fn [_ _] {:dispatch [:my-event]}))
 ```
 
-And yes, it is possible too ...
-
 ```
 (reg-event-fx :my-effects (fn [_ _] {:dispatch {:dispatch-n [{:dispatch-later [{:ms 420 :dispatch [:my-event]}]}]}}))
 ```
@@ -149,7 +125,7 @@ And yes, it is possible too ...
 ### dispatch-once
 
 To spare some CPU when dispatching an event in high frequency we we can use the `dispatch-once` function
-which only fires an event once in the given interval.
+which only dispatches an event once in the given interval.
 
 > Re-Frame calculates the subscriptions every time when the state changes!
 
@@ -163,14 +139,14 @@ callings except two times per second (500 ms interval).
 ### dispatch-last
 
 It is quite similar to the previous function but the `dispatch-last` function only
-fires an event if you stop calling it at least for the given timeout.
+dispatches an event if you stop calling it at least for the given timeout.
 
 ```
 (dispatch-last 500 [:my-event])
 ```
 
 If you call this the same way as in the previous sample the function will ignore
-all of your callings and only fires the event (once) when you stop calling it
+all of your callings and only dispatches the event (once) when you stop calling it
 at least for the given timeout.
 
 ### dispatch-later
@@ -181,7 +157,7 @@ your own handlers.
 
 ```
 {:dispatch-later [{:ms 100 :dispatch [:my-event]}
-                  {:ms 200 :dispatch-n [[:my-event] [:your-event]]}
+                  {:ms 200 :dispatch-n [[:my-event] [:another-event]]}
                   {:ms 300 :my-fx nil}
                   {:ms 400 :dispatch-n [[:my-event] {:dispatch-later [{:fx [:my-side-effect] :ms 500}]}]}]}
 ```

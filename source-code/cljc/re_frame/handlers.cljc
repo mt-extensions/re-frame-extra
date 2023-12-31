@@ -40,7 +40,7 @@
   ; @usage
   ; (dispatch nil)
   [event-handler]
-  ; By default the Re-Frame doesn't print errors on server-side if an event isn't registered when it is dispatched.
+  ; By default the Re-Frame doesn't print errors on server-side if an event is not registered when it is dispatched.
   (letfn [(check! [] (let [event-id      (utilities/event-vector->event-id event-handler)
                            event-exists? (re-frame.dev/event-handler-registered? :event event-id)]
                           (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id)
@@ -129,8 +129,8 @@
   ;                           :fx-n       [[...] [...]]
   ;                           :dispatch-n [[...] [...]]}])
   [effects-map-list]
-  ; The original dispatch-later function of Re-Frame doesn't set a timeout on
-  ; events in server-side (Clojure) environment.
+  ; The original 'dispatch-later' function of the Re-Frame library doesn't actually set any timeout
+  ; on 'dispatch-later' events in server-side (Clojure) environment.
   (doseq [{:keys [ms] :as effects-map} (remove nil? effects-map-list)]
          (if ms (letfn [(f0 [] (dispatch (dissoc effects-map :ms)))]
                        (time/set-timeout! f0 ms)))))
@@ -193,12 +193,12 @@
              (reg-event-lock! timeout event-id))))
 
 (defn dispatch-last
-  ; @important
-  ; The 'dispatch-last' function only handles standard event vectors, because
+  ; @note
+  ; The 'dispatch-last' function handles only standard event vectors, because
   ; the metamorphic events don't have unique identifiers!
   ;
   ; @description
-  ; The 'dispatch-last' function only fires an event if you stop calling it
+  ; The 'dispatch-last' function only dispatches an event if you stop calling it
   ; at least for the given timeout.
   ; It ignores dispatching the event until the timout elapsed since the last calling.
   ;
@@ -216,12 +216,12 @@
               (time/set-timeout! f0 timeout))))
 
 (defn dispatch-once
-  ; @important
+  ; @note
   ; The 'dispatch-once' function handles only standard event vectors, because
   ; metamorphic events don't have unique identifiers!
   ;
   ; @description
-  ; The 'dispatch-once' function only fires an event once in the given interval.
+  ; The 'dispatch-once' function dispatches an event only once in the given interval.
   ; It ignores dispatching the event except one time per interval.
   ;
   ; @param (integer) interval

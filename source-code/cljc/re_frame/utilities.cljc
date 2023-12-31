@@ -39,9 +39,9 @@
   ; @param (list of *) params
   ;
   ; @example
-  ; (event-vector<-params [:my-event] "My param" "Your param")
+  ; (event-vector<-params [:my-event] "My param" "Another param")
   ; =>
-  ; [:my-event "My param" "Your param"]
+  ; [:my-event "My param" "Another param"]
   ;
   ; @return (event-vector)
   [n & params]
@@ -91,9 +91,9 @@
   ; @param (vector) event-vector
   ;
   ; @example
-  ; (effects-map<-event {:dispatch [:my-event]} [:your-event])
+  ; (effects-map<-event {:dispatch [:my-event]} [:another-event])
   ; =>
-  ; {:dispatch [:my-event] :dispatch-n [[:your-event]]}
+  ; {:dispatch [:my-event] :dispatch-n [[:another-event]]}
   ;
   ; @return (map)
   [effects-map event-vector]
@@ -262,30 +262,24 @@
   ; =>
   ; {:dispatch [:my-event]}
   ;
-  ; @example
-  ; (metamorphic-event->effects-map (fn [] {:dispatch [:my-event]))
-  ; =>
-  ; {:dispatch [:my-event]}
-  ;
   ; @return (map)
   [n]
-  (cond (vector? n) (->  n event-vector->effects-map)
-        (map?    n) (->  n)
-        (fn?     n) (-> (n) metamorphic-event->effects-map)))
+  (cond (vector? n) (-> n event-vector->effects-map)
+        (map?    n) (-> n)))
 
 (defn metamorphic-event<-params
   ; @param (metamorphic-event) n
   ; @param (list of *) params
   ;
   ; @example
-  ; (metamorphic-event<-params [:my-event] "My param" "Your param")
+  ; (metamorphic-event<-params [:my-event] "My param" "Another param")
   ; =>
-  ; [:my-event "My param" "Your param"]
+  ; [:my-event "My param" "Another param"]
   ;
   ; @example
-  ; (metamorphic-event<-params {:dispatch [:my-event]} "My param" "Your param")
+  ; (metamorphic-event<-params {:dispatch [:my-event]} "My param" "Another param")
   ; =>
-  ; {:dispatch [:my-event "My param" "Your param"]}
+  ; {:dispatch [:my-event "My param" "Another param"]}
   ;
   ; @return (metamorphic-event)
   [n & params]
