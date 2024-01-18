@@ -8,11 +8,12 @@
 
 (defn r
   ; @param (function) f
-  ; @param (*) params
+  ; @param (map)(opt) context
+  ; @param (list of *)(opt) params
   ;
   ; @usage
-  ; (defn remove-item! [db [event-id item-path]])
-  ; (r remove-item! db [:my-item])
+  ; (defn my-handler [db [event-id my-param]] ...)
+  ; (r my-handler db "My value")
   ;
   ; @return (*)
   [f & [context & params]]
