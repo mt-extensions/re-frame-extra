@@ -271,7 +271,7 @@ You can apply functions with `r` one after another by using the `as->` function:
              (r update-data! %)))
 ```
 
-And also you can pass more than one parameter by using the `r`:
+And you can also pass multiple parameters by using the `r`:
 
 ```
 (defn add-user!
