@@ -1,11 +1,11 @@
 
 {:paths ["source-code/cljc"]
  :deps  {bithandshake/cljc-fruits    {:git/url "https://github.com/bithandshake/cljc-fruits"
-                                      :sha     "32f15dd9fd6efbbda5fa0494ccceae1c398bb6de"}
+                                      :sha     "76731f3aebff86219eb334fe759a02ff69765ede"}
          bithandshake/cljc-time      {:git/url "https://github.com/bithandshake/cljc-time"
-                                      :sha     "4dfe9f9d959313dbc22242c35e5a8525445b9609"}
+                                      :sha     "58aee623e1cc20a464638b308f1492aa7ac3cce5"}
          bithandshake/re-frame-utils {:git/url "https://github.com/bithandshake/re-frame-utils"
-                                      :sha     "3f2280d209ec882201f2bcf1c08e5948cc0028c1"}
+                                      :sha     "7ec65e3a402d01cf7a9b1a9a7ca820be4d35b999"}
          org.clojure/clojure         {:mvn/version "1.10.1"}
          org.clojure/clojurescript   {:mvn/version "1.10.891"}
          re-frame/re-frame           {:mvn/version "1.2.0"}}}
