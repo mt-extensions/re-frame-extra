@@ -5,7 +5,7 @@
          bithandshake/cljc-time      {:git/url "https://github.com/bithandshake/cljc-time"
                                       :sha     "3a5dd6eb7e2baf9f895c89136cce9bcd108e23cb"}
          bithandshake/re-frame-utils {:git/url "https://github.com/bithandshake/re-frame-utils"
-                                      :sha     "8f129c8c4b5ee2f712ed5b02139e4718b5d20de7"}
+                                      :sha     "0a758e29666a2fa8136dc6aa657307b5e6d707ff"}
          org.clojure/clojure         {:mvn/version "1.10.1"}
          org.clojure/clojurescript   {:mvn/version "1.10.891"}
          re-frame/re-frame           {:mvn/version "1.2.0"}}}
