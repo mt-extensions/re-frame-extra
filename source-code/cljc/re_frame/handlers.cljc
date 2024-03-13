@@ -2,52 +2,51 @@
 (ns re-frame.handlers
     (:require [fruits.vector.api  :as vector]
               [re-frame.core      :as core]
-              [re-frame.dev.api   :as re-frame.dev]
               [re-frame.loggers   :refer [console]]
               [re-frame.registrar :as registrar]
-              [re-frame.state     :as state]
-              [re-frame.utilities :as utilities]
-              [time.api           :as time]))
+              [re-frame.extra.state :as state]
+              [re-frame.extra.utils :as utils]
+              [re-frame.extra.check :as check]
+              [time.api :as time]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
 (core/reg-event-fx :dispatch-metamorphic-event
-  ; @param (metamorphic-event) n
+  ; @param (metamorphic-event or vector) metamorphic-event
   ;
   ; @usage
-  ; [:dispatch-metamorphic-event [...]]
+  ; [:dispatch-metamorphic-event [:my-event {...}]]
   ;
   ; @usage
-  ; [:dispatch-metamorphic-event {:dispatch [...]}]
-  (fn [_ [_ n]] (utilities/metamorphic-event->effects-map n)))
+  ; [:dispatch-metamorphic-event {:dispatch [:my-event {...}]}]
+  (fn [_ [_ metamorphic-event]] (utils/metamorphic-event->effects-map metamorphic-event)))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
 (defn dispatch
-  ; @param (metamorphic-event) event-handler
+  ; @description
+  ; Dispatches the given event handler.
+  ;
+  ; @param (metamorphic-event or vector) event-handler
   ;
   ; @usage
-  ; (dispatch [:my-event])
+  ; (dispatch [:my-event {...}])
   ;
   ; @usage
-  ; (dispatch {:dispatch [:my-event]})
+  ; (dispatch {:dispatch [:my-event {...}]})
   ;
   ; @usage
-  ; (dispatch (fn [] {:dispatch [:my-event]}))
+  ; (dispatch (fn [] {:dispatch [:my-event {...}]}))
   ;
   ; @usage
   ; (dispatch nil)
   [event-handler]
-  ; By default the Re-Frame doesn't print errors on server-side if an event is not registered when it is dispatched.
-  (letfn [(check! [] (let [event-id      (utilities/event-vector->event-id event-handler)
-                           event-exists? (re-frame.dev/event-handler-registered? :event event-id)]
-                          (when-not event-exists? (println "re-frame: no :event handler registered for:" event-id)
-                                                  (println event-handler))))]
-         (if (vector? event-handler) #?(:clj (check!) :cljs nil))
-         (if (vector? event-handler)         (core/dispatch event-handler)
-                                             (core/dispatch [:dispatch-metamorphic-event event-handler]))))
+  #?(:clj (check/check-event-handler event-handler))
+  (if (vector?       event-handler)
+      (core/dispatch event-handler)
+      (core/dispatch [:dispatch-metamorphic-event event-handler])))
 
 ; @usage
 ; {:dispatch ...}
@@ -76,10 +75,13 @@
 ;; ----------------------------------------------------------------------------
 
 (defn dispatch-fx
-  ; @param (event-vector) event-handler
+  ; @description
+  ; Dispatches the given side effect handler.
+  ;
+  ; @param (vector) event-handler
   ;
   ; @usage
-  ; (dispatch-fx [:my-side-effect-event ...])
+  ; (dispatch-fx [:my-side-effect {...}])
   [event-handler]
   (dispatch {:fx event-handler}))
 
@@ -87,13 +89,16 @@
 ;; ----------------------------------------------------------------------------
 
 (defn dispatch-sync
-  ; @description
-  ; This function doesn't take metamoprhic handlers (for performance reasons).
+  ; @note
+  ; This function doesn't take metamoprhic events (for performance reasons).
   ;
-  ; @param (event-vector) event-handler
+  ; @description
+  ; Dispatches the given event handler immediately.
+  ;
+  ; @param (vector) event-handler
   ;
   ; @usage
-  ; (dispatch-sync [...])
+  ; (dispatch-sync [:my-event {...}])
   ;
   [event-handler]
   (core/dispatch-sync event-handler))
@@ -102,7 +107,10 @@
 ;; ----------------------------------------------------------------------------
 
 (defn dispatch-n
-  ; @param (metamorphic-events in vector) event-list
+  ; @description
+  ; Dispatches the given event handlers.
+  ;
+  ; @param (metamorphic-events or vectors in vector) event-list
   ;
   ; @usage
   ; (dispatch-n [[:event-a]
@@ -121,16 +129,18 @@
 ;; ----------------------------------------------------------------------------
 
 (defn dispatch-later
+  ; @description
+  ; Dispatches the given delayed event handlers.
+  ;
   ; @param (maps in vector) effects-map-list
   ;
   ; @usage
-  ; (dispatch-later [{:ms 500 :dispatch [...]}
-  ;                  {:ms 600 :fx [...]
-  ;                           :fx-n       [[...] [...]]
-  ;                           :dispatch-n [[...] [...]]}])
+  ; (dispatch-later [{:ms 500 :dispatch [:my-event {...}]}
+  ;                  {:ms 600 :fx [:my-side-effect {...}]
+  ;                           :fx-n       [[:another-side-effect {...}]]
+  ;                           :dispatch-n [[:another-event       {...}]]}])
   [effects-map-list]
-  ; The original 'dispatch-later' function of the Re-Frame library doesn't actually set any timeout
-  ; on 'dispatch-later' events in server-side (Clojure) environment.
+  ; The original 'dispatch-later' function doesn't set any timeout for 'dispatch-later' events in the Clojure environment.
   (doseq [{:keys [ms] :as effects-map} (remove nil? effects-map-list)]
          (if ms (letfn [(f0 [] (dispatch (dissoc effects-map :ms)))]
                        (time/set-timeout! f0 ms)))))
@@ -148,8 +158,6 @@
   ;
   ; @param (integer) timeout
   ; @param (keyword) event-id
-  ;
-  ; @return (?)
   [timeout event-id]
   (let [elapsed-time (time/elapsed)
         unlock-time  (+ timeout elapsed-time)]
@@ -170,24 +178,20 @@
   ; @ignore
   ;
   ; @description
-  ; Dispatches the event if it's NOT locked.
+  ; Only dispatches the event if it's NOT locked.
   ;
-  ; @param (event-vector) event-vector
-  ;
-  ; @return (?)
+  ; @param (vector) event-vector
   [event-vector]
-  (if (-> event-vector utilities/event-vector->event-id event-unlocked?)
-      (core/dispatch event-vector)))
+  (if (-> event-vector utils/event-vector->event-id event-unlocked?)
+      (-> event-vector core/dispatch)))
 
 (defn- delayed-try
   ; @ignore
   ;
   ; @param (integer) timeout
-  ; @param (event-vector) event-vector
-  ;
-  ; @return (?)
+  ; @param (vector) event-vector
   [timeout event-vector]
-  (let [event-id (utilities/event-vector->event-id event-vector)]
+  (let [event-id (utils/event-vector->event-id event-vector)]
        (when (event-unlocked? event-id)
              (core/dispatch   event-vector)
              (reg-event-lock! timeout event-id))))
@@ -203,14 +207,12 @@
   ; It ignores dispatching the event until the timout elapsed since the last calling.
   ;
   ; @param (integer) timeout
-  ; @param (event-vector) event-vector
+  ; @param (vector) event-vector
   ;
   ; @usage
   ; (dispatch-last 500 [:my-event])
-  ;
-  ; @return (?)
   [timeout event-vector]
-  (let [event-id (utilities/event-vector->event-id event-vector)]
+  (let [event-id (utils/event-vector->event-id event-vector)]
        (reg-event-lock! timeout event-id)
        (letfn [(f0 [] (dispatch-unlocked?! event-vector))]
               (time/set-timeout! f0 timeout))))
@@ -225,14 +227,14 @@
   ; It ignores dispatching the event except one time per interval.
   ;
   ; @param (integer) interval
-  ; @param (event-vector) event-vector
+  ; @param (vector) event-vector
   ;
   ; @usage
   ; (dispatch-once 500 [:my-event])
   ;
   ; @return (?)
   [interval event-vector]
-  (let [event-id (utilities/event-vector->event-id event-vector)]
+  (let [event-id (utils/event-vector->event-id event-vector)]
        (if (event-unlocked? event-id)
            (do (core/dispatch event-vector)
                (reg-event-lock! interval event-id))
@@ -275,7 +277,7 @@
                   (if ; Tick now?
                       (-> effects-map :tick zero?)
                       ; Tick now!
-                      (utilities/merge-effects-maps merged-effects-map effects-map)
+                      (utils/merge-effects-maps merged-effects-map effects-map)
                       ; Tick later!
                       (update merged-effects-map :dispatch-tick vector/conj-item (update effects-map :tick dec))))]
              (reduce f0 {} effects-maps-vector))))

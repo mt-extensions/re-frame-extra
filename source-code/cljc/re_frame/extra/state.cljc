@@ -1,10 +1,13 @@
 
-(ns re-frame.state)
+(ns re-frame.extra.state)
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
 ; @ignore
+;
+; @description
+; Stored event locks.
 ;
 ; @atom (map)
 (def EVENT-LOCKS (atom {}))
