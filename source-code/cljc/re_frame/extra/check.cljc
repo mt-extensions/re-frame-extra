@@ -1,7 +1,6 @@
 
 (ns re-frame.extra.check
-    (:require [re-frame.extra.utils :as utils]
-              [re-frame.dev.api :as re-frame.dev]
+    (:require [re-frame.tools.api :as re-frame.tools]
               [re-frame.loggers :refer [console]]))
 
 ;; ----------------------------------------------------------------------------
@@ -19,9 +18,9 @@
   ; @usage
   ; (check-metamorphic-event [:my-event {...}])
   [n]
-  (if (utils/event-vector? n)
-      (let [event-id (utils/event-vector->event-id n)]
-           (when-not (re-frame.dev/event-handler-registered? :event event-id)
+  (if (re-frame.tools/event-vector? n)
+      (let [event-id (re-frame.tools/event-vector->event-id n)]
+           (when-not (re-frame.tools/event-handler-registered? :event event-id)
                      (println "re-frame: no :event handler registered for:" event-id)
                      (println n)))))
 
@@ -40,12 +39,12 @@
   ; @usage
   ; (check-side-effect-vector [:my-side-effect {...}])
   [n]
-  (if (utils/side-effect-vector? n)
-      (let [effect-id (utils/side-effect-vector->effect-id n)]
-           (when     (= :db effect-id)
-                     (console :warn "re-frame: \":fx\" effect should not contain a :db effect"))
-           (when-not (re-frame.dev/event-handler-registered? :fx effect-id)
-                     (console :warn "re-frame: in \":fx\" effect found " effect-id " which has no associated handler. Ignoring.")))))
+  (if (re-frame.tools/side-effect-vector? n)
+      (let [effect-id (re-frame.tools/side-effect-vector->effect-id n)]
+           (when-not  (re-frame.tools/event-handler-registered? :fx effect-id)
+                      (console :warn "re-frame: in \":fx\" effect found " effect-id " which has no associated handler. Ignoring."))
+           (when      (= :db effect-id)
+                      (console :warn "re-frame: \":fx\" effect should not contain a :db effect")))))
 
 (defn check-side-effect-list
   ; @ignore

@@ -2,7 +2,7 @@
 (ns re-frame.extra.reg
     (:require [re-frame.core         :as core]
               [re-frame.debug.api :as re-frame.debug]
-              [re-frame.extra.utils :as utils]))
+              [re-frame.tools.api :as re-frame.tools]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -32,8 +32,8 @@
   ; (reg-sub :my-subscription my-handler-f)
   ;
   ; @usage
-  ; (defn my-signal-f         [db _])
-  ; (defn another-signal-f    [db _])
+  ; (defn my-signal-f      [db _])
+  ; (defn another-signal-f [db _])
   ; (defn my-computation-f [[my-signal another-signal] _])
   ; (reg-sub :my-subscription my-signal-f another-signal-f my-computation-f)
   [query-id & handler-fns]
@@ -80,13 +80,13 @@
    (reg-event-fx event-id nil metamorphic-handler))
 
   ([event-id interceptors metamorphic-handler]
-   (let [handler-f    (utils/metamorphic-handler->handler-f metamorphic-handler)
+   (let [handler-f    (re-frame.tools/metamorphic-handler->handler-f metamorphic-handler)
          interceptors (re-frame.debug/import-debug-interceptor interceptors)]
         (core/reg-event-fx event-id interceptors handler-f))))
 
 (defn reg-fx
   ; @description
-  ; Registers a side effect handler that takes its parameters [individually](#apply-fx-params),
+  ; Registers a side effect handler that takes its parameters [individually](/re-frame-tools/cljc/re-frame/tools/api.html#apply-fx-params),
   ; regardless of how they are structured in the effect map.
   ;
   ; @param (keyword) event-id
@@ -102,4 +102,4 @@
   ; (reg-fx       :my-side-effect my-side-effect-f)
   ; (reg-event-fx :my-effect {:my-side-effect-f ["a" "b"]})
   [event-id handler-f]
-  (core/reg-fx event-id #(utils/apply-fx-params handler-f %)))
+  (core/reg-fx event-id #(re-frame.tools/apply-fx-params handler-f %)))

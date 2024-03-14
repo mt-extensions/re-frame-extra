@@ -2,7 +2,7 @@
 (ns re-frame.extra.handlers
     (:require [re-frame.core      :as core]
               [re-frame.registrar :as registrar]
-              [re-frame.extra.utils :as utils]
+              [re-frame.tools.api :as re-frame.tools]
               [re-frame.extra.check :as check]
               [time.api :as time]
               [activity-listener.api :as activity-listener]))
@@ -36,9 +36,9 @@
   [metamorphic-event]
   ; Re-Frame does not print errors in the Clojure environment(!) if an event is is dispatched but not registered.
   #?(:clj (check/check-metamorphic-event metamorphic-event))
-  (if metamorphic-event (if (utils/event-vector? metamorphic-event)
-                            (core/dispatch       metamorphic-event)
-                            (core/dispatch       [:dispatch-metamorphic-event metamorphic-event]))))
+  (if metamorphic-event (if (re-frame.tools/event-vector? metamorphic-event)
+                            (core/dispatch                metamorphic-event)
+                            (core/dispatch                [:dispatch-metamorphic-event metamorphic-event]))))
 
 (registrar/clear-handlers :fx      :dispatch)
 (core/reg-fx              :dispatch dispatch)
@@ -67,7 +67,7 @@
 
 (defn dispatch-later
   ; @description
-  ; Dispatches the given list of effect maps delayed.
+  ; Dispatches the given list of effect maps with optional delay.
   ;
   ; @param (maps in vector) effect-map-list
   ; [(map) effect-map
@@ -92,9 +92,10 @@
   ;                            :fx-n       [[:my-side-effect]]}]}
   [effect-map-list]
   ; The original 'dispatch-later' function does not set any timeout for the given events in the Clojure environment.
-  (doseq [{:keys [ms] :as effect-map} effect-map-list]
-         (if ms (letfn [(f0 [] (-> effect-map utils/delayed-effect-map->effect-map dispatch))]
-                       (time/set-timeout! f0 ms)))))
+  (letfn [(f0 [effect-map] (-> effect-map re-frame.tools/delayed-effect-map->effect-map dispatch))]
+         (doseq [{:keys [ms] :as effect-map} effect-map-list]
+                (if ms (time/set-timeout! (f0 effect-map) ms)
+                       (dispatch effect-map)))))
 
 (registrar/clear-handlers :fx            :dispatch-later)
 (core/reg-fx              :dispatch-later dispatch-later)
@@ -129,7 +130,7 @@
 
 (defn dispatch-once
   ; @description
-  ; Dispatches the given event handler throttled (rate limited).
+  ; Dispatches the given event handler with optional throttling (rate limiting).
   ;
   ; @param (vector) event-vector
   ; @param (ms) timeout
@@ -140,7 +141,7 @@
   ; @usage
   ; {:dispatch-once [[:my-event] 420]}
   [event-vector timeout]
-  (let [event-id (utils/event-vector->event-id event-vector)]
+  (let [event-id (re-frame.tools/event-vector->event-id event-vector)]
        (when (activity-listener/activity-not-locked? event-id)
              (activity-listener/lock-activity!       event-id timeout)
              (dispatch                               event-vector))))
@@ -167,7 +168,8 @@
 
 (defn dispatch-tick
   ; @description
-  ; Dispatches the given list of delayed event handlers.
+  ; Dispatches the given list of event handlers with optional delay.
+  ; The timeout is expressed in ticks (dispatching frequency).
   ;
   ; @param (maps in vector) effect-map-list
   ; [(map) effect-map

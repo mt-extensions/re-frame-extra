@@ -1,7 +1,7 @@
 
 (ns re-frame.extra.effects
     (:require [re-frame.core :as core]
-              [re-frame.extra.utils :as utils]
+              [re-frame.tools.api :as re-frame.tools]
               [fruits.vector.api :as vector]))
 
 ;; ----------------------------------------------------------------------------
@@ -15,7 +15,7 @@
   ;
   ; @usage
   ; [:dispatch-metamorphic-event {:dispatch [:my-event]}]
-  (fn [_ [_ metamorphic-event]] (utils/metamorphic-event->effect-map metamorphic-event)))
+  (fn [_ [_ metamorphic-event]] (re-frame.tools/metamorphic-event->effect-map metamorphic-event)))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -38,7 +38,9 @@
   ; [:dispatch-tick [{:tick 420 :dispatch [:my-event]}]]
   (fn [_ [_ effect-map-list]]
       (letfn [(f0 [merged-effect-map effect-map]
-                  (if (-> effect-map :tick zero?)                                                                      ; <- Tick now?
-                      (-> merged-effect-map (utils/merge-effect-maps effect-map))                                      ; <- Tick now!
-                      (-> merged-effect-map (update :dispatch-tick vector/conj-item (update effect-map :tick dec)))))] ; <- Tick later!
+                  (cond (-> effect-map :tick nil?)                                                                       ; <- No 'tick' value is provided.
+                        (-> merged-effect-map (re-frame.tools/merge-effect-maps effect-map))                             ; <- Dispatching without delay.
+                        (-> effect-map :tick zero?)                                                                      ; <- Delay elapsed.
+                        (-> merged-effect-map (re-frame.tools/merge-effect-maps effect-map))                             ; <- Dispatching now.
+                        (-> merged-effect-map (update :dispatch-tick vector/conj-item (update effect-map :tick dec)))))] ; <- Dispatching later.
              (reduce f0 {} effect-map-list))))
