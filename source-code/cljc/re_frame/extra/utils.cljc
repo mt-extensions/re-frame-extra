@@ -97,7 +97,7 @@
   ; @param (vector) event-vector
   ;
   ; @usage
-  ; (event-vector->event-id [:my-event {...}])
+  ; (event-vector->event-id [:my-event])
   ; =>
   ; :my-event
   ;
@@ -105,16 +105,16 @@
   [event-vector]
   (first event-vector))
 
-(defn event-vector->effects-map
+(defn event-vector->effect-map
   ; @description
   ; Converts the given event vector into an effect map.
   ;
   ; @param (vector) event-vector
   ;
   ; @usage
-  ; (event-vector->effects-map [:my-event {...}])
+  ; (event-vector->effect-map [:my-event])
   ; =>
-  ; {:dispatch [:my-event {...}]}
+  ; {:dispatch [:my-event]}
   ;
   ; @return (map)
   [event-vector]
@@ -138,23 +138,77 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-(defn effects-map<-event-vector
+(defn side-effect-vector?
+  ; @description
+  ; Returns TRUE if the given 'n' value is a vector containing the first element as a keyword (indicating it might be a side effect vector).
+  ;
+  ; @param (*) n
+  ;
+  ; @usage
+  ; (side-effect-vector? [:my-side-effect ...])
+  ; =>
+  ; true
+  ;
+  ; @return (boolean)
+  [n]
+  (and (-> n vector?)
+       (-> n first keyword?)))
+
+(defn side-effect-vector->effect-id
+  ; @description
+  ; Returns the event ID from the given event vector.
+  ;
+  ; @param (vector) side-effect-vector
+  ;
+  ; @usage
+  ; (side-effect-vector->effect-id [:my-side-effect])
+  ; =>
+  ; :my-side-effect
+  ;
+  ; @return (vector)
+  [side-effect-vector]
+  (first side-effect-vector))
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
+
+(defn delayed-effect-map->effect-map
+  ; @description
+  ; Dissociates the delay related properties (':ms', ':tick') from the given effect map.
+  ;
+  ; @param (map) effect-map
+  ;
+  ; @usage
+  ; (delayed-effect-map->effect-map {:dispatch [:my-event] :ms 420})
+  ; =>
+  ; {:dispatch [:my-event] :ms 420}
+  ;
+  ; @usage
+  ; (delayed-effect-map->effect-map {:dispatch [:my-event] :tick 420})
+  ; =>
+  ; {:dispatch [:my-event] :tick 420}
+  ;
+  ; @return (map)
+  [effect-map]
+  (dissoc effect-map :ms :tick))
+
+(defn effect-map<-event-vector
   ; @description
   ; Inserts the given event vector into the given effect map.
   ;
-  ; @param (map) effects-map
+  ; @param (map) effect-map
   ; @param (vector) event-vector
   ;
   ; @usage
-  ; (effects-map<-event-vector {:dispatch [:my-event]} [:another-event])
+  ; (effect-map<-event-vector {:dispatch [:my-event]} [:another-event])
   ; =>
   ; {:dispatch [:my-event] :dispatch-n [[:another-event]]}
   ;
   ; @return (map)
-  [effects-map event-vector]
-  (update effects-map :dispatch-n vector/conj-item event-vector))
+  [effect-map event-vector]
+  (update effect-map :dispatch-n vector/conj-item event-vector))
 
-(defn merge-effects-maps
+(defn merge-effect-maps
   ; @description
   ; Merges the the given effect maps.
   ;
@@ -162,8 +216,8 @@
   ; @param (map) b
   ;
   ; @usage
-  ; (merge-effects-maps {:dispatch [:a1] :dispatch-n [[:a2] [:a3]}]}
-  ;                     {:dispatch [:b1] :dispatch-n [[:b2]]})
+  ; (merge-effect-maps {:dispatch [:a1] :dispatch-n [[:a2] [:a3]}]}
+  ;                    {:dispatch [:b1] :dispatch-n [[:b2]]})
   ; =>
   ; {:dispatch [:a1] :dispatch-n [[:a2] [:a3] [:b1] [:b2]]}
   ;
@@ -177,20 +231,20 @@
                (f0 :dispatch-n     vector/concat-items (:dispatch-n     b))
                (f0 :dispatch-later vector/concat-items (:dispatch-later b)))))
 
-(defn effects-map->handler-f
+(defn effect-map->handler-f
   ; @description
   ; Converts the given effect map into an effect handler function.
   ;
-  ; @param (map) effects-map
+  ; @param (map) effect-map
   ;
   ; @usage
-  ; (effects-map->handler-f {:dispatch [:my-event {...}]})
+  ; (effect-map->handler-f {:dispatch [:my-event]})
   ; =>
-  ; (fn [_ _] {:dispatch [:my-event {...}]})
+  ; (fn [_ _] {:dispatch [:my-event]})
   ;
   ; @return (function)
-  [effects-map]
-  (fn [_ _] effects-map))
+  [effect-map]
+  (fn [_ _] effect-map))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -230,9 +284,9 @@
   ;  ...}
   ;
   ; @usage
-  ; (context->event-vector {:coeffects {:event [:my-event {...}]}})
+  ; (context->event-vector {:coeffects {:event [:my-event]}})
   ; =>
-  ; [:my-event {...}]
+  ; [:my-event]
   ;
   ; @return (vector)
   [context]
@@ -249,7 +303,7 @@
   ;  ...}
   ;
   ; @usage
-  ; (context->event-id {:coeffects {:event [:my-event {...}]}})
+  ; (context->event-id {:coeffects {:event [:my-event]}})
   ; =>
   ; :my-event
   ;
@@ -307,9 +361,9 @@
   ;  ...}
   ;
   ; @usage
-  ; (cofx->event-vector {:event [:my-event {...}]})
+  ; (cofx->event-vector {:event [:my-event]})
   ; =>
-  ; [:my-event {...}]
+  ; [:my-event]
   ;
   ; @return (vector)
   [cofx]
@@ -325,7 +379,7 @@
   ;  ...}
   ;
   ; @usage
-  ; (cofx->event-id {:event [:my-event {...}]})
+  ; (cofx->event-id {:event [:my-event]})
   ; =>
   ; :my-event
   ;
@@ -336,25 +390,25 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-(defn metamorphic-event->effects-map
+(defn metamorphic-event->effect-map
   ; @description
   ; Converts the given metamorphic event into an effect map.
   ;
-  ; @param (metamorphic-event or vector) metamorphic-event
+  ; @param (metamorphic-event) metamorphic-event
   ;
   ; @usage
-  ; (metamorphic-event->effects-map [:my-event])
+  ; (metamorphic-event->effect-map [:my-event])
   ; =>
   ; {:dispatch [:my-event]}
   ;
   ; @usage
-  ; (metamorphic-event->effects-map {:dispatch [:my-event])
+  ; (metamorphic-event->effect-map {:dispatch [:my-event])
   ; =>
   ; {:dispatch [:my-event]}
   ;
   ; @return (map)
   [metamorphic-event]
-  (cond (vector? metamorphic-event) (-> metamorphic-event event-vector->effects-map)
+  (cond (vector? metamorphic-event) (-> metamorphic-event event-vector->effect-map)
         (map?    metamorphic-event) (-> metamorphic-event)))
 
 (defn metamorphic-event<-params
@@ -362,7 +416,7 @@
   ; @description
   ; Appends the given parameters to each event vector in the given effect map.
   ;
-  ; @param (metamorphic-event or vector) metamorphic-event
+  ; @param (metamorphic-event) metamorphic-event
   ; @param (list of *) params
   ;
   ; @usage
@@ -378,9 +432,9 @@
   ; @return (metamorphic-event)
   [metamorphic-event & params]
   ; A metamorphic event can be a vector ...
-  ; ... as an event-vector:         [:my-event {...}]
-  ; ... as a dispatch-later vector: [{:ms   500 :dispatch [:my-event {...}]}]
-  ; ... as a dispatch-tick vector:  [{:tick 500 :dispatch [:my-event {...}]}]
+  ; ... as an event-vector:         [:my-event]
+  ; ... as a dispatch-later vector: [{:ms   500 :dispatch [:my-event]}]
+  ; ... as a dispatch-tick vector:  [{:tick 500 :dispatch [:my-event]}]
   (cond (event-vector? metamorphic-event) (vector/concat-items metamorphic-event params)
         (vector?       metamorphic-event) (vector/->items      metamorphic-event #(apply metamorphic-event<-params % params))
         (map?          metamorphic-event) (map/->values        metamorphic-event #(apply metamorphic-event<-params % params))
@@ -393,12 +447,12 @@
   ; @description
   ; Converts the given metamorphic handler into an effect handler function.
   ;
-  ; @param (function or metamorphic-handler) metamorphic-handler
+  ; @param (metamorphic-handler) metamorphic-handler
   ;
   ; @usage
-  ; (metamorphic-handler->handler-f [:my-event {...}])
+  ; (metamorphic-handler->handler-f [:my-event])
   ; =>
-  ; (fn [_ _] {:dispatch [:my-event {...}]})
+  ; (fn [_ _] {:dispatch [:my-event]})
   ;
   ; @usage
   ; (metamorphic-handler->handler-f {:dispatch [:my-event {...]})
@@ -414,7 +468,7 @@
   [metamorphic-handler]
   (cond (map?    metamorphic-handler) (-> metamorphic-handler event-vector->handler-f)
         (vector? metamorphic-handler) (-> metamorphic-handler event-vector->handler-f)
-        (fn?     metamorphic-handler) (fn [cofx event-vector] (metamorphic-event->effects-map (metamorphic-handler cofx event-vector)))
+        (fn?     metamorphic-handler) (fn [cofx event-vector] (metamorphic-event->effect-map (metamorphic-handler cofx event-vector)))
         :return  metamorphic-handler))
 
 ;; ----------------------------------------------------------------------------

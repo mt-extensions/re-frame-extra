@@ -1,8 +1,8 @@
 
 (ns re-frame.extra.api
-    (:require [re-frame.core         :as core]
-              [re-frame.handlers     :as handlers]
-              [re-frame.interceptors :as interceptors]
+    (:require [re-frame.extra.effects]
+              [re-frame.extra.interceptors :as interceptors]
+              [re-frame.extra.handlers :as handlers]
               [re-frame.extra.reg :as reg]
               [re-frame.extra.sub :as sub]
               [re-frame.extra.utils :as utils]))
@@ -10,17 +10,46 @@
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
 
-; @redirect (re-frame.extra.core/*)
-(def ->interceptor core/->interceptor)
-(def inject-cofx   core/inject-cofx)
+; @tutorial Types
+;
+; @title Event vector
+;
+; [:my-event "My param"]
+;
+; @title Effect map
+;
+; {:dispatch [:my-event]
+;  :dispatch-later [{:ms 420 :dispatch [:my-event]}]
+;  ...}
+;
+; @title Metamorphic event
+;
+; The metamorphic event formula provides a flexible way to dispatch Re-Frame events.
+; The extended [dispatch](#dispatch) function accepts not only event vectors but also effect maps and functions for dispatching.
+;
+; @usage
+; (dispatch [:my-event])
+; (dispatch {:dispatch [:my-event]})
+; (dispatch (fn [] {:dispatch [:my-event]}))
+;
+; @title Metamorphic handler
+;
+; The metamorphic handler formula provides a flexible way to register effect handlers.
+; The extended [reg-event-fx](#reg-event-fx) function accepts not only handler functions but also event vectors and effect maps.
+;
+; @usage
+; (reg-event-fx :my-effects (fn [_ _] {:dispatch [:my-event]}))
+; (reg-event-fx :my-effects {:dispatch [:my-event]})
+; (reg-event-fx :my-effects [:my-event])
+
+;; ----------------------------------------------------------------------------
+;; ----------------------------------------------------------------------------
 
 ; @redirect (re-frame.extra.handlers/*)
 (def dispatch       handlers/dispatch)
-(def dispatch-fx    handlers/dispatch-fx)
 (def dispatch-sync  handlers/dispatch-sync)
 (def dispatch-n     handlers/dispatch-n)
 (def dispatch-later handlers/dispatch-later)
-(def dispatch-last  handlers/dispatch-last)
 (def dispatch-once  handlers/dispatch-once)
 (def dispatch-tick  handlers/dispatch-tick)
 (def fx             handlers/fx)
@@ -46,11 +75,14 @@
 (def event-vector<-params           utils/event-vector<-params)
 (def event-vector<-subject-id       utils/event-vector<-subject-id)
 (def event-vector->event-id         utils/event-vector->event-id)
-(def event-vector->effects-map      utils/event-vector->effects-map)
+(def event-vector->effect-map       utils/event-vector->effect-map)
 (def event-vector->handler-f        utils/event-vector->handler-f)
-(def effects-map<-event-vector      utils/effects-map<-event-vector)
-(def merge-effects-maps             utils/merge-effects-maps)
-(def effects-map->handler-f         utils/effects-map->handler-f)
+(def side-effect-vector?            utils/side-effect-vector?)
+(def side-effect-vector->effect-id  utils/side-effect-vector->effect-id)
+(def delayed-effect-map->effect-map utils/delayed-effect-map->effect-map)
+(def effect-map<-event-vector       utils/effect-map<-event-vector)
+(def merge-effect-maps              utils/merge-effect-maps)
+(def effect-map->handler-f          utils/effect-map->handler-f)
 (def context->event-vector          utils/context->event-vector)
 (def context->event-id              utils/context->event-id)
 (def context->db-before-effect      utils/context->db-before-effect)
@@ -58,6 +90,6 @@
 (def cofx->event-id                 utils/cofx->event-id)
 (def cofx->event-vector             utils/cofx->event-vector)
 (def metamorphic-handler->handler-f utils/metamorphic-handler->handler-f)
-(def metamorphic-event->effects-map utils/metamorphic-event->effects-map)
+(def metamorphic-event->effect-map  utils/metamorphic-event->effect-map)
 (def metamorphic-event<-params      utils/metamorphic-event<-params)
 (def apply-fx-params                utils/apply-fx-params)

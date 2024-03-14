@@ -1,8 +1,7 @@
 
 (ns re-frame.extra.reg
-    (:require [fruits.vector.api     :as vector]
-              [re-frame.core         :as core]
-              [re-frame.interceptors :as interceptors]
+    (:require [re-frame.core         :as core]
+              [re-frame.debug.api :as re-frame.debug]
               [re-frame.extra.utils :as utils]))
 
 ;; ----------------------------------------------------------------------------
@@ -55,16 +54,16 @@
    (reg-event-db event-id nil handler-f))
 
   ([event-id interceptors handler-f]
-   (let [interceptors (interceptors/interceptors<-default-interceptors interceptors)]
+   (let [interceptors (re-frame.debug/import-debug-interceptor interceptors)]
         (core/reg-event-db event-id interceptors handler-f))))
 
 (defn reg-event-fx
   ; @description
-  ; Registers an effect handler that can be either a handler function, which returns an effect map, or a metamorphic handler in various forms.
+  ; Registers an effect handler that can be either a handler function (returning an effect map), or a metamorphic handler in various forms.
   ;
   ; @param (keyword) event-id
   ; @param (vector)(opt) interceptors
-  ; @param (function or metamorphic-handler) metamorphic-handler
+  ; @param (metamorphic-handler) metamorphic-handler
   ;
   ; @usage
   ; (reg-event-fx :my-event (fn [cofx event-vector] {:dispatch [:another-event]}))
@@ -82,7 +81,7 @@
 
   ([event-id interceptors metamorphic-handler]
    (let [handler-f    (utils/metamorphic-handler->handler-f metamorphic-handler)
-         interceptors (interceptors/interceptors<-default-interceptors interceptors)]
+         interceptors (re-frame.debug/import-debug-interceptor interceptors)]
         (core/reg-event-fx event-id interceptors handler-f))))
 
 (defn reg-fx
