@@ -7,7 +7,8 @@
               [re-frame.extra.state :as state]
               [re-frame.extra.utils :as utils]
               [re-frame.extra.check :as check]
-              [time.api :as time]))
+              [time.api :as time]
+              [activity-listener.api :as activity-listener]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
@@ -199,7 +200,7 @@
 (defn dispatch-last
   ; @note
   ; The 'dispatch-last' function handles only standard event vectors, because
-  ; the metamorphic events don't have unique identifiers!
+  ; the metamorphic events do not have unique identifiers!
   ;
   ; @description
   ; The 'dispatch-last' function only dispatches an event if you stop calling it
@@ -213,14 +214,17 @@
   ; (dispatch-last 500 [:my-event])
   [timeout event-vector]
   (let [event-id (utils/event-vector->event-id event-vector)]
-       (reg-event-lock! timeout event-id)
-       (letfn [(f0 [] (dispatch-unlocked?! event-vector))]
+       (activity-listener/lock-activity! event-id timeout)
+       ;(reg-event-lock! timeout event-id)
+       (letfn [(f0 [] ;(dispatch-unlocked?! event-vector)
+                   (if (activity-listener/activity-not-locked? event-id)
+                       (core/dispatch event-vector)))]
               (time/set-timeout! f0 timeout))))
 
 (defn dispatch-once
   ; @note
   ; The 'dispatch-once' function handles only standard event vectors, because
-  ; metamorphic events don't have unique identifiers!
+  ; metamorphic events do not have unique identifiers!
   ;
   ; @description
   ; The 'dispatch-once' function dispatches an event only once in the given interval.
@@ -235,10 +239,15 @@
   ; @return (?)
   [interval event-vector]
   (let [event-id (utils/event-vector->event-id event-vector)]
-       (if (event-unlocked? event-id)
+       (if ;(event-unlocked? event-id)
+           (activity-listener/activity-not-locked? event-id)
            (do (core/dispatch event-vector)
-               (reg-event-lock! interval event-id))
-           (letfn [(f0 [] (delayed-try interval event-vector))]
+               ;(reg-event-lock! interval event-id))
+               (activity-listener/lock-activity! event-id interval))
+           (letfn [(f0 [] ;(delayed-try interval event-vector)
+                       (if (activity-listener/activity-not-locked? event-id)
+                           (core/dispatch event-vector)
+                           (activity-listener/lock-activity! event-id interval)))]
                   (time/set-timeout! f0 interval)))))
 
 ;; ----------------------------------------------------------------------------

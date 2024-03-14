@@ -10,7 +10,7 @@
   ; @ignore
   ;
   ; @note
-  ; By default, Re-Frame doesn't print errors in the Clojure environment if an event is is dispatched but not registered.
+  ; By default, Re-Frame does not print errors in the Clojure environment if an event is is dispatched but not registered.
   ;
   ; @description
   ; Prints a warning to the console in case ...

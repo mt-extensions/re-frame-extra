@@ -20,13 +20,13 @@ that allows you to register and dispatch events in a freestyle way.
 
 Check out the latest commit on the [release branch](https://github.com/bithandshake/re-frame-api/tree/release).
 
-### Documentation
-
-The <strong>re-frame-api</strong> functional documentation is [available here](https://bithandshake.github.io/re-frame-api).
-
 ### Changelog
 
 You can track the changes of the <strong>re-frame-api</strong> library [here](CHANGES.md).
+
+# Documentation
+
+The <strong>re-frame-api</strong> functional documentation is [available here](https://bithandshake.github.io/re-frame-api).
 
 # Usage
 
