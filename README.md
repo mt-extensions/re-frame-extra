@@ -3,9 +3,7 @@
 
 ### Overview
 
-The <strong>re-frame-extra</strong> is a basic implementation of the [day8 / re-frame] library with extended functionality.
-
-> The <strong>re-frame-extra</strong> library implements the 1.2.0 version of Re-Frame.
+The <strong>re-frame-extra</strong> is a basic implementation of the [day8 / re-frame] Clojure library with extended functionality.
 
 ### deps.edn
 
