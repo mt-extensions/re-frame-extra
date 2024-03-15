@@ -92,9 +92,9 @@
   ;                            :fx-n       [[:my-side-effect]]}]}
   [effect-map-list]
   ; The original 'dispatch-later' function does not set any timeout for the given events in the Clojure environment.
-  (letfn [(f0 [effect-map] (-> effect-map re-frame.tools/delayed-effect-map->effect-map dispatch))]
+  (letfn [(f0 [%] (-> % re-frame.tools/delayed-effect-map->effect-map dispatch))]
          (doseq [{:keys [ms] :as effect-map} effect-map-list]
-                (if ms (time/set-timeout! (f0 effect-map) ms)
+                (if ms (time/set-timeout! #(f0 effect-map) ms)
                        (dispatch effect-map)))))
 
 (registrar/clear-handlers :fx            :dispatch-later)

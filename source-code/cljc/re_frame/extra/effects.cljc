@@ -40,7 +40,8 @@
       (letfn [(f0 [merged-effect-map effect-map]
                   (cond (-> effect-map :tick nil?)                                                                       ; <- No 'tick' value is provided.
                         (-> merged-effect-map (re-frame.tools/merge-effect-maps effect-map))                             ; <- Dispatching without delay.
-                        (-> effect-map :tick zero?)                                                                      ; <- Delay elapsed.
+                        (-> effect-map :tick zero?)                                                                      ; <- Delay is elapsed.
                         (-> merged-effect-map (re-frame.tools/merge-effect-maps effect-map))                             ; <- Dispatching now.
+                        (-> effect-map :tick integer?)                                                                   ; <- Delay hasn't elapsed.
                         (-> merged-effect-map (update :dispatch-tick vector/conj-item (update effect-map :tick dec)))))] ; <- Dispatching later.
              (reduce f0 {} effect-map-list))))
