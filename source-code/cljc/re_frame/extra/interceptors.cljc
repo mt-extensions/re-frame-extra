@@ -1,6 +1,6 @@
 
 (ns re-frame.extra.interceptors
-    (:require [re-frame.core :as core]
+    (:require [re-frame.core      :as core]
               [re-frame.tools.api :as re-frame.tools]))
 
 ;; ----------------------------------------------------------------------------

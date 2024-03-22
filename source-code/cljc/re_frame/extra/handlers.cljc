@@ -1,11 +1,11 @@
 
 (ns re-frame.extra.handlers
-    (:require [re-frame.core      :as core]
-              [re-frame.registrar :as registrar]
-              [re-frame.tools.api :as re-frame.tools]
-              [re-frame.extra.check :as check]
-              [time.api :as time]
-              [activity-listener.api :as activity-listener]))
+    (:require [activity-listener.api :as activity-listener]
+              [re-frame.core         :as core]
+              [re-frame.extra.check  :as check]
+              [re-frame.registrar    :as registrar]
+              [re-frame.tools.api    :as re-frame.tools]
+              [time.api              :as time]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

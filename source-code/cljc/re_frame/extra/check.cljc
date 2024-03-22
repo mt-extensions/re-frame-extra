@@ -1,7 +1,7 @@
 
 (ns re-frame.extra.check
-    (:require [re-frame.tools.api :as re-frame.tools]
-              [re-frame.loggers :refer [console]]))
+    (:require [re-frame.loggers   :refer [console]]
+              [re-frame.tools.api :as re-frame.tools]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

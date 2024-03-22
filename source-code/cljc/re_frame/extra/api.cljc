@@ -1,11 +1,11 @@
 
 (ns re-frame.extra.api
     (:require [re-frame.extra.effects]
+              [re-frame.extra.handlers     :as handlers]
               [re-frame.extra.interceptors :as interceptors]
-              [re-frame.extra.handlers :as handlers]
-              [re-frame.extra.reg :as reg]
-              [re-frame.extra.sub :as sub]
-              [re-frame.extra.utils :as utils]))
+              [re-frame.extra.reg          :as reg]
+              [re-frame.extra.sub          :as sub]
+              [re-frame.extra.utils        :as utils]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

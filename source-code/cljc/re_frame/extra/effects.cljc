@@ -1,8 +1,8 @@
 
 (ns re-frame.extra.effects
-    (:require [re-frame.core :as core]
-              [re-frame.tools.api :as re-frame.tools]
-              [fruits.vector.api :as vector]))
+    (:require [fruits.vector.api  :as vector]
+              [re-frame.core      :as core]
+              [re-frame.tools.api :as re-frame.tools]))
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------

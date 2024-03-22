@@ -1,6 +1,6 @@
 
 (ns re-frame.extra.reg
-    (:require [re-frame.core         :as core]
+    (:require [re-frame.core      :as core]
               [re-frame.debug.api :as re-frame.debug]
               [re-frame.tools.api :as re-frame.tools]))
 
