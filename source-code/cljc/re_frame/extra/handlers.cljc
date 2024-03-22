@@ -146,8 +146,7 @@
              (activity-listener/lock-activity!       event-id timeout)
              (dispatch                               event-vector))))
 
-(registrar/clear-handlers :fx           :dispatch-once)
-(core/reg-fx              :dispatch-once dispatch-once)
+(core/reg-fx :dispatch-once dispatch-once)
 
 ;; ----------------------------------------------------------------------------
 ;; ----------------------------------------------------------------------------
