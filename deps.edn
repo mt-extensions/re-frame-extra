@@ -1,7 +1,7 @@
 
 {:paths ["source-code/cljc"]
  :deps  {mt-extensions/re-frame-utils {:git/url "https://github.com/mt-extensions/re-frame-utils"
-                                       :sha     "21861430ed1c3e4a2e6c88f24b80ae36bd2cc8e9"}
+                                       :sha     "d4c7b614e523da29ccf893acc740a2386daffa05"}
          bithandshake/cljc-fruits     {:git/url "https://github.com/bithandshake/cljc-fruits"
                                        :sha     "6f9aeb18bcd0b38f80574aab83490a68216c39d6"}
          mt-utilities/cljc-time       {:git/url "https://github.com/mt-utilities/cljc-time"
